@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>防禦大作戰｜第3章 遊戲</title>
+<link rel="stylesheet" href="../css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  .ctrl{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; align-items:center; }
+  .build{ display:grid; gap:10px; }
+  .build button{ text-align:left; min-height:64px; padding:10px 14px; border-radius:16px; border:2px solid var(--c-line); background:#fff; font-family:inherit; font-size:1rem; cursor:pointer; color:inherit; display:flex; gap:12px; align-items:center; }
+  .build button:hover:not(:disabled){ border-color:var(--u); background:var(--u-l); }
+  .build button:disabled{ opacity:.4; cursor:not-allowed; }
+  .build .ic{ font-size:2rem; }
+  .build small{ color:var(--c-muted); display:block; }
+  .legendrow{ display:flex; gap:14px; flex-wrap:wrap; font-size:.85rem; color:var(--c-muted); margin-top:8px; }
+</style>
+</head>
+<body data-page="games" data-root="../" data-game class="unit-33">
+<main class="wrap">
+  <div class="page-hero">
+    <h1>🛡️ 防禦大作戰（個人模式）</h1>
+    <p>病原體要從「體外」闖進「全身組織」！答題拿能量，佈置三道防線：皮膚黏膜牆、吞噬白血球、專一性白血球，撐過 5 波攻擊。</p>
+  </div>
+  <div class="game-top">
+    <button class="btn ghost" data-lobby>🎮 遊戲大廳</button>
+    <span class="stat">⚡ 能量 <span id="en">60</span></span>
+    <span class="stat">❤️ 身體 <span id="hp">10</span></span>
+    <span class="stat">🌊 第 <span id="wv">0</span>／5 波</span>
+    <span class="stat">✅ 答對 <span id="acc">0/0</span>（連對 <span id="streak">0</span>）</span>
+    <span style="flex:1"></span>
+    <button class="btn ghost" id="howBtn">❔ 玩法</button>
+  </div>
+  <div class="game-stage"><canvas id="cv" width="900" height="500" aria-label="防禦大作戰戰場"></canvas></div>
+  <div class="ctrl">
+    <button class="btn defense" id="askBtn">❓ 答題拿能量（+10）</button>
+    <button class="btn" id="waveBtn">▶ 開始第 1 波</button>
+    <button class="btn ghost" id="vacBtn" disabled>💉 疫苗卡</button>
+    <span id="hint" style="color:var(--c-muted);font-size:.9rem">點戰場上的「＋」格子放置防守單位。</span>
+  </div>
+  <div class="legendrow"><span>🟩 細菌</span><span>🟣 流感病毒</span><span>🔴 腸病毒</span><span>👑 首領（第 5 波）</span><span>★ 已被疫苗「記住」的病原體</span></div>
+</main>
+
+<script src="../js/common.js"></script>
+<script src="../js/unit.js"></script>
+<script src="../data/questions.js"></script>
+<script src="../js/game-common.js"></script>
+<script>
+(function(){
+  'use strict';
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  var Wd = 900, Ht = 500;
+  (function hidpi(){ var r = window.devicePixelRatio || 1; cv.width = Wd * r; cv.height = Ht * r; ctx.setTransform(r,0,0,r,0,0); })();
+  function $(id){ return document.getElementById(id); }
+  var PATH = [[0,110],[220,110],[220,390],[460,390],[460,110],[700,110],[700,330],[900,330]];
+  var SEGLEN = [], TOTAL = 0;
+  for(var i=1;i<PATH.length;i++){ var l = Math.hypot(PATH[i][0]-PATH[i-1][0], PATH[i][1]-PATH[i-1][1]); SEGLEN.push(l); TOTAL += l; }
+  function at(d){ for(var i=0;i<SEGLEN.length;i++){ if(d <= SEGLEN[i]){ var k = d / SEGLEN[i]; return [PATH[i][0] + (PATH[i+1][0]-PATH[i][0])*k, PATH[i][1] + (PATH[i+1][1]-PATH[i][1])*k]; } d -= SEGLEN[i]; } return PATH[PATH.length-1]; }
+  function distOf(x, y){ var best = 0, bd = 1e9, acc = 0; for(var i=0;i<SEGLEN.length;i++){ for(var t=0;t<=1;t+=.02){ var px = PATH[i][0]+(PATH[i+1][0]-PATH[i][0])*t, py = PATH[i][1]+(PATH[i+1][1]-PATH[i][1])*t, dd = Math.hypot(px-x, py-y); if(dd < bd){ bd = dd; best = acc + SEGLEN[i]*t; } } acc += SEGLEN[i]; } return best; }
+  var TYPES = {
+    bact:  { n:'細菌', hp:10, sp:45, col:'#66BB6A', r:12 },
+    flu:   { n:'流感病毒', hp:8, sp:60, col:'#AB47BC', r:11 },
+    entero:{ n:'腸病毒', hp:9, sp:52, col:'#EF5350', r:11 },
+    boss:  { n:'流感病毒首領', hp:260, sp:24, col:'#7B1FA2', r:26, kind:'flu' }
+  };
+  var WAVES = [
+    [['bact',6]],
+    [['bact',5],['flu',5]],
+    [['entero',8],['bact',4]],
+    [['flu',8],['entero',6],['bact',4]],
+    [['boss',1],['flu',6],['bact',6]]
+  ];
+  var SLOTS = [
+    { x:110, y:110, t:'wall' }, { x:220, y:250, t:'wall' },
+    { x:120, y:190, t:'tower' }, { x:120, y:300, t:'tower' }, { x:330, y:300, t:'tower' }, { x:330, y:200, t:'tower' },
+    { x:340, y:470, t:'tower' }, { x:580, y:210, t:'tower' }, { x:580, y:320, t:'tower' }, { x:590, y:40, t:'tower' },
+    { x:800, y:230, t:'tower' }, { x:800, y:430, t:'tower' }
+  ];
+  SLOTS.forEach(function(s){ if(s.t === 'wall') s.d = distOf(s.x, s.y); });
+  var UNITS = {
+    wall:   { n:'皮膚黏膜牆', ic:'🧱', cost:20, line:'第一道防線', desc:'擋下所有病原體，但每擋一隻會破損一點（耐久 8）。' },
+    phago:  { n:'吞噬白血球', ic:'⚪', cost:30, line:'第二道防線', desc:'攻擊任何病原體（非專一性），放下時出現紅腫熱痛的發炎反應。' },
+    special:{ n:'專一性白血球', ic:'⭐', cost:50, line:'第三道防線', desc:'攻擊力最強，產生抗體，但只對「指定的一種」病原體有效。' }
+  };
+  var G;
+  function reset(){
+    G = { en:60, hp:10, wave:0, inWave:false, spawnQ:[], spawnT:0, foes:[], towers:{}, fx:[], right:0, total:0, streak:0, paused:false, over:false,
+          vacc:{}, vaccAvail:false, memoryPlaced:{}, curve:[], specAcc:0, t:0, vaccMarks:[] };
+    hud();
+  }
+  function hud(){
+    $('en').textContent = G.en; $('hp').textContent = G.hp; $('wv').textContent = G.wave; $('acc').textContent = G.right + '/' + G.total; $('streak').textContent = G.streak;
+    $('waveBtn').disabled = G.inWave || G.over || G.wave >= 5; $('waveBtn').textContent = G.wave >= 5 ? '已完成 5 波' : '▶ 開始第 ' + (G.wave + 1) + ' 波';
+    $('vacBtn').disabled = !G.vaccAvail || G.inWave || G.over;
+  }
+
+  /* ---------- 答題 ---------- */
+  function ask(title){
+    G.paused = true;
+    return GAME.ask({ units:['3-3'], title:title || '答對 +10 能量' }).then(function(ok){
+      G.total++; G.paused = false;
+      if(ok){ G.right++; G.streak++; G.en += 10; if(G.streak % 3 === 0){ G.en += 10; CH3.toast('🔥 連續答對 3 題，額外 +10 能量！'); } }
+      else G.streak = 0;
+      hud(); return ok;
+    });
+  }
+  $('askBtn').addEventListener('click', function(){ if(!G.over) ask(); });
+
+  /* ---------- 波次 ---------- */
+  $('waveBtn').addEventListener('click', function(){
+    if(G.inWave || G.over || G.wave >= 5) return;
+    G.wave++; G.inWave = true; G.vaccAvail = false; G.spawnQ = [];
+    WAVES[G.wave-1].forEach(function(p){ for(var i=0;i<p[1];i++) G.spawnQ.push(p[0]); });
+    if(G.wave === 5){ var b = G.spawnQ.shift(); G.spawnQ.splice(4, 0, b); } else G.spawnQ = CH3.shuffle(G.spawnQ);
+    G.spawnT = 0; hud(); CH3.toast('🌊 第 ' + G.wave + ' 波來了！');
+  });
+  function waveCleared(){
+    G.inWave = false;
+    if(G.wave >= 5){ win(); return; }
+    G.vaccAvail = true; hud();
+    var next = WAVES[G.wave].map(function(p){ return TYPES[p[0]].n + ' ×' + p[1]; }).join('、');
+    CH3.toast('✅ 第 ' + G.wave + ' 波守住了！下一波：' + next);
+    $('hint').innerHTML = '下一波：<b>' + next + '</b>。可以先用 💉 疫苗卡讓白血球「記住」其中一種！';
+  }
+
+  /* ---------- 疫苗卡 ---------- */
+  $('vacBtn').addEventListener('click', function(){
+    if(!G.vaccAvail) return;
+    var kinds = {}; WAVES[G.wave].forEach(function(p){ var k = TYPES[p[0]].kind || p[0]; kinds[k] = 1; });
+    var m = GAME.modal('<h2>💉 疫苗卡</h2><p>疫苗的成分能<b>模擬病原體表面特徵</b>，讓特殊白血球先「記住」它。下次遇到同一種病原體時，專一性防禦會<b>又快又強</b>！</p>' +
+      '<h3>1. 選疫苗成分</h3><div class="seg" data-comp><button data-v="a" aria-pressed="true">沒感染力的病原體</button><button data-v="b">弱化的病原體</button><button data-v="c">病原體表面特殊蛋白質</button></div>' +
+      '<h3>2. 要預防哪一種病原體？（下一波會出現）</h3><div class="build">' + Object.keys(kinds).map(function(k){ return '<button data-k="'+k+'" '+(G.vacc[k]?'disabled':'')+'><span class="ic">'+({bact:'🟩',flu:'🟣',entero:'🔴'})[k]+'</span><span><b>'+TYPES[k].n+'</b>'+(G.vacc[k]?'<small>已經接種過了</small>':'')+'</span></button>'; }).join('') + '</div>' +
+      '<p style="text-align:right;margin-bottom:0"><button class="btn ghost" data-x>先不要</button></p>');
+    UNIT.seg(m.el.querySelector('[data-comp]'), function(){});
+    m.el.addEventListener('click', function(e){
+      if(e.target.closest('[data-x]')){ m.close(); return; }
+      var b = e.target.closest('[data-k]'); if(!b || b.disabled) return;
+      var k = b.getAttribute('data-k'); G.vacc[k] = true; G.vaccAvail = false; G.vaccMarks.push({ t:G.t, k:k });
+      m.close(); hud(); CH3.toast('💉 已接種：白血球記住了「' + TYPES[k].n + '」的表面特徵');
+    });
+  });
+
+  /* ---------- 放置單位 ---------- */
+  function scalePt(e){ var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * Wd, (e.clientY - r.top) / r.height * Ht]; }
+  cv.addEventListener('click', function(e){
+    if(G.over) return;
+    var p = scalePt(e), idx = -1;
+    SLOTS.forEach(function(s, i){ if(Math.hypot(s.x - p[0], s.y - p[1]) < 32) idx = i; });
+    if(idx < 0) return;
+    var s = SLOTS[idx], tw = G.towers[idx];
+    if(tw && !(tw.u === 'wall' && tw.hp <= 0)){ info(tw); return; }
+    buildMenu(idx, s);
+  });
+  function info(tw){
+    var u = UNITS[tw.u];
+    CH3.toast(u.ic + ' ' + u.n + (tw.u === 'wall' ? '：耐久 ' + tw.hp + '/8' : tw.u === 'special' ? '：專門對付「' + TYPES[tw.target].n + '」' : '：攻擊任何病原體'));
+  }
+  function buildMenu(idx, s){
+    G.paused = true;
+    var opts = s.t === 'wall' ? ['wall'] : ['phago','special'];
+    var m = GAME.modal('<h2>放置防守單位</h2><div class="build">' + opts.map(function(k){ var u = UNITS[k]; return '<button data-u="'+k+'" '+(G.en < u.cost ? 'disabled' : '')+'><span class="ic">'+u.ic+'</span><span><b>'+u.n+'</b>（'+u.line+'）⚡'+u.cost+'<small>'+u.desc+'</small></span></button>'; }).join('') + '</div>' +
+      (s.t === 'wall' ? '<p style="color:var(--c-muted)">這個格子在病原體的入口，只能放皮膚黏膜牆。</p>' : '') +
+      '<p style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0"><span>目前能量 ⚡'+G.en+'</span><button class="btn ghost" data-x>取消</button></p>');
+    m.el.addEventListener('click', function(e){
+      if(e.target.closest('[data-x]')){ m.close(); G.paused = false; return; }
+      var b = e.target.closest('[data-u]'); if(!b || b.disabled) return;
+      var k = b.getAttribute('data-u');
+      if(k === 'special'){
+        m.el.innerHTML = '<h2>⭐ 指定病原體</h2><p>專一性白血球只對<b>一種</b>病原體有效（例如腸病毒引起的防禦無法對抗流感病毒）。要針對哪一種？</p><div class="build">' +
+          ['bact','flu','entero'].map(function(t){ return '<button data-t="'+t+'"><span class="ic">'+({bact:'🟩',flu:'🟣',entero:'🔴'})[t]+'</span><b>'+TYPES[t].n+'</b></button>'; }).join('') + '</div>';
+        m.el.addEventListener('click', function(ev){ var tb = ev.target.closest('[data-t]'); if(!tb) return; place(idx, 'special', tb.getAttribute('data-t')); m.close(); G.paused = false; });
+        return;
+      }
+      place(idx, k); m.close(); G.paused = false;
+    });
+  }
+  function place(idx, k, target, free){
+    if(!free) G.en -= UNITS[k].cost;
+    var s = SLOTS[idx];
+    G.towers[idx] = { u:k, x:s.x, y:s.y, target:target, cd:0, hp: k === 'wall' ? 8 : 0, born:G.t, memory:!!free };
+    if(k === 'phago') G.fx.push({ kind:'inflame', x:s.x, y:s.y, t:0, life:2.5 });
+    hud(); UNIT.thump(400, .08, .3);
+  }
+
+  /* ---------- 主迴圈 ---------- */
+  var last = 0;
+  function loop(ts){
+    var dt = Math.min(.05, (ts - (last || ts)) / 1000); last = ts;
+    if(G && !G.paused && !G.over) update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+  function update(dt){
+    G.t += dt;
+    // 生成
+    if(G.inWave && G.spawnQ.length){
+      G.spawnT -= dt;
+      if(G.spawnT <= 0){
+        var k = G.spawnQ.shift(), T = TYPES[k];
+        var f = { k:k, kind:T.kind || k, hp:T.hp, max:T.hp, d:0, sp:T.sp, r:T.r, slow:0 };
+        G.foes.push(f); G.spawnT = .9;
+        if(G.vacc[f.kind] && !G.memoryPlaced[f.kind + G.wave]){
+          G.memoryPlaced[f.kind + G.wave] = true;
+          var empty = SLOTS.map(function(s,i){ return i; }).filter(function(i){ return SLOTS[i].t === 'tower' && !G.towers[i]; });
+          if(empty.length){ place(empty[Math.floor(empty.length/2)], 'special', f.kind, true); CH3.toast('⚡ 白血球記得「' + TYPES[f.kind].n + '」！記憶白血球快速大量增生'); }
+          else CH3.toast('⚡ 白血球記得「' + TYPES[f.kind].n + '」，專一性攻擊加倍！');
+        }
+      }
+    }
+    // 移動與牆
+    var specThis = 0;
+    G.foes.forEach(function(f){
+      var prev = f.d; f.d += f.sp * dt;
+      SLOTS.forEach(function(s, i){
+        var tw = G.towers[i];
+        if(s.t !== 'wall' || !tw || tw.hp <= 0) return;
+        if(prev < s.d && f.d >= s.d){
+          if(f.k === 'boss'){ tw.hp = 0; G.fx.push({ kind:'text', x:s.x, y:s.y - 30, txt:'城牆被突破！', t:0, life:1.5, col:'#C62828' }); }
+          else { f.dead = true; tw.hp--; G.fx.push({ kind:'text', x:s.x, y:s.y - 30, txt:'擋下！', t:0, life:.8, col:'#E65100' }); if(tw.hp <= 0) G.fx.push({ kind:'text', x:s.x, y:s.y - 50, txt:'皮膚破損（傷口）', t:0, life:2, col:'#C62828' }); }
+        }
+      });
+      if(f.d >= TOTAL && !f.dead){ f.dead = true; f.leaked = true; G.hp -= f.k === 'boss' ? 5 : 1; UNIT.thump(90, .2, .5); }
+    });
+    // 塔攻擊
+    Object.keys(G.towers).forEach(function(i){
+      var tw = G.towers[i]; if(tw.u === 'wall') return;
+      tw.cd -= dt; if(tw.cd > 0) return;
+      var range = tw.u === 'phago' ? 115 : 150, best = null, bd = -1;
+      G.foes.forEach(function(f){
+        if(f.dead) return;
+        if(tw.u === 'special' && f.kind !== tw.target) return;
+        var p = at(f.d); if(Math.hypot(p[0]-tw.x, p[1]-tw.y) > range) return;
+        if(f.d > bd){ bd = f.d; best = f; }
+      });
+      if(!best) return;
+      var dmg = tw.u === 'phago' ? 1 : (G.vacc[best.kind] ? 6 : 3);
+      best.hp -= dmg; tw.cd = tw.u === 'phago' ? .5 : .4;
+      if(tw.u === 'special') specThis += dmg;
+      var bp = at(best.d);
+      G.fx.push({ kind: tw.u === 'phago' ? 'eat' : 'ab', x:tw.x, y:tw.y, x2:bp[0], y2:bp[1], t:0, life:.25 });
+      if(best.hp <= 0){ best.dead = true; G.fx.push({ kind:'text', x:bp[0], y:bp[1] - 16, txt: tw.u === 'phago' ? '吞噬！' : '抗體！', t:0, life:.7, col: tw.u === 'phago' ? '#C62828' : '#1565C0' }); }
+    });
+    G.specAcc += specThis;
+    if(Math.floor(G.t) !== Math.floor(G.t - dt)){ G.curve.push({ t:Math.floor(G.t), v:G.specAcc }); G.specAcc = 0; }
+    G.foes = G.foes.filter(function(f){ return !f.dead; });
+    G.fx.forEach(function(x){ x.t += dt; }); G.fx = G.fx.filter(function(x){ return x.t < x.life; });
+    if(G.hp <= 0){ G.hp = 0; lose(); }
+    if(G.inWave && !G.spawnQ.length && !G.foes.length) waveCleared();
+    hud();
+  }
+
+  /* ---------- 繪圖 ---------- */
+  function rr(x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x+r, y); ctx.arcTo(x+w, y, x+w, y+h, r); ctx.arcTo(x+w, y+h, x, y+h, r); ctx.arcTo(x, y+h, x, y, r); ctx.arcTo(x, y, x+w, y, r); ctx.closePath(); }
+  function foe(f){
+    var p = at(f.d), x = p[0], y = p[1], T = TYPES[f.k];
+    ctx.save(); ctx.translate(x, y);
+    if(f.kind === 'bact'){ ctx.fillStyle = T.col; rr(-16, -9, 32, 18, 9); ctx.fill(); ctx.strokeStyle = '#2E7D32'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#2E7D32'; ctx.beginPath(); ctx.arc(-6,0,2,0,7); ctx.arc(6,0,2,0,7); ctx.fill(); }
+    else {
+      var r = T.r; ctx.strokeStyle = f.kind === 'flu' ? '#6A1B9A' : '#B71C1C'; ctx.lineWidth = f.k === 'boss' ? 4 : 2.5;
+      for(var a=0;a<8;a++){ var an = a/8*Math.PI*2 + G.t; ctx.beginPath(); ctx.moveTo(Math.cos(an)*r, Math.sin(an)*r); ctx.lineTo(Math.cos(an)*(r+ (f.k==='boss'?12:6)), Math.sin(an)*(r+(f.k==='boss'?12:6))); ctx.stroke(); }
+      ctx.fillStyle = T.col; if(f.kind === 'entero'){ ctx.beginPath(); for(var hx=0;hx<6;hx++){ var ha = hx/6*Math.PI*2; ctx.lineTo(Math.cos(ha)*r, Math.sin(ha)*r); } ctx.closePath(); } else { ctx.beginPath(); ctx.arc(0,0,r,0,7); }
+      ctx.fill(); ctx.stroke();
+      if(f.k === 'boss'){ ctx.font = '24px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('👑', 0, -34); }
+    }
+    if(G.vacc[f.kind]){ ctx.fillStyle = '#FFD600'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('★', 0, -T.r - 10); }
+    // 血條
+    ctx.fillStyle = '#ECEFF1'; ctx.fillRect(-16, T.r + 6, 32, 4); ctx.fillStyle = '#E53935'; ctx.fillRect(-16, T.r + 6, 32 * Math.max(0, f.hp / f.max), 4);
+    ctx.restore();
+  }
+  function render(){
+    ctx.clearRect(0, 0, Wd, Ht);
+    // 背景分區
+    ctx.fillStyle = '#E3F2FD'; ctx.fillRect(0, 0, 90, Ht);
+    ctx.fillStyle = '#FFF8F6'; ctx.fillRect(90, 0, Wd - 90, Ht);
+    ctx.fillStyle = '#FFF3E0'; ctx.fillRect(840, 0, 60, Ht);
+    ctx.font = 'bold 16px "Noto Sans TC", sans-serif'; ctx.fillStyle = '#1565C0'; ctx.textAlign = 'center'; ctx.fillText('體外', 45, 30);
+    ctx.fillStyle = '#E65100'; ctx.fillText('全身', 870, 280); ctx.fillText('組織', 870, 300);
+    // 路徑
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#FFCDD2'; ctx.lineWidth = 46; ctx.beginPath(); PATH.forEach(function(p, i){ i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }); ctx.stroke();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.setLineDash([8, 10]); ctx.stroke(); ctx.setLineDash([]);
+    // 發炎
+    G.fx.forEach(function(x){ if(x.kind === 'inflame'){ var k = x.t / x.life; ctx.fillStyle = 'rgba(239,83,80,' + (0.35 * (1 - k)) + ')'; ctx.beginPath(); ctx.arc(x.x, x.y, 60 + 40 * k, 0, 7); ctx.fill(); ctx.fillStyle = 'rgba(183,28,28,' + (1 - k) + ')'; ctx.font = 'bold 14px sans-serif'; ctx.fillText('紅 腫 熱 痛', x.x, x.y - 44); } });
+    // 格子與單位
+    SLOTS.forEach(function(s, i){
+      var tw = G.towers[i];
+      if(!tw || (tw.u === 'wall' && tw.hp <= 0)){
+        ctx.strokeStyle = s.t === 'wall' ? '#E65100' : '#90A4AE'; ctx.lineWidth = 2.5; ctx.setLineDash([6, 4]);
+        rr(s.x - 24, s.y - 24, 48, 48, 12); ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = s.t === 'wall' ? '#E65100' : '#607D8B'; ctx.font = 'bold 22px sans-serif'; ctx.fillText('＋', s.x, s.y + 8);
+        if(tw && tw.u === 'wall'){ ctx.font = 'bold 11px sans-serif'; ctx.fillStyle = '#C62828'; ctx.fillText('傷口', s.x, s.y + 38); }
+        return;
+      }
+      if(tw.u === 'wall'){
+        ctx.fillStyle = '#FFCC80'; rr(s.x - 26, s.y - 26, 52, 52, 8); ctx.fill(); ctx.strokeStyle = '#E65100'; ctx.lineWidth = 3; ctx.stroke();
+        ctx.font = '26px sans-serif'; ctx.fillText('🧱', s.x, s.y + 9);
+        ctx.fillStyle = '#ECEFF1'; ctx.fillRect(s.x - 24, s.y + 30, 48, 5); ctx.fillStyle = '#FB8C00'; ctx.fillRect(s.x - 24, s.y + 30, 48 * tw.hp / 8, 5);
+      } else {
+        var sp = tw.u === 'special';
+        ctx.fillStyle = 'rgba(30,136,229,.06)'; ctx.beginPath(); ctx.arc(s.x, s.y, sp ? 150 : 115, 0, 7); ctx.fill();
+        ctx.fillStyle = '#F5F7FF'; ctx.strokeStyle = '#1E88E5'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(s.x, s.y, 22, 0, 7); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#9575CD'; ctx.beginPath(); ctx.ellipse(s.x - 4, s.y - 2, 10, 7, .4, 0, 7); ctx.fill();
+        if(sp){ ctx.fillStyle = '#FFD600'; ctx.beginPath(); ctx.arc(s.x + 16, s.y - 16, 9, 0, 7); ctx.fill(); ctx.fillStyle = '#000'; ctx.font = 'bold 11px sans-serif'; ctx.fillText('★', s.x + 16, s.y - 12);
+          ctx.font = 'bold 12px sans-serif'; ctx.fillStyle = '#1565C0'; ctx.fillText('對付' + TYPES[tw.target].n + (tw.memory ? '（記憶）' : ''), s.x, s.y + 38); }
+      }
+    });
+    // 病原體
+    G.foes.forEach(foe);
+    // 特效
+    G.fx.forEach(function(x){
+      if(x.kind === 'eat'){ ctx.strokeStyle = 'rgba(198,40,40,.6)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x.x, x.y); ctx.lineTo(x.x2, x.y2); ctx.stroke(); }
+      if(x.kind === 'ab'){ var k = x.t / x.life, ax = x.x + (x.x2 - x.x) * k, ay = x.y + (x.y2 - x.y) * k; ctx.strokeStyle = '#1565C0'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(ax, ay + 7); ctx.lineTo(ax, ay); ctx.lineTo(ax - 5, ay - 6); ctx.moveTo(ax, ay); ctx.lineTo(ax + 5, ay - 6); ctx.stroke(); }
+      if(x.kind === 'text'){ ctx.fillStyle = x.col; ctx.font = 'bold 15px "Noto Sans TC", sans-serif'; ctx.globalAlpha = 1 - x.t / x.life; ctx.fillText(x.txt, x.x, x.y - x.t * 20); ctx.globalAlpha = 1; }
+    });
+    if(G.paused && !G.over){ ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.fillRect(0, 0, Wd, Ht); }
+  }
+
+  /* ---------- 結束 ---------- */
+  function curveSvg(){
+    var raw = G.curve, pts = raw.map(function(p, i){ var a = 0, n = 0; for(var j=Math.max(0,i-2); j<=Math.min(raw.length-1,i+2); j++){ a += raw[j].v; n++; } return { t:p.t, v:a/n }; });
+    var maxT = Math.max(10, pts.length ? pts[pts.length-1].t : 10), maxV = Math.max(10, Math.max.apply(null, pts.map(function(p){ return p.v; }).concat([1])));
+    var poly = pts.map(function(p){ return (40 + p.t / maxT * 440).toFixed(1) + ',' + (190 - p.v / maxV * 160).toFixed(1); }).join(' ');
+    var marks = G.vaccMarks.map(function(m){ var x = 40 + m.t / maxT * 440; return '<line x1="'+x+'" y1="20" x2="'+x+'" y2="190" stroke="#1E88E5" stroke-dasharray="4 3"/><text x="'+x+'" y="16" text-anchor="middle" font-size="11" fill="#1E88E5">💉'+TYPES[m.k].n+'</text>'; }).join('');
+    return '<svg viewBox="0 0 500 220" style="width:100%"><line x1="40" y1="190" x2="490" y2="190" stroke="#455A64" stroke-width="2"/><line x1="40" y1="190" x2="40" y2="20" stroke="#455A64" stroke-width="2"/>' +
+      '<text x="490" y="210" text-anchor="end" font-size="12" fill="#455A64">時間 →</text><text x="12" y="105" font-size="12" fill="#455A64" transform="rotate(-90 12 105)" text-anchor="middle">專一性防禦強度</text>' +
+      marks + '<polyline points="'+poly+'" fill="none" stroke="#1565C0" stroke-width="3" stroke-linejoin="round"/></svg>';
+  }
+  function win(){
+    G.over = true; hud(); $('hint').textContent = '5 波全部守住了！';
+    var acc = G.total ? Math.round(G.right / G.total * 100) : 0, b = GAME.best('defenseHp', G.hp);
+    var m = GAME.modal('<h2 style="text-align:center">🎉 成功守住身體！</h2><p style="text-align:center">剩餘身體健康 ❤️'+G.hp+'・答對率 '+acc+'%・最佳 ❤️'+b.best+'</p>' +
+      '<h3>這一局的「免疫力曲線」</h3>' + curveSvg() +
+      '<p style="background:var(--u-l);padding:10px 14px;border-radius:12px;font-size:.92rem">藍色虛線是施打疫苗的時間。被疫苗「記住」的病原體再次出現時，專一性防禦（抗體）反應<b>又快又強</b>──就像課本圖 3-20 的第二次反應！</p>' +
+      '<div style="display:flex;gap:10px;justify-content:center"><button class="btn ghost" data-lobby>🎮 遊戲大廳</button><button class="btn defense" data-again>↺ 再玩一次</button></div>');
+    m.el.querySelector('[data-again]').addEventListener('click', function(){ m.close(); reset(); });
+    GAME.unlock('immune');
+  }
+  function lose(){
+    if(G.over) return; G.over = true; hud();
+    var m = GAME.modal('<h2 style="text-align:center">😷 病原體攻進全身組織了…</h2><p>第 '+G.wave+' 波失守。小提醒：</p><ul><li>入口先放<b>皮膚黏膜牆</b>，可以擋下很多病原體。</li><li><b>吞噬白血球</b>什麼都打；<b>專一性白血球</b>很強但只打指定的一種。</li><li>波與波之間用 <b>💉 疫苗卡</b>，讓白血球先記住下一波的病原體！</li></ul>' +
+      '<div style="display:flex;gap:10px;justify-content:center"><button class="btn ghost" data-lobby>🎮 遊戲大廳</button><button class="btn defense" data-again>↺ 再挑戰</button></div>');
+    m.el.querySelector('[data-again]').addEventListener('click', function(){ m.close(); reset(); });
+  }
+  var STEPS = ['病原體會沿著紅色路徑，從左邊的<b>體外</b>走向右邊的<b>全身組織</b>。',
+    '按「<b>答題拿能量</b>」：答對 +10，連續答對 3 題再加 10。',
+    '點戰場上的「＋」格子放防守單位：入口的橘色格放 🧱 <b>皮膚黏膜牆</b>（第一道防線）。',
+    '其他格子放 ⚪ <b>吞噬白血球</b>（第二道，什麼都打）或 ⭐ <b>專一性白血球</b>（第三道，最強但只打指定的一種）。',
+    '每波結束後可以用 💉 <b>疫苗卡</b>，讓白血球記住下一波的某種病原體：再遇到時會快速大量增生、攻擊加倍！',
+    '撐過 5 波（第 5 波有👑首領），看看這一局的免疫力曲線。'];
+  $('howBtn').addEventListener('click', function(){ G.paused = true; GAME.intro('defense', '🛡️ 防禦大作戰：玩法', STEPS, function(){ G.paused = false; }); });
+  /* 老師示範用：主控台輸入 DEFENSE_ENERGY(100) 增加能量 */
+  window.DEFENSE_ENERGY = function(n){ G.en += n || 100; hud(); };
+  reset(); requestAnimationFrame(loop);
+  GAME.introOnce('defense', '🛡️ 防禦大作戰：玩法', STEPS);
+  GAME.inProgress = function(){ var busy = !!(G && G.wave > 0 && !G.over); if(busy) G.paused = true; return busy; };
+  GAME.onResume = function(){ G.paused = false; };
+})();
+</script>
+</body>
+</html>
