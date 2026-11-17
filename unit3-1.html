@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3-1 植物的運輸構造｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  #stem .p-xylem{ fill:#29B6F6; } #stem .p-phloem{ fill:#FF9800; }
+  #stem .p-cambium{ fill:none; stroke:#2E7D32; stroke-width:4; stroke-dasharray:7 5; }
+  #stem[data-sel] .p-xylem, #stem[data-sel] .p-phloem, #stem[data-sel] .p-cambium, #stem[data-sel] .p-ground{ opacity:.25; transition:opacity .2s; }
+  #stem[data-sel="xylem"] .p-xylem, #stem[data-sel="phloem"] .p-phloem, #stem[data-sel="cambium"] .p-cambium, #stem[data-sel="ground"] .p-ground{ opacity:1; }
+  #stem[data-sel="cambium"] .p-cambium{ stroke-width:6; stroke-dasharray:none; }
+  #stem .lbl{ font-size:15px; font-weight:900; }
+  .seasontag{ font-weight:900; padding:2px 12px; border-radius:999px; background:#fff; display:inline-block; }
+</style>
+</head>
+<body data-page="3-1" data-root="./" class="unit-31">
+<main class="wrap">
+
+  <div class="page-hero unit-hero">
+    <div class="txt">
+      <span class="tag" style="background:rgba(255,255,255,.25);color:#fff">單元 3-1</span>
+      <h1 style="margin:.2em 0">植物的運輸構造</h1>
+      <p>橘子上的白色細絲，就是植物運輸物質的「管道」──維管束。它怎麼把水往上送？養分又怎麼運到需要的地方？</p>
+    </div>
+    <div class="mini secondary">
+      <div>本單元概念卡 <strong data-unit-progress-text>0 / 5 張</strong></div>
+      <div class="progress" data-unit-progress="3-1"><span></span></div>
+    </div>
+  </div>
+
+  <nav class="toc" aria-label="本頁目錄">
+    <a href="#b1">① 維管束</a><a href="#a1">🎬 莖橫切面</a><a href="#b2">② 樹皮與年輪</a><a href="#a2">🎬 年輪生長</a>
+    <a href="#b3">③ 水分與養分運輸</a><a href="#a3">🎬 運輸全景圖</a>
+    <button class="btn ghost" id="flipAll" style="min-height:40px;padding:4px 14px;font-size:.85rem">全部翻到說明面</button>
+  </nav>
+
+  <!-- ========== 概念卡 1、2 ========== -->
+  <div class="block-title" id="b1"><span class="num">1</span><h2>維管束與排列方式</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-1-c1"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <rect x="38" y="6" width="24" height="88" rx="12" fill="#E8F5E9" stroke="#4CAF50" stroke-width="3"/>
+          <rect x="43" y="12" width="7" height="76" rx="3" fill="#29B6F6"/><rect x="52" y="12" width="6" height="76" rx="3" fill="#FF9800"/>
+          <polygon points="46.5,14 42,24 51,24" fill="#0277BD"/>
+          <polygon points="55,86 51,77 59,77" fill="#E65100"/><polygon points="55,14 51,23 59,23" fill="#E65100"/>
+        </svg>
+        <h3>維管束</h3><span class="hint">點我翻面看說明</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>維管束</h3>
+        <ul>
+          <li>大部分植物體內<span class="kw">運輸物質</span>的組織，細胞排列成束狀、上下連通，由根延伸到葉片、花及果實。</li>
+          <li><span class="kw">木質部</span>：運輸<span class="sym-water">水分和礦物質</span>。</li>
+          <li><span class="kw">韌皮部</span>：運輸<span class="sym-food">養分</span>。</li>
+          <li>莖內的維管束：<b>木質部在內側、韌皮部在外側</b>。</li>
+        </ul>
+        <div class="ft"><small>課本 P.96</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+
+    <div class="concept" data-id="3-1-c2"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="27" cy="50" r="22" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+          <g fill="#29B6F6"><circle cx="20" cy="40" r="3"/><circle cx="33" cy="45" r="3"/><circle cx="24" cy="58" r="3"/><circle cx="36" cy="60" r="3"/><circle cx="15" cy="53" r="3"/><circle cx="29" cy="33" r="3"/></g>
+          <circle cx="73" cy="50" r="22" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+          <circle cx="73" cy="50" r="13" fill="none" stroke="#2E7D32" stroke-width="2" stroke-dasharray="3 2"/>
+          <g fill="#29B6F6"><circle cx="73" cy="40" r="3"/><circle cx="83" cy="50" r="3"/><circle cx="73" cy="60" r="3"/><circle cx="63" cy="50" r="3"/></g>
+        </svg>
+        <h3>維管束排列</h3><span class="hint">散生 vs. 環狀</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>維管束的排列方式</h3>
+        <table class="mini-table">
+          <tr><th></th><th>散生排列</th><th>環狀排列</th></tr>
+          <tr><td>形成層</td><td>無</td><td>有</td></tr>
+          <tr><td>莖加粗</td><td>不會</td><td>會</td></tr>
+          <tr><td>例子</td><td>玉米、水稻、小麥</td><td>向日葵、榕樹</td></tr>
+        </table>
+        <ul>
+          <li><span class="kw">形成層</span>向內產生新的木質部、向外產生新的韌皮部，所以莖可以加粗。</li>
+          <li>一年生植物（鬼針草、向日葵）形成層<b>較不發達</b>；多年生植物（相思樹、榕樹）<b>較發達</b>。</li>
+        </ul>
+        <div class="ft"><small>課本 P.97</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 1：莖橫切面 ========== -->
+  <div class="block-title" id="a1"><span class="num">🎬</span><h2>莖橫切面切換器</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <div class="seg" id="segPlant"><button data-v="corn" aria-pressed="true">🌽 玉米（散生排列）</button><button data-v="sun">🌻 向日葵（環狀排列）</button></div>
+      <span class="sp"></span>
+      <div class="seg" id="segPart"><button data-v="" aria-pressed="true">全部</button><button data-v="xylem">▲ 木質部</button><button data-v="phloem">● 韌皮部</button><button data-v="cambium">┅ 形成層</button></div>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="stem" viewBox="0 0 500 420" role="img" aria-label="莖的橫切面"></svg></div>
+      <div class="info" id="stemInfo"></div>
+    </div>
+    <div class="legend"><span><i style="background:#29B6F6"></i>▲ 木質部（運水）</span><span><i style="background:#FF9800"></i>● 韌皮部（運養分）</span><span><i style="border:2px dashed #2E7D32"></i>形成層</span><span>💡 把手指或滑鼠移到構造上，可以看名稱和功能</span></div>
+  </div>
+
+  <!-- ========== 概念卡 3 ========== -->
+  <div class="block-title" id="b2"><span class="num">2</span><h2>樹皮、木材與年輪</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-1-c3"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="44" fill="#6D4C41"/><circle cx="50" cy="50" r="38" fill="#FFE0B2"/>
+          <g fill="none" stroke="#A1887F" stroke-width="3"><circle cx="50" cy="50" r="31"/><circle cx="50" cy="50" r="23"/><circle cx="50" cy="50" r="15"/><circle cx="50" cy="50" r="7"/></g>
+        </svg>
+        <h3>樹皮・木材・年輪</h3><span class="hint">點我翻面看說明</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>樹皮、木材與年輪</h3>
+        <ul>
+          <li><span class="kw">木材</span>：木質部逐年累積形成；<span class="kw">樹皮</span>：韌皮部及其外側。</li>
+          <li><span class="kw">年輪</span>：溫暖多雨→細胞大、顏色淺；氣溫降、雨量少→細胞小、顏色深，形成深淺環紋。</li>
+          <li>巨木<b>樹心中空</b>仍能存活：中空的是不具運輸功能的<b>老化木質部</b>。</li>
+          <li>松鼠<b>環狀啃食</b>柳杉樹皮→韌皮部破壞→養分到不了根→根死亡無法吸水→枝葉枯黃。</li>
+        </ul>
+        <div class="ft"><small>課本 P.98～99</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 2：年輪 ========== -->
+  <div class="block-title" id="a2"><span class="num">🎬</span><h2>年輪生長模擬＋松鼠啃食</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <div class="seg" id="segRing"><button data-v="ring" aria-pressed="true">🪵 年輪生長</button><button data-v="squirrel">🐿️ 松鼠環狀啃食</button></div>
+      <span class="sp"></span>
+      <div class="range" id="ringCtrl">
+        <label for="yearRange"><strong>時間</strong></label>
+        <input type="range" id="yearRange" min="0" max="16" step="1" value="0">
+        <button class="btn ghost" id="ringPrev">◀ 上一步</button>
+        <button class="btn ghost" id="ringNext">下一步 ▶</button>
+        <button class="btn" id="ringPlay">▶ 自動播放</button>
+      </div>
+      <div id="sqCtrl" style="display:none"><button class="btn" id="sqPlay">🐿️ 開始啃食</button> <button class="btn ghost" id="sqReset">↺ 重來</button> <button class="btn plant" id="sqQuiz">🧩 自我檢測：排順序</button></div>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="ring" viewBox="0 0 500 420" role="img" aria-label="樹幹橫切面的年輪"></svg><svg id="tree" viewBox="0 0 500 420" role="img" aria-label="柳杉被環狀剝皮的過程" style="display:none"></svg></div>
+      <div class="info" id="ringInfo"></div>
+    </div>
+  </div>
+
+  <!-- ========== 概念卡 4、5 ========== -->
+  <div class="block-title" id="b3"><span class="num">3</span><h2>水分與養分的運輸</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-1-c4"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <div class="ic" style="display:flex;align-items:center;justify-content:center" id="dropIcon"></div>
+        <h3>水分與礦物質的運輸</h3><span class="hint">根毛・蒸散作用</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>水分與礦物質的吸收與運輸</h3>
+        <ul>
+          <li>根部吸收水分和礦物質，細絲狀的<span class="kw">根毛</span>增加吸收的表面積。</li>
+          <li>水分進入後，少部分被細胞利用，<b>大部分經葉表面的氣孔散失</b>，稱為<span class="kw">蒸散作用</span>。</li>
+          <li>蒸散作用是水分<b>向上運輸的主要動力</b>：水從氣孔蒸散時產生拉力，把木質部細管內的水往上牽引，形成<span class="kw">連續水柱</span>。</li>
+        </ul>
+        <div class="ft"><small>課本 P.100</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+
+    <div class="concept" data-id="3-1-c5"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 92 V40" stroke="#6D4C41" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="38" cy="30" r="9" fill="#F8BBD0"/><circle cx="60" cy="24" r="9" fill="#F8BBD0"/><circle cx="52" cy="40" r="8" fill="#F48FB1"/>
+          <circle cx="38" cy="30" r="3" fill="#FFF59D"/><circle cx="60" cy="24" r="3" fill="#FFF59D"/>
+          <g fill="#FF9800"><circle cx="50" cy="84" r="4"/><circle cx="50" cy="70" r="4"/><circle cx="50" cy="56" r="4"/></g>
+        </svg>
+        <h3>養分的運輸</h3><span class="hint">韌皮部・儲存</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>養分的運輸</h3>
+        <ul>
+          <li>光合作用產生的養分由<span class="kw">韌皮部</span>運送到其他部位，供細胞利用或<b>儲藏</b>（儲存在根和莖）。</li>
+          <li>儲藏的養分需要時可再分解，由韌皮部運到需要的地方（<b>上下都可以</b>）。</li>
+          <li>例：冬季過後，<b>梅花、櫻花</b>葉片尚未長出，先分解<b>根部儲存的養分</b>供應花芽，所以早春先開花。</li>
+        </ul>
+        <div class="ft"><small>課本 P.100～101</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 3：運輸全景圖 ========== -->
+  <div class="block-title" id="a3"><span class="num">🎬</span><h2>植物運輸全景圖</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <div class="seg" id="segWeather"><button data-v="sun" aria-pressed="true">☀️ 晴天</button><button data-v="cloud">☁️ 陰天</button><button data-v="night">🌙 夜間</button></div>
+      <div class="seg" id="segStoma"><button data-v="open" aria-pressed="true">氣孔 打開</button><button data-v="close">氣孔 關閉</button></div>
+      <span class="sp"></span>
+      <div class="seg" id="segPs"><button data-v="on" aria-pressed="true">🌿 顯示光合作用</button><button data-v="off">隱藏</button></div>
+      <div class="seg" id="segShow"><button data-v="both" aria-pressed="true">全部</button><button data-v="water">只看水分 ▲</button><button data-v="food">只看養分 ●</button></div>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="pano" viewBox="0 0 500 460" role="img" aria-label="植物體內水分與養分運輸"></svg></div>
+      <div class="info" id="panoInfo"></div>
+    </div>
+    <div class="legend"><span><i style="background:#29B6F6"></i>▲ 水分（木質部，由下往上）</span><span><i style="background:#FF9800"></i>● 養分（韌皮部，上下都可以）</span><span style="color:#6D4C41"><b>CO₂</b> 由氣孔進入</span><span style="color:#1565C0"><b>O₂</b> 由氣孔放出</span><span>💡 夜間模式時氣孔會自動關閉</span></div>
+  </div>
+
+  <div class="unit-foot">
+    <a class="btn ghost" href="index.html">← 回首頁</a>
+    <a class="btn plant" href="quiz.html?unit=3-1">✏️ 練習 3-1 題目</a>
+    <a class="btn" href="unit3-2.html">下一單元：3-2 人體的循環 →</a>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/unit.js"></script>
+<script>
+(function(){
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){
+    var e = document.createElementNS(NS, tag);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    if(parent) parent.appendChild(e); return e;
+  }
+  document.getElementById('dropIcon').innerHTML = CH3.mascots.drop(100);
+
+  /* ===== 動畫 1：莖橫切面切換器 ===== */
+  var stem = document.getElementById('stem'), stemInfo = document.getElementById('stemInfo');
+  var plant = 'corn', part = '';
+  var PART_TEXT = {
+    xylem:  ['▲ 木質部', '運輸<b>水分和礦物質</b>，由下往上。在每個維管束中位於<b>內側</b>（靠近莖的中心）。'],
+    phloem: ['● 韌皮部', '運輸<b>養分</b>，可運到需要的部位。在每個維管束中位於<b>外側</b>。'],
+    cambium:['┅ 形成層', '位於木質部和韌皮部之間，<b>向內</b>產生新的木質部、<b>向外</b>產生新的韌皮部，使莖加粗。'],
+    ground: ['其他組織', '維管束以外的部分（表皮與其他組織），負責保護、儲存等。']
+  };
+  var PLANT_TEXT = {
+    corn: ['🌽 玉米：散生排列', '維管束<b>散生</b>在組織中，木質部和韌皮部之間<b>沒有形成層</b>，莖不會逐年加粗。<br>同類：水稻、小麥。'],
+    sun:  ['🌻 向日葵：環狀排列', '維管束排成<b>一圈</b>，木質部和韌皮部之間<b>有形成層</b>，莖可以加粗。<br>向日葵是一年生植物，形成層較不發達；多年生的相思樹、榕樹較發達。']
+  };
+  var CORN_POS = [[250,48],[205,62],[300,62],[160,92],[345,92],[125,135],[380,135],[108,185],[395,185],[112,238],[392,238],[132,288],[372,288],[170,330],[330,330],[212,352],[288,352],
+                  [210,122],[290,120],[172,172],[328,172],[250,160],[200,226],[300,226],[250,246],[222,292],[280,296],[158,238],[345,238],[250,104],[250,316]];
+  function drawStem(){
+    stem.innerHTML = '';
+    var cx = 250, cy = 210;
+    el('circle',{cx:cx,cy:cy,r:182,fill:'#C8E6C9',class:'p-ground hot','data-part':'ground'},stem);
+    el('circle',{cx:cx,cy:cy,r:174,fill:'#F1F8E9',class:'p-ground hot','data-part':'ground'},stem);
+    if(plant === 'corn'){
+      CORN_POS.forEach(function(p){
+        var x = p[0], y = p[1] + 4;
+        var ang = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
+        var dist = Math.hypot(x - cx, y - cy), s = dist > 120 ? .8 : 1.05;
+        var g = el('g',{transform:'translate('+x+' '+y+') rotate('+ang.toFixed(1)+') scale('+s+')'},stem);
+        el('ellipse',{cx:0,cy:0,rx:12,ry:15,fill:'#DCEDC8',stroke:'#9CCC65','stroke-width':1.5},g);
+        el('circle',{cx:0,cy:-6,r:6.5,class:'p-phloem hot','data-part':'phloem'},g);
+        el('path',{d:'M-8 2 L8 2 L0 13 Z',class:'p-xylem hot','data-part':'xylem'},g);
+      });
+      label(345,90,'韌皮部',440,34,'#E65100'); label(250,170,'木質部',440,400,'#0277BD');
+    } else {
+      el('circle',{cx:cx,cy:cy,r:62,fill:'#FFFDE7',class:'p-ground hot','data-part':'ground'},stem);
+      var N = 14;
+      for(var i=0;i<N;i++){
+        var a = i / N * 360;
+        var g = el('g',{transform:'translate('+cx+' '+cy+') rotate('+a+')'},stem);
+        el('path',{d:wedge(96,126,13),class:'p-xylem hot','data-part':'xylem'},g);
+        el('path',{d:wedge(134,154,12),class:'p-phloem hot','data-part':'phloem'},g);
+      }
+      el('circle',{cx:cx,cy:cy,r:130,class:'p-cambium hot','data-part':'cambium'},stem);
+      label(cx+150,cy,'韌皮部',450,34,'#E65100'); label(cx+110,cy+8,'木質部',450,400,'#0277BD'); label(cx-92,cy-92,'形成層',52,34,'#2E7D32');
+    }
+    if(part) stem.setAttribute('data-sel', part); else stem.removeAttribute('data-sel');
+    showStemInfo();
+  }
+  function wedge(r1, r2, deg){
+    var a = deg * Math.PI / 360;
+    function pt(r, s){ return (r*Math.cos(s*a)).toFixed(1)+' '+(r*Math.sin(s*a)).toFixed(1); }
+    return 'M'+pt(r1,-1)+' L'+pt(r2,-1)+' A'+r2+' '+r2+' 0 0 1 '+pt(r2,1)+' L'+pt(r1,1)+' A'+r1+' '+r1+' 0 0 0 '+pt(r1,-1)+' Z';
+  }
+  function label(x1,y1,txt,x2,y2,color){
+    el('line',{x1:x1,y1:y1,x2:x2,y2:(y2 < y1 ? y2+6 : y2-16),stroke:color,'stroke-width':2,'stroke-dasharray':'4 3'},stem);
+    var bg = el('rect',{x:x2-34,y:y2-17,width:68,height:24,rx:12,fill:'#fff',opacity:.9},stem);
+    var t = el('text',{x:x2,y:y2,'text-anchor':'middle',fill:color,class:'lbl'},stem); t.textContent = txt;
+  }
+  function showStemInfo(hover){
+    var p = hover || part, pl = PLANT_TEXT[plant];
+    var html = '<h3>'+pl[0]+'</h3><p>'+pl[1]+'</p>';
+    if(p && PART_TEXT[p]) html += '<hr style="border:none;border-top:1px dashed rgba(0,0,0,.15)"><h3>'+PART_TEXT[p][0]+'</h3><p>'+PART_TEXT[p][1]+'</p>';
+    else html += '<p style="color:var(--c-muted)">👆 點上方按鈕或圖上的構造，看看它的位置和功能。</p>';
+    if(plant === 'corn' && p === 'cambium') html += '<p><b>⚠ 玉米沒有形成層！</b>所以圖上找不到。</p>';
+    stemInfo.innerHTML = html;
+  }
+  stem.addEventListener('mouseover', function(e){ var t = e.target.closest('[data-part]'); if(t) showStemInfo(t.getAttribute('data-part')); });
+  stem.addEventListener('mouseleave', function(){ showStemInfo(); });
+  stem.addEventListener('click', function(e){
+    var t = e.target.closest('[data-part]'); if(!t) return;
+    var p = t.getAttribute('data-part'); if(p === 'ground') p = 'ground';
+    document.querySelectorAll('#segPart button').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-v') === p); });
+    part = p; drawStem();
+  });
+  UNIT.seg(document.getElementById('segPlant'), function(v){ plant = v; drawStem(); });
+  UNIT.seg(document.getElementById('segPart'), function(v){ part = v; drawStem(); });
+  drawStem();
+
+  /* ===== 動畫 2：年輪生長 ===== */
+  var ring = document.getElementById('ring'), ringInfo = document.getElementById('ringInfo');
+  var yr = document.getElementById('yearRange'), ringTimer = null;
+  var LIGHT_W = 12, DARK_W = 4, PITH = 12;
+  function drawRing(){
+    var v = Number(yr.value), years = Math.floor(v / 2), half = v % 2;
+    ring.innerHTML = '';
+    var cx = 250, cy = 210, rings = [], r = PITH;
+    for(var i=0;i<years;i++){ rings.push({r2:r+LIGHT_W, c:'#FFE0B2'}); r += LIGHT_W; rings.push({r2:r+DARK_W, c:'#8D6E63'}); r += DARK_W; }
+    if(half){ rings.push({r2:r+LIGHT_W, c:'#FFF3E0', fresh:true}); r += LIGHT_W; }
+    var wood = r;
+    el('circle',{cx:cx,cy:cy,r:wood+24,fill:'#6D4C41'},ring);
+    el('circle',{cx:cx,cy:cy,r:wood+9,fill:'#FFB74D'},ring);
+    el('circle',{cx:cx,cy:cy,r:wood+3,fill:'none',stroke:'#2E7D32','stroke-width':3,'stroke-dasharray':'5 3'},ring);
+    for(var j=rings.length-1;j>=0;j--) el('circle',{cx:cx,cy:cy,r:rings[j].r2,fill:rings[j].c},ring);
+    el('circle',{cx:cx,cy:cy,r:PITH,fill:'#D7CCC8'},ring);
+    if(half) el('circle',{cx:cx,cy:cy,r:wood-LIGHT_W/2,fill:'none',stroke:'#FFCA28','stroke-width':LIGHT_W,opacity:.55},ring);
+    tag(cx + wood + 17, cy - 30, '樹皮', 450, 36, '#4E342E');
+    tag(cx + wood + 6, cy + 20, '韌皮部', 450, 380, '#E65100');
+    tag(cx - wood - 3, cy - 40, '形成層', 55, 36, '#2E7D32');
+    if(years > 0) tag(cx - wood/2, cy + 10, '木材（木質部）', 90, 390, '#795548');
+    var season = v === 0 ? '剛長出的幼莖' : (half ? '第 ' + (years+1) + ' 年・春夏' : '第 ' + years + ' 年・秋冬');
+    var txt;
+    if(v === 0) txt = '拖曳時間滑桿或按「播放」，看形成層每年怎麼向內長出新的木質部。';
+    else if(half) txt = '氣候<b>溫暖、雨量豐富</b>，木質部細胞生長<b>快</b> → 細胞<b>大</b>、顏色<b>淺</b>（寬的淺色帶）。';
+    else txt = '氣溫下降、雨量減少，木質部細胞生長<b>慢</b> → 細胞<b>小</b>、顏色<b>深</b>（窄的深色帶）。';
+    ringInfo.innerHTML = '<h3><span class="seasontag">'+season+'</span></h3><p>'+txt+'</p>' +
+      '<p>目前已形成 <b>'+years+'</b> 圈完整的年輪。</p>' +
+      '<p style="font-size:.88rem;color:var(--c-muted)">深淺兩色都是<b>木質部</b>。形成層也同時向外長出韌皮部，韌皮部及其外側就是樹皮。</p>';
+  }
+  function tag(x1,y1,txt,x2,y2,color){
+    el('line',{x1:x1,y1:y1,x2:x2,y2:(y2 < y1 ? y2+8 : y2-14),stroke:color,'stroke-width':2,'stroke-dasharray':'4 3'},ring);
+    var w = txt.length * 16 + 14;
+    el('rect',{x:x2-w/2,y:y2-12,width:w,height:24,rx:12,fill:'#fff',opacity:.9},ring);
+    var t = el('text',{x:x2,y:y2+6,'text-anchor':'middle',fill:color,'font-size':15,'font-weight':900},ring); t.textContent = txt;
+  }
+  yr.addEventListener('input', drawRing);
+  document.getElementById('ringPlay').addEventListener('click', function(){
+    var b = this;
+    if(ringTimer){ clearInterval(ringTimer); ringTimer = null; b.textContent = '▶ 自動播放'; return; }
+    if(Number(yr.value) >= Number(yr.max)) yr.value = 0;
+    b.textContent = '⏸ 暫停';
+    ringTimer = setInterval(function(){
+      yr.value = Number(yr.value) + 1; drawRing();
+      if(Number(yr.value) >= Number(yr.max)){ clearInterval(ringTimer); ringTimer = null; b.textContent = '▶ 自動播放'; }
+    }, UNIT.reduced() ? 600 : 1800);
+  });
+  function ringStep(d){
+    if(ringTimer){ clearInterval(ringTimer); ringTimer = null; document.getElementById('ringPlay').textContent = '▶ 自動播放'; }
+    yr.value = Math.max(0, Math.min(Number(yr.max), Number(yr.value) + d)); drawRing();
+  }
+  document.getElementById('ringPrev').addEventListener('click', function(){ ringStep(-1); });
+  document.getElementById('ringNext').addEventListener('click', function(){ ringStep(1); });
+  drawRing();
+
+  /* ===== 松鼠啃食 ===== */
+  var tree = document.getElementById('tree'), sqTimers = [];
+  var SQ_STEPS = [
+    '松鼠為了磨牙，<b>環狀啃食</b>柳杉的樹皮。',
+    '樹皮包含韌皮部，<b>韌皮部被破壞</b>。',
+    '葉片製造的<b>養分無法向下</b>運輸到根部。',
+    '根部缺乏養分而<b>死亡</b>，無法吸收水分。',
+    '柳杉<b>枝葉枯黃凋零</b>。'
+  ];
+  function drawTree(step, keep){
+    var crown = step >= 5 ? '#C0A050' : (step >= 4 ? '#8BC34A' : '#43A047');
+    var root = step >= 4 ? '#9E9E9E' : '#795548';
+    var h = '<rect x="0" y="330" width="500" height="90" fill="#EFEBE9"/>';
+    h += '<g fill="'+crown+'"><polygon points="250,20 160,150 340,150"/><polygon points="250,70 140,220 360,220"/><polygon points="250,130 125,280 375,280"/></g>';
+    h += '<rect x="232" y="270" width="36" height="70" fill="#8D6E63"/>';
+    h += '<g stroke="'+root+'" stroke-width="7" stroke-linecap="round" fill="none"><path d="M250 340 C240 370 210 380 180 400"/><path d="M250 340 C262 372 292 382 330 398"/><path d="M250 340 V410"/></g>';
+    if(step >= 1) h += '<rect x="228" y="296" width="44" height="16" fill="#FFF8E1" stroke="#BF360C" stroke-width="2" stroke-dasharray="4 3"/>';
+    if(step >= 2){
+      h += '<g fill="#FF9800"><circle cx="262" cy="230" r="5"/><circle cx="262" cy="255" r="5"/><circle cx="262" cy="280" r="5"/></g>';
+      h += '<text x="282" y="312" font-size="30" fill="#C62828" font-weight="900">✕</text>';
+      if(step >= 3) h += '<text x="300" y="360" font-size="16" fill="#C62828" font-weight="900">養分到不了根</text>';
+    } else {
+      h += '<g fill="#FF9800"><circle cx="262" cy="240" r="5"/><circle cx="262" cy="290" r="5"/><circle cx="262" cy="330" r="5"/><circle cx="252" cy="372" r="5"/></g>';
+    }
+    if(step >= 4) h += '<text x="40" y="410" font-size="16" fill="#616161" font-weight="900">根死亡・無法吸水</text>';
+    if(step >= 1 && step < 5){
+      h += '<g transform="translate(170 300)"><path d="M-30 0 C-60 -40 -20 -70 -10 -30" fill="#A1887F" stroke="#6D4C41" stroke-width="2"/>' +
+           '<ellipse cx="10" cy="5" rx="24" ry="17" fill="#BCAAA4" stroke="#6D4C41" stroke-width="2"/><circle cx="34" cy="-6" r="12" fill="#BCAAA4" stroke="#6D4C41" stroke-width="2"/>' +
+           '<circle cx="38" cy="-8" r="2.5" fill="#212121"/><path d="M28 -16 l3 -9 l5 8z" fill="#BCAAA4" stroke="#6D4C41"/><rect x="44" y="-4" width="10" height="4" rx="2" fill="#fff" stroke="#6D4C41"/></g>';
+    }
+    tree.innerHTML = h;
+    if(keep) return;
+    ringInfo.innerHTML = '<h3>🐿️ 柳杉為什麼會枯死？</h3><ol class="steps">' +
+      SQ_STEPS.map(function(s,i){ return '<li class="'+(i < step ? 'on' : '')+'">'+s+'</li>'; }).join('') + '</ol>' +
+      (step >= 5 ? '<p><b>重點：</b>被破壞的是<b>韌皮部</b>（運養分），不是木質部！</p>' : '');
+  }
+  function sqReset(){ sqTimers.forEach(clearTimeout); sqTimers = []; drawTree(0); }
+  document.getElementById('sqPlay').addEventListener('click', function(){
+    sqReset();
+    for(var s=1;s<=5;s++)(function(s){ sqTimers.push(setTimeout(function(){ drawTree(s); }, (UNIT.reduced() ? 250 : 1300) * s)); })(s);
+  });
+  document.getElementById('sqReset').addEventListener('click', sqReset);
+  document.getElementById('sqQuiz').addEventListener('click', function(){
+    sqTimers.forEach(clearTimeout); sqTimers = []; drawTree(0);
+    var items = SQ_STEPS.map(function(t, i){ return { t:t.replace(/<[^>]+>/g, ''), i:i }; }), sh;
+    do { sh = CH3.shuffle(items); } while(sh.every(function(x, k){ return x.i === k; }));
+    ringInfo.innerHTML = '<h3>🧩 自我檢測：柳杉為什麼會枯死？</h3><p style="margin:0">把 5 個步驟<b>拖曳</b>（或按 ▲▼）排成正確的順序，再按「檢查」。</p>' +
+      '<ul class="sortlist" id="sqSort">' + sh.map(function(x){ return '<li data-i="'+x.i+'"><span class="grip">⠿</span><span class="tx">'+x.t+'</span><span class="mv"><button data-mv="up" aria-label="上移">▲</button><button data-mv="down" aria-label="下移">▼</button></span></li>'; }).join('') + '</ul>' +
+      '<div class="ops"><button class="btn plant" id="sqCheck">✔ 檢查</button><button class="btn ghost" id="sqShuffle">🔀 重新打亂</button></div><div id="sqRes"></div>';
+    UNIT.sortable(document.getElementById('sqSort'));
+    document.getElementById('sqShuffle').addEventListener('click', function(){ document.getElementById('sqQuiz').click(); });
+    document.getElementById('sqCheck').addEventListener('click', function(){
+      var lis = document.querySelectorAll('#sqSort li'), right = 0;
+      lis.forEach(function(li, k){ var ok = Number(li.getAttribute('data-i')) === k; li.classList.toggle('ok', ok); li.classList.toggle('ng', !ok); if(ok) right++; });
+      var res = document.getElementById('sqRes');
+      if(right === 5){ res.innerHTML = '<div class="good">🎉 全對！你已經學會了：韌皮部被破壞 → 養分到不了根 → 根死亡無法吸水 → 枝葉枯黃。按「開始啃食」可以再看一次動畫。</div>'; drawTree(5, true); }
+      else res.innerHTML = '<div class="warn">答對 ' + right + ' / 5 個位置。紅框的再想一想：先發生什麼，才會造成下一件事？</div>';
+    });
+  });
+  UNIT.seg(document.getElementById('segRing'), function(v){
+    var sq = v === 'squirrel';
+    ring.style.display = sq ? 'none' : ''; tree.style.display = sq ? '' : 'none';
+    document.getElementById('ringCtrl').style.display = sq ? 'none' : '';
+    document.getElementById('sqCtrl').style.display = sq ? '' : 'none';
+    sqReset(); if(!sq) drawRing();
+  });
+
+  /* ===== 動畫 3：植物運輸全景圖（含光合作用、夜間模式） ===== */
+  var pano = document.getElementById('pano'), panoInfo = document.getElementById('panoInfo');
+  var weather = 'sun', stomaSel = 'open', stoma = 'open', show = 'both', psOn = true;
+  pano.innerHTML =
+    '<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E3F2FD"/><stop offset="1" stop-color="#FAFAF5"/></linearGradient>' +
+    '<marker id="arY" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10z" fill="#FBC02D"/></marker></defs>' +
+    '<rect width="500" height="330" fill="url(#sky)" id="skyRect"/>' +
+    '<g id="sunIcon"><circle cx="440" cy="50" r="24" fill="#FFCA28"/><g stroke="#FFCA28" stroke-width="4" stroke-linecap="round"><path d="M440 12v-8M440 96v-8M402 50h-8M486 50h-8M414 24l-6-6M472 82l-6-6M466 24l6-6M408 82l6-6"/></g></g>' +
+    '<g id="cloudIcon" style="display:none" fill="#B0BEC5"><ellipse cx="430" cy="54" rx="40" ry="20"/><ellipse cx="410" cy="44" rx="22" ry="20"/><ellipse cx="448" cy="40" rx="24" ry="22"/></g>' +
+    '<g id="moonIcon" style="display:none"><path d="M450 30 a26 26 0 1 0 22 40 a20 20 0 1 1 -22 -40z" fill="#FFF9C4"/><g fill="#FFF9C4"><circle cx="380" cy="30" r="2"/><circle cx="340" cy="70" r="1.6"/><circle cx="410" cy="100" r="1.8"/><circle cx="300" cy="24" r="1.4"/><circle cx="160" cy="40" r="1.8"/></g></g>' +
+    '<g id="rays" stroke="#FBC02D" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arY)"><line x1="416" y1="72" x2="350" y2="132"/><line x1="410" y1="62" x2="210" y2="182"/><line x1="404" y1="82" x2="300" y2="138"/></g>' +
+    '<rect y="330" width="500" height="130" fill="#D7CCC8"/>' +
+    '<g stroke="#8D6E63" stroke-width="7" fill="none" stroke-linecap="round"><path d="M250 330 C250 370 220 390 180 420"/><path d="M250 330 C250 370 285 392 330 420"/><path d="M250 330 V440"/></g>' +
+    '<g stroke="#A1887F" stroke-width="1.5"><path d="M190 412 l-10 10M200 405 l-4 14M318 412 l10 10M308 405 l6 13M250 430 l-12 6M250 420 l12 6"/></g>' +
+    '<ellipse cx="250" cy="380" rx="22" ry="34" fill="#FFCC80" opacity=".55"/><text x="282" y="378" font-size="13" fill="#6D4C41" font-weight="700">根部儲存養分</text>' +
+    '<text x="70" y="450" font-size="13" fill="#5D4037" font-weight="700">根毛吸收水分 ▲</text>' +
+    '<rect x="241" y="80" width="18" height="252" rx="8" fill="#81C784"/>' +
+    '<line x1="246" y1="86" x2="246" y2="330" stroke="#29B6F6" stroke-width="3" opacity=".5"/><line x1="254" y1="86" x2="254" y2="330" stroke="#FF9800" stroke-width="3" opacity=".5"/>' +
+    '<path d="M246 200 C200 160 140 170 100 200 C150 230 210 230 246 200Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>' +
+    '<path d="M254 150 C300 110 360 116 400 146 C350 180 290 180 254 150Z" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>' +
+    '<path d="M246 200 L110 200 M254 150 L390 146" stroke="#2E7D32" stroke-width="1.5"/>' +
+    '<g id="chloro" fill="#1B5E20" opacity=".55"><ellipse cx="160" cy="190" rx="5" ry="3"/><ellipse cx="200" cy="208" rx="5" ry="3"/><ellipse cx="140" cy="210" rx="5" ry="3"/><ellipse cx="310" cy="140" rx="5" ry="3"/><ellipse cx="350" cy="158" rx="5" ry="3"/><ellipse cx="330" cy="135" rx="5" ry="3"/></g>' +
+    '<g transform="translate(250 66)"><circle r="16" fill="#F8BBD0"/><circle r="6" fill="#FFF59D"/></g><text x="272" y="60" font-size="13" fill="#AD1457" font-weight="700">花芽</text>' +
+    '<g transform="translate(70 100)"><circle r="34" fill="#fff" stroke="#2E7D32" stroke-width="2"/><g id="guard"></g><text y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#2E7D32" id="stomaTxt">氣孔</text></g>' +
+    '<line x1="96" y1="122" x2="150" y2="190" stroke="#2E7D32" stroke-dasharray="4 3"/>' +
+    '<text x="300" y="275" font-size="13" fill="#0277BD" font-weight="700">木質部 ▲</text><text x="170" y="290" font-size="13" fill="#E65100" font-weight="700">● 韌皮部</text>' +
+    '<g id="psBox"><rect x="300" y="190" width="192" height="62" rx="12" fill="#fff" stroke="#43A047" stroke-width="2" opacity=".95"/>' +
+      '<text x="396" y="208" text-anchor="middle" font-size="12" font-weight="900" fill="#2E7D32">🌿 葉綠體進行光合作用</text>' +
+      '<text x="396" y="226" text-anchor="middle" font-size="12" font-weight="900" fill="#37474F">水＋CO₂ ─光→ 養分＋O₂</text>' +
+      '<text x="396" y="244" text-anchor="middle" font-size="12" font-weight="900" id="psRate" fill="#E65100">光合作用：旺盛</text></g>' +
+    '<g id="pGas"></g><g id="pWater"></g><g id="pVapor"></g><g id="pFood"></g>';
+  var paths = {
+    w1: 'M180 420 C220 390 250 370 246 330 L246 205 C210 190 160 195 120 200',
+    w2: 'M330 420 C285 392 250 370 246 330 L246 160 L250 150 C300 140 340 146 380 146',
+    f1: 'M380 150 C330 150 290 150 254 152 L254 330 L254 370',
+    f2: 'M120 200 C170 202 220 202 254 200 L254 90'
+  };
+  var pathEls = {}, particles = [];
+  Object.keys(paths).forEach(function(k){ pathEls[k] = el('path',{d:paths[k],fill:'none',stroke:'none'},pano); });
+  function mkParticles(key, n, kind){
+    var g = document.getElementById(kind === 'water' ? 'pWater' : 'pFood');
+    for(var i=0;i<n;i++){
+      var s = kind === 'water' ? el('polygon',{points:'0,-6 5,4 -5,4',fill:'#0288D1'},g) : el('circle',{r:4.5,fill:'#EF6C00'},g);
+      particles.push({ el:s, path:pathEls[key], len:pathEls[key].getTotalLength(), t:i/n, kind:kind });
+    }
+  }
+  mkParticles('w1',10,'water'); mkParticles('w2',10,'water'); mkParticles('f1',8,'food'); mkParticles('f2',7,'food');
+  var vapors = [], vg = document.getElementById('pVapor');
+  for(var i=0;i<8;i++){
+    var leafPt = i % 2 ? [120 + i*8, 195] : [330 + i*6, 140];
+    var v = el('text',{'font-size':18,fill:'#4FC3F7','font-weight':900},vg); v.textContent = '~';
+    vapors.push({ el:v, x:leafPt[0], y:leafPt[1], t:i/8 });
+  }
+  // 光合作用氣體：CO₂ 從空氣進入葉片、O₂ 從葉片出去
+  var gases = [], gg = document.getElementById('pGas');
+  [[30,260,150,205,'co2'],[40,150,140,196,'co2'],[470,110,360,150,'co2'],[160,215,40,250,'o2'],[350,160,460,190,'o2'],[200,205,170,120,'o2']].forEach(function(a, i){
+    var t = el('text',{'font-size':13,'font-weight':900,fill:a[4] === 'co2' ? '#6D4C41' : '#1565C0'},gg); t.textContent = a[4] === 'co2' ? 'CO₂' : 'O₂';
+    gases.push({ el:t, x1:a[0], y1:a[1], x2:a[2], y2:a[3], t:i/6 });
+  });
+  function drawGuard(){
+    var g = document.getElementById('guard'), open = stoma === 'open';
+    g.innerHTML = open
+      ? '<path d="M-6 -22 C-22 -12 -22 12 -6 22 C-12 10 -12 -10 -6 -22Z" fill="#81C784" stroke="#2E7D32"/><path d="M6 -22 C22 -12 22 12 6 22 C12 10 12 -10 6 -22Z" fill="#81C784" stroke="#2E7D32"/><ellipse rx="5" ry="16" fill="#E3F2FD"/>'
+      : '<path d="M-1 -22 C-20 -12 -20 12 -1 22 C-4 10 -4 -10 -1 -22Z" fill="#81C784" stroke="#2E7D32"/><path d="M1 -22 C20 -12 20 12 1 22 C4 10 4 -10 1 -22Z" fill="#81C784" stroke="#2E7D32"/>';
+    document.getElementById('stomaTxt').textContent = open ? '氣孔打開' : '氣孔關閉';
+  }
+  function speeds(){
+    var w = weather === 'night' ? .03 : stoma === 'close' ? .06 : (weather === 'sun' ? 1 : .35);
+    var ps = weather === 'sun' ? 1 : weather === 'cloud' ? .4 : 0;
+    if(stoma === 'close') ps *= .15;
+    return { water:w, food: weather === 'night' ? .35 : .5, ps:ps };
+  }
+  function panoText(){
+    var s = speeds(), h;
+    if(weather === 'night') h = '<h3>🌙 夜間</h3><p>夜晚<b>沒有光</b>，<b>光合作用停止</b>；大部分植物的<b>氣孔關閉</b>，蒸散作用極弱，向上的拉力很小，<b>水分運輸極為緩慢</b>。</p><p>韌皮部仍然可以把白天製造、儲存的養分，運到需要的地方。</p>';
+    else if(stoma === 'close') h = '<h3>氣孔關閉</h3><p>水分幾乎無法由氣孔散失，<b>蒸散作用幾乎停止</b>，水柱上升<b>非常慢</b>。</p><p>二氧化碳也很難從氣孔進入葉片 → <b>光合作用變得很弱</b>。</p>';
+    else if(weather === 'sun') h = '<h3>☀️ 晴天・氣孔打開</h3><p>陽光強、溫度高，<b>蒸散作用旺盛</b>：水分由氣孔散失產生拉力，木質部裡的<b>連續水柱</b>被快速往上拉。</p>';
+    else h = '<h3>☁️ 陰天・氣孔打開</h3><p>蒸散作用變慢，<b>水分上升速度變慢</b>；光線較弱，光合作用也比較慢。</p>';
+    h += '<p>▲ 水分上升：<b>' + (s.water >= 1 ? '快' : s.water > .2 ? '中等' : s.water > .05 ? '很慢' : '極為緩慢') + '</b>　🌿 光合作用：<b>' + psWord(s.ps) + '</b></p>';
+    if(psOn) h += '<div style="background:#fff;border-radius:12px;padding:8px 12px;margin-top:6px;font-size:.92rem"><b>🔗 光合作用 × 運輸作用</b><br>' +
+      '① 根毛吸收的<b>水</b>經<b>木質部</b>運到葉片<br>② <b>二氧化碳</b>從<b>氣孔</b>進入葉片<br>③ 葉綠體利用<b>光</b>，把水和二氧化碳變成<b>養分</b>，放出<b>氧氣</b><br>④ 養分經<b>韌皮部</b>運到花芽利用、運到根和莖<b>儲存</b><br>' +
+      '<span style="color:var(--c-muted)">所以蒸散作用、光合作用、養分運輸是互相串聯的，一起維持植物的生命！</span></div>';
+    panoInfo.innerHTML = h;
+    var pr = document.getElementById('psRate'); pr.textContent = '光合作用：' + psWord(s.ps); pr.setAttribute('fill', s.ps > .5 ? '#E65100' : s.ps > 0 ? '#8D6E63' : '#9E9E9E');
+  }
+  function psWord(p){ return p >= 1 ? '旺盛' : p >= .3 ? '較慢' : p > 0 ? '很弱' : '停止'; }
+  function paintSky(){
+    document.getElementById('sunIcon').style.display = weather === 'sun' ? '' : 'none';
+    document.getElementById('cloudIcon').style.display = weather === 'cloud' ? '' : 'none';
+    document.getElementById('moonIcon').style.display = weather === 'night' ? '' : 'none';
+    document.getElementById('skyRect').setAttribute('fill', weather === 'sun' ? 'url(#sky)' : weather === 'cloud' ? '#ECEFF1' : '#1A237E');
+    var s = speeds();
+    document.getElementById('rays').style.display = psOn && weather !== 'night' ? '' : 'none';
+    document.getElementById('rays').setAttribute('opacity', weather === 'cloud' ? .35 : 1);
+    document.getElementById('psBox').style.display = psOn ? '' : 'none';
+    document.getElementById('chloro').style.display = psOn ? '' : 'none';
+    document.querySelectorAll('#segStoma button').forEach(function(b){ b.disabled = weather === 'night'; b.setAttribute('aria-pressed', b.getAttribute('data-v') === stoma); });
+  }
+  var last = 0;
+  function tick(ts){
+    var dt = Math.min(50, ts - (last || ts)) / 1000; last = ts;
+    var s = speeds();
+    if(UNIT.reduced()) dt *= .4;
+    particles.forEach(function(p){
+      var hidden = (show === 'water' && p.kind === 'food') || (show === 'food' && p.kind === 'water');
+      p.el.style.display = hidden ? 'none' : '';
+      p.t = (p.t + dt * (p.kind === 'water' ? s.water : s.food) * .18) % 1;
+      var pt = p.path.getPointAtLength(p.t * p.len);
+      p.el.setAttribute('transform','translate('+pt.x.toFixed(1)+' '+pt.y.toFixed(1)+')');
+    });
+    vapors.forEach(function(v){
+      v.el.style.display = (show === 'food' || stoma === 'close') ? 'none' : '';
+      v.t = (v.t + dt * s.water * .5) % 1;
+      v.el.setAttribute('x', (v.x + v.t * 20).toFixed(1)); v.el.setAttribute('y', (v.y - v.t * 60).toFixed(1));
+      v.el.setAttribute('opacity', (1 - v.t).toFixed(2));
+    });
+    gases.forEach(function(g){
+      g.el.style.display = psOn && s.ps > 0 ? '' : 'none';
+      g.t = (g.t + dt * Math.max(.05, s.ps) * .25) % 1;
+      g.el.setAttribute('x', (g.x1 + (g.x2 - g.x1) * g.t).toFixed(1)); g.el.setAttribute('y', (g.y1 + (g.y2 - g.y1) * g.t).toFixed(1));
+      g.el.setAttribute('opacity', (g.t < .15 ? g.t / .15 : g.t > .85 ? (1 - g.t) / .15 : 1).toFixed(2));
+    });
+    requestAnimationFrame(tick);
+  }
+  UNIT.seg(document.getElementById('segWeather'), function(v){
+    weather = v;
+    stoma = v === 'night' ? 'close' : stomaSel;
+    drawGuard(); paintSky(); panoText();
+  });
+  UNIT.seg(document.getElementById('segStoma'), function(v){ stomaSel = v; if(weather !== 'night'){ stoma = v; } drawGuard(); panoText(); });
+  UNIT.seg(document.getElementById('segShow'), function(v){ show = v; });
+  UNIT.seg(document.getElementById('segPs'), function(v){ psOn = v === 'on'; paintSky(); panoText(); });
+  drawGuard(); paintSky(); panoText(); requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

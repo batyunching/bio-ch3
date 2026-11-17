@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>練習題｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  .panel{ display:grid; gap:18px; }
+  .field h3{ margin:0 0 8px; font-size:1rem; color:var(--c-muted); }
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip input{ position:absolute; opacity:0; pointer-events:none; }
+  .chip span{
+    display:inline-flex; align-items:center; min-height:48px; padding:8px 18px; border-radius:999px;
+    border:2px solid var(--c-line); background:#fff; cursor:pointer; font-weight:700; user-select:none;
+  }
+  .chip input:checked + span{ background:var(--u,var(--c-text)); border-color:var(--u,var(--c-text)); color:#fff; }
+  .chip input:focus-visible + span{ outline:3px solid #90CAF9; }
+  .stat-row{ display:flex; gap:12px; flex-wrap:wrap; color:var(--c-muted); font-size:.9rem; }
+
+  .qbox{ border-left:8px solid var(--u); }
+  .qhead{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+  .stars{ color:#FFB300; letter-spacing:2px; }
+  .qtext{ font-size:1.2rem; font-weight:700; margin:6px 0 16px; }
+  .opts{ display:grid; gap:10px; }
+  .opt{
+    text-align:left; min-height:56px; padding:12px 16px; border-radius:14px; border:2px solid var(--c-line);
+    background:#fff; font-family:inherit; font-size:1rem; cursor:pointer; display:flex; gap:12px; align-items:center; color:inherit;
+  }
+  .opt:hover:not(:disabled){ border-color:var(--u); background:var(--u-l); }
+  .opt .k{ flex:0 0 34px; height:34px; border-radius:50%; background:#F1F0EA; display:flex; align-items:center; justify-content:center; font-weight:900; }
+  .opt.correct{ border-color:var(--c-ok); background:#E8F5E9; }
+  .opt.correct .k{ background:var(--c-ok); color:#fff; }
+  .opt.wrong{ border-color:var(--c-ng); background:#FFEBEE; }
+  .opt.wrong .k{ background:var(--c-ng); color:#fff; }
+  .opt.selected{ border-color:var(--u); background:var(--u-l); }
+  .tf{ grid-template-columns:1fr 1fr; }
+  .tf .opt{ justify-content:center; font-size:1.3rem; font-weight:900; }
+
+  /* 排序 */
+  .order-pool, .order-ans{ display:flex; flex-wrap:wrap; gap:10px; min-height:64px; padding:10px; border-radius:14px; }
+  .order-ans{ background:var(--u-l); border:2px dashed var(--u); margin-bottom:12px; }
+  .order-ans:empty::before{ content:'依序點選下方項目放到這裡'; color:var(--c-muted); align-self:center; }
+  .token{ min-height:48px; padding:8px 14px; border-radius:12px; border:2px solid var(--c-line); background:#fff; font-family:inherit; font-size:.95rem; cursor:pointer; font-weight:700; color:inherit; }
+  .order-ans .token{ border-color:var(--u); }
+  .token .n{ display:inline-block; min-width:24px; height:24px; border-radius:50%; background:var(--u); color:#fff; font-size:.8rem; margin-right:6px; text-align:center; line-height:24px; }
+  .token.ok{ border-color:var(--c-ok); background:#E8F5E9; } .token.ng{ border-color:var(--c-ng); background:#FFEBEE; }
+
+  /* 配對 */
+  .match{ display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+  .match .col{ display:grid; gap:10px; align-content:start; }
+  .match .token{ width:100%; text-align:left; }
+  .match .token.picked{ border-color:var(--u); background:var(--u-l); }
+  .match .token.paired{ opacity:.95; }
+  .pair-badge{ display:inline-block; width:24px; height:24px; border-radius:50%; color:#fff; font-size:.8rem; text-align:center; line-height:24px; margin-right:6px; }
+
+  .feedback{ margin-top:16px; padding:14px 18px; border-radius:14px; display:none; }
+  .feedback.show{ display:block; animation:pop .3s ease; }
+  .feedback.ok{ background:#E8F5E9; border:2px solid var(--c-ok); }
+  .feedback.ng{ background:#FFEBEE; border:2px solid var(--c-ng); }
+  @keyframes pop{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:none; } }
+  .actions{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .topbar{ display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .topbar .progress{ flex:1; }
+
+  .result-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+  @media (max-width:700px){ .result-grid{ grid-template-columns:1fr; } .tf{ grid-template-columns:1fr; } .match{ grid-template-columns:1fr; } }
+  .rbox{ border-top:6px solid var(--u); text-align:center; }
+  .rbox .pct{ font-size:2.2rem; font-weight:900; color:var(--u-d); }
+  .big-score{ font-size:3rem; font-weight:900; text-align:center; }
+  .wrong-list{ display:grid; gap:10px; margin-top:12px; }
+  .wrong-item{ display:flex; gap:10px; align-items:flex-start; justify-content:space-between; padding:12px 14px; background:#fff; border-radius:12px; border-left:6px solid var(--u); }
+  .hide{ display:none !important; }
+</style>
+</head>
+<body data-page="quiz" data-root="./">
+<main class="wrap">
+
+  <!-- ===== 設定 ===== -->
+  <div id="setup">
+    <div class="page-hero" style="background:linear-gradient(120deg,#4CAF50,#E53935 55%,#1E88E5)">
+      <h1>✏️ 練習題</h1>
+      <p>選擇單元、難度和題數，作答後立即看詳解；答錯的題目會自動放進錯題本。</p>
+    </div>
+
+    <div class="card panel">
+      <div class="field">
+        <h3>單元</h3>
+        <div class="chips">
+          <label class="chip unit-31"><input type="checkbox" name="unit" value="3-1" checked><span>3-1 植物的運輸構造</span></label>
+          <label class="chip unit-32"><input type="checkbox" name="unit" value="3-2" checked><span>3-2 人體的循環</span></label>
+          <label class="chip unit-33"><input type="checkbox" name="unit" value="3-3" checked><span>3-3 人體的防禦</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <h3>難度</h3>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="level" value="1" checked><span>★ 基礎</span></label>
+          <label class="chip"><input type="checkbox" name="level" value="2" checked><span>★★ 進階</span></label>
+          <label class="chip"><input type="checkbox" name="level" value="3" checked><span>★★★ 挑戰</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <h3>題數</h3>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="count" value="10" checked><span>10 題</span></label>
+          <label class="chip"><input type="radio" name="count" value="20"><span>20 題</span></label>
+          <label class="chip"><input type="radio" name="count" value="all"><span>全部</span></label>
+        </div>
+      </div>
+      <div class="stat-row"><span id="availInfo"></span><span id="wrongInfo"></span></div>
+      <div class="actions" style="margin-top:0">
+        <button class="btn" id="btnStart">開始練習 ▶</button>
+        <button class="btn ghost" id="btnWrong">只練錯題本</button>
+        <button class="btn ghost secondary" id="btnShowWrong">📒 查看錯題本</button>
+      </div>
+    </div>
+
+    <div class="card hide" id="wrongPanel" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">📒 錯題本</h2>
+        <button class="btn ghost" id="btnClearWrong">清空錯題本</button>
+      </div>
+      <div class="wrong-list" id="wrongList"></div>
+    </div>
+  </div>
+
+  <!-- ===== 作答 ===== -->
+  <div id="play" class="hide">
+    <div class="topbar">
+      <button class="icon-btn" id="btnQuit" title="結束練習">✕</button>
+      <div class="progress"><span id="qProg" style="background:var(--c-text)"></span></div>
+      <strong id="qCount">1/10</strong>
+    </div>
+    <div class="card qbox" id="qbox"></div>
+  </div>
+
+  <!-- ===== 結算 ===== -->
+  <div id="result" class="hide">
+    <div class="card">
+      <h2 style="text-align:center">練習完成！</h2>
+      <div class="big-score" id="score"></div>
+      <div class="result-grid" id="unitResult"></div>
+      <div class="actions" style="justify-content:center">
+        <button class="btn" id="btnAgain">再練一次</button>
+        <button class="btn ghost" id="btnRetryWrong">練這次答錯的題</button>
+        <button class="btn ghost" id="btnBack">回到設定</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="js/common.js"></script>
+<script src="data/questions.js"></script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var KEYS = ['A','B','C','D','E','F'];
+  var PAIR_COLORS = ['#7E57C2','#00897B','#F4511E','#3949AB','#C0CA33','#6D4C41'];
+  var list = [], cur = 0, results = [], answered = false;
+
+  /* ---------- 設定區 ---------- */
+  function selected(name){
+    return Array.prototype.map.call(document.querySelectorAll('input[name="'+name+'"]:checked'), function(i){ return i.value; });
+  }
+  function pool(){
+    return QB.filter({ units:selected('unit'), levels:selected('level').map(Number) });
+  }
+  function refreshInfo(){
+    $('availInfo').textContent = '符合條件：' + pool().length + ' 題';
+    $('wrongInfo').textContent = '錯題本：' + CH3.wrongBook.list().length + ' 題';
+    $('btnWrong').disabled = CH3.wrongBook.list().length === 0;
+  }
+  document.querySelectorAll('#setup input').forEach(function(i){ i.addEventListener('change', refreshInfo); });
+
+  function start(qs){
+    if(!qs.length){ CH3.toast('沒有符合條件的題目，請調整篩選'); return; }
+    list = qs; cur = 0; results = [];
+    $('setup').classList.add('hide'); $('result').classList.add('hide'); $('play').classList.remove('hide');
+    render(); window.scrollTo(0,0);
+  }
+  $('btnStart').addEventListener('click', function(){
+    var c = document.querySelector('input[name="count"]:checked').value;
+    var qs = CH3.shuffle(pool());
+    if(c !== 'all') qs = qs.slice(0, Number(c));
+    start(qs);
+  });
+  $('btnWrong').addEventListener('click', function(){
+    start(CH3.shuffle(QB.filter({ ids:CH3.wrongBook.list() })));
+  });
+
+  /* 錯題本列表 */
+  function renderWrong(){
+    var ids = CH3.wrongBook.list(), html = '';
+    if(!ids.length) html = '<p style="color:var(--c-muted)">目前沒有錯題，太棒了！</p>';
+    ids.forEach(function(id){
+      var q = QB.byId(id); if(!q) return;
+      html += '<div class="wrong-item '+CH3.unitClass(q.unit)+'"><div><span class="tag">'+q.unit+'</span> '+q.question+
+        '<div style="color:var(--c-muted);font-size:.85rem;margin-top:4px">💡 '+q.explain+'</div></div>' +
+        '<button class="icon-btn" data-rm="'+id+'" title="移出錯題本">🗑</button></div>';
+    });
+    $('wrongList').innerHTML = html;
+  }
+  $('btnShowWrong').addEventListener('click', function(){
+    $('wrongPanel').classList.toggle('hide'); renderWrong();
+  });
+  $('wrongList').addEventListener('click', function(e){
+    var b = e.target.closest('[data-rm]'); if(!b) return;
+    CH3.wrongBook.remove(b.getAttribute('data-rm')); renderWrong(); refreshInfo();
+  });
+  $('btnClearWrong').addEventListener('click', function(){
+    CH3.wrongBook.clear(); renderWrong(); refreshInfo(); CH3.toast('錯題本已清空');
+  });
+
+  /* ---------- 出題 ---------- */
+  function stars(n){ return '★★★'.slice(0,n) + '<span style="color:#ddd">' + '★★★'.slice(n) + '</span>'; }
+  var TYPE_NAME = { single:'單選', tf:'是非', order:'排序', match:'配對', hotspot:'圖片標示' };
+
+  function render(){
+    answered = false;
+    var q = list[cur], box = $('qbox');
+    box.className = 'card qbox ' + CH3.unitClass(q.unit);
+    $('qCount').textContent = (cur+1) + '/' + list.length;
+    $('qProg').style.width = (cur / list.length * 100) + '%';
+
+    var head = '<div class="qhead"><span><span class="tag">'+q.unit+' '+CH3.UNIT_NAMES[q.unit]+'</span> <span class="tag" style="background:#F1F0EA;color:#555">'+TYPE_NAME[q.type]+'</span>'+(q.src ? ' <span class="tag" style="background:#FFF8E1;color:#8D6E00">'+q.src+'</span>' : '')+'</span><span class="stars" aria-label="難度'+q.level+'">'+stars(q.level)+'</span></div>';
+    var body = '<div class="qtext">'+q.question+'</div>';
+
+    if(q.type === 'single'){
+      // 打亂選項順序，記錄原始索引
+      var order = CH3.shuffle(q.options.map(function(_,i){ return i; }));
+      body += '<div class="opts">' + order.map(function(oi, k){
+        return '<button class="opt" data-i="'+oi+'"><span class="k">'+KEYS[k]+'</span><span>'+q.options[oi]+'</span></button>';
+      }).join('') + '</div>';
+    } else if(q.type === 'tf'){
+      body += '<div class="opts tf"><button class="opt" data-i="0">⭕ 正確</button><button class="opt" data-i="1">❌ 錯誤</button></div>';
+    } else if(q.type === 'order'){
+      var items = q.options.map(function(t,i){ return {t:t,i:i}; });
+      var sh; do{ sh = CH3.shuffle(items); }while(items.length > 1 && sh.every(function(x,k){ return x.i === k; }));
+      body += '<div class="order-ans" id="orderAns"></div><div class="order-pool" id="orderPool">' +
+        sh.map(function(x){ return '<button class="token" data-i="'+x.i+'">'+x.t+'</button>'; }).join('') + '</div>' +
+        '<div class="actions"><button class="btn" id="btnCheck" disabled>確認答案</button><button class="btn ghost" id="btnResetOrder">重排</button></div>';
+    } else if(q.type === 'match'){
+      var rights = CH3.shuffle(q.options.map(function(p,i){ return {t:p[1], i:i}; }));
+      body += '<p style="margin-top:-8px;color:var(--c-muted)">先點左邊，再點右邊配成一對；點已配對的項目可取消。</p><div class="match"><div class="col" id="mLeft">' +
+        q.options.map(function(p,i){ return '<button class="token" data-l="'+i+'">'+p[0]+'</button>'; }).join('') +
+        '</div><div class="col" id="mRight">' +
+        rights.map(function(r){ return '<button class="token" data-r="'+r.i+'">'+r.t+'</button>'; }).join('') +
+        '</div></div><div class="actions"><button class="btn" id="btnCheck" disabled>確認答案</button></div>';
+    }
+    body += '<div class="feedback" id="fb" role="status"></div><div class="actions hide" id="nextWrap"><button class="btn" id="btnNextQ">'+(cur === list.length-1 ? '看結果 ▶' : '下一題 ▶')+'</button></div>';
+    box.innerHTML = head + body;
+    bind(q);
+  }
+
+  function bind(q){
+    var box = $('qbox');
+    box.onclick = null;
+    if(q.type === 'single' || q.type === 'tf'){
+      box.querySelectorAll('.opt').forEach(function(b){
+        b.addEventListener('click', function(){
+          if(answered) return;
+          var pick = Number(b.getAttribute('data-i')), ok = pick === q.answer;
+          box.querySelectorAll('.opt').forEach(function(o){
+            o.disabled = true;
+            if(Number(o.getAttribute('data-i')) === q.answer) o.classList.add('correct');
+          });
+          if(!ok) b.classList.add('wrong');
+          finish(q, ok);
+        });
+      });
+    }
+    if(q.type === 'order'){
+      var ans = $('orderAns'), poolEl = $('orderPool'), chk = $('btnCheck');
+      function renumber(){
+        Array.prototype.forEach.call(ans.children, function(t,k){
+          var n = t.querySelector('.n'); if(!n){ n = document.createElement('span'); n.className = 'n'; t.insertBefore(n, t.firstChild); }
+          n.textContent = k+1;
+        });
+        Array.prototype.forEach.call(poolEl.children, function(t){ var n = t.querySelector('.n'); if(n) n.remove(); });
+        chk.disabled = poolEl.children.length !== 0;
+      }
+      box.onclick = function(e){
+        var t = e.target.closest('.token'); if(!t || answered) return;
+        if(t.parentNode === poolEl) ans.appendChild(t); else if(t.parentNode === ans) poolEl.appendChild(t);
+        renumber();
+      };
+      $('btnResetOrder').addEventListener('click', function(){
+        if(answered) return;
+        while(ans.firstChild) poolEl.appendChild(ans.firstChild); renumber();
+      });
+      chk.addEventListener('click', function(){
+        if(answered) return;
+        var ok = true;
+        Array.prototype.forEach.call(ans.children, function(t,k){
+          var good = Number(t.getAttribute('data-i')) === k;
+          t.classList.add(good ? 'ok' : 'ng'); if(!good) ok = false;
+        });
+        chk.disabled = true; $('btnResetOrder').disabled = true;
+        finish(q, ok, ok ? '' : '正確順序：' + q.options.join(' → '));
+      });
+    }
+    if(q.type === 'match'){
+      var pairs = {}, picked = null, chk2 = $('btnCheck');
+      function paint(){
+        box.querySelectorAll('[data-l],[data-r]').forEach(function(t){
+          t.classList.remove('picked','paired'); var b = t.querySelector('.pair-badge'); if(b) b.remove();
+        });
+        Object.keys(pairs).forEach(function(l, k){
+          var c = PAIR_COLORS[Number(l) % PAIR_COLORS.length];
+          [box.querySelector('[data-l="'+l+'"]'), box.querySelector('[data-r="'+pairs[l]+'"]')].forEach(function(t){
+            t.classList.add('paired'); t.style.borderColor = c;
+            var b = document.createElement('span'); b.className = 'pair-badge'; b.style.background = c; b.textContent = Number(l)+1;
+            t.insertBefore(b, t.firstChild);
+          });
+        });
+        box.querySelectorAll('[data-l],[data-r]').forEach(function(t){ if(!t.classList.contains('paired')) t.style.borderColor = ''; });
+        if(picked !== null) box.querySelector('[data-l="'+picked+'"]').classList.add('picked');
+        chk2.disabled = Object.keys(pairs).length !== q.options.length;
+      }
+      box.onclick = function(e){
+        var t = e.target.closest('.token'); if(!t || answered) return;
+        if(t.hasAttribute('data-l')){
+          var l = t.getAttribute('data-l');
+          if(pairs[l] !== undefined){ delete pairs[l]; picked = null; } else picked = (picked === l ? null : l);
+        } else if(t.hasAttribute('data-r')){
+          var r = t.getAttribute('data-r');
+          var owner = Object.keys(pairs).filter(function(k){ return pairs[k] === r; })[0];
+          if(owner !== undefined){ delete pairs[owner]; }
+          else if(picked !== null){ pairs[picked] = r; picked = null; }
+          else { CH3.toast('請先點左邊的項目'); }
+        }
+        paint();
+      };
+      chk2.addEventListener('click', function(){
+        if(answered) return;
+        var ok = true;
+        box.querySelectorAll('.token').forEach(function(t){ t.style.borderColor = ''; });
+        Object.keys(pairs).forEach(function(l){
+          var good = pairs[l] === l;
+          box.querySelector('[data-l="'+l+'"]').classList.add(good ? 'ok' : 'ng');
+          box.querySelector('[data-r="'+pairs[l]+'"]').classList.add(good ? 'ok' : 'ng');
+          if(!good) ok = false;
+        });
+        chk2.disabled = true;
+        finish(q, ok, ok ? '' : '正確配對：' + q.options.map(function(p){ return p[0] + '－' + p[1]; }).join('；'));
+      });
+    }
+  }
+
+  function finish(q, ok, extra){
+    answered = true;
+    results.push({ q:q, ok:ok });
+    if(ok) CH3.wrongBook.remove(q.id); else CH3.wrongBook.add(q.id);
+    var fb = $('fb');
+    fb.className = 'feedback show ' + (ok ? 'ok' : 'ng');
+    fb.innerHTML = '<strong>' + (ok ? '✅ 答對了！' : '❌ 再想想～已加入錯題本') + '</strong><div>💡 ' + q.explain + '</div>' + (extra ? '<div style="margin-top:6px;font-weight:700">' + extra + '</div>' : '');
+    $('nextWrap').classList.remove('hide');
+    $('btnNextQ').addEventListener('click', next);
+    $('btnNextQ').focus();
+  }
+  function next(){
+    cur++;
+    if(cur >= list.length) showResult(); else { render(); window.scrollTo(0,0); }
+  }
+
+  /* ---------- 結算 ---------- */
+  function showResult(){
+    $('play').classList.add('hide'); $('result').classList.remove('hide');
+    var right = results.filter(function(r){ return r.ok; }).length;
+    $('score').textContent = right + ' / ' + results.length;
+    var html = '';
+    ['3-1','3-2','3-3'].forEach(function(u){
+      var rs = results.filter(function(r){ return r.q.unit === u; });
+      if(!rs.length) return;
+      var c = rs.filter(function(r){ return r.ok; }).length;
+      html += '<div class="card rbox '+CH3.unitClass(u)+'"><div class="tag">'+u+'</div><div>'+CH3.UNIT_NAMES[u]+'</div><div class="pct">'+Math.round(c/rs.length*100)+'%</div><div style="color:var(--c-muted)">'+c+' / '+rs.length+' 題</div></div>';
+    });
+    $('unitResult').innerHTML = html;
+    $('btnRetryWrong').disabled = right === results.length;
+    // 紀錄最佳成績
+    var hist = CH3.store.get('quizHistory', []);
+    hist.push({ t:Date.now(), right:right, total:results.length });
+    CH3.store.set('quizHistory', hist.slice(-30));
+    window.scrollTo(0,0);
+  }
+  $('btnAgain').addEventListener('click', function(){ start(CH3.shuffle(list)); });
+  $('btnRetryWrong').addEventListener('click', function(){
+    start(results.filter(function(r){ return !r.ok; }).map(function(r){ return r.q; }));
+  });
+  function backToSetup(){
+    $('play').classList.add('hide'); $('result').classList.add('hide'); $('setup').classList.remove('hide');
+    refreshInfo(); if(!$('wrongPanel').classList.contains('hide')) renderWrong();
+  }
+  $('btnBack').addEventListener('click', backToSetup);
+  $('btnQuit').addEventListener('click', function(){
+    if(results.length) showResult(); else backToSetup();
+  });
+
+  // 網址參數：quiz.html?unit=3-2 只選該單元
+  var m = location.search.match(/unit=(3-[123])/);
+  if(m){ document.querySelectorAll('input[name="unit"]').forEach(function(i){ i.checked = i.value === m[1]; }); }
+  refreshInfo();
+})();
+</script>
+</body>
+</html>

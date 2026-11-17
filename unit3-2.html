@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3-2 人體的循環｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  /* 心臟 */
+  #heart .ch{ transition:transform .35s ease; transform-box:fill-box; transform-origin:center; }
+  #heart.pa .atrium, #heart.pb .ventricle{ transform:scale(.88); }
+  #heart .flow{ opacity:0; transition:opacity .25s; }
+  #heart.pa .f-a, #heart.pb .f-b, #heart.pc .f-c{ opacity:1; }
+  #heart .back{ opacity:0; }
+  #heart.novalve.pb .back-b, #heart.novalve.pc .back-c{ opacity:1; animation:blink .5s infinite alternate; }
+  #heart.novalve .valve{ display:none; }
+  @keyframes blink{ to{ opacity:.35; } }
+  #heart .vl{ stroke:#263238; stroke-width:6; stroke-linecap:round; }
+  .phase-pills{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .phase-pills span{ padding:4px 12px; border-radius:999px; background:#fff; font-weight:700; font-size:.85rem; opacity:.45; }
+  .phase-pills span.on{ opacity:1; background:var(--u); color:#fff; }
+  .sound{ font-size:2rem; font-weight:900; color:var(--u-d); height:46px; }
+  /* 血管 */
+  .vt{ width:100%; border-collapse:collapse; font-size:.9rem; background:#fff; border-radius:12px; overflow:hidden; }
+  .vt th,.vt td{ border:1px solid var(--c-line); padding:6px 8px; text-align:center; }
+  .vt th{ background:#FAFAF5; }
+  .vt .sel{ background:var(--u-l); font-weight:900; color:var(--u-d); }
+  /* 試管 */
+  #tube .layer{ cursor:pointer; transition:opacity .6s; }
+  #tube .layer:hover{ filter:brightness(1.08) drop-shadow(0 0 4px rgba(0,0,0,.3)); }
+  .spin{ animation:spin .25s linear 6; transform-box:fill-box; transform-origin:50% 95%; }
+  @keyframes spin{ 0%{ transform:rotate(0); } 25%{ transform:rotate(-14deg); } 75%{ transform:rotate(14deg); } 100%{ transform:rotate(0); } }
+  .bt td.blank{ color:#ccc; }
+  /* 循環 */
+  #circ .stn{ cursor:pointer; }
+  #circ .stn circle{ transition:r .2s; }
+  #circ .stn.on circle{ r:17; }
+  .stlist{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+  .stlist div{ background:#fff; border-radius:10px; padding:4px 10px; font-size:.85rem; opacity:.55; border-left:6px solid #E53935; }
+  .stlist div.deoxy{ border-left-color:#8E1B1B; border-left-style:dashed; }
+  .stlist div.on{ opacity:1; font-weight:900; box-shadow:0 2px 6px rgba(0,0,0,.12); }
+</style>
+</head>
+<body data-page="3-2" data-root="./" class="unit-32">
+<main class="wrap">
+
+  <div class="page-hero unit-hero">
+    <div class="txt">
+      <span class="tag" style="background:rgba(255,255,255,.25);color:#fff">單元 3-2</span>
+      <h1 style="margin:.2em 0">人體的循環</h1>
+      <p>心臟日夜不停地跳動，把血液送到全身。血液走哪條路？血管和血液又各有什麼本領？</p>
+    </div>
+    <div class="mini secondary">
+      <div>本單元概念卡 <strong data-unit-progress-text>0 / 6 張</strong></div>
+      <div class="progress" data-unit-progress="3-2"><span></span></div>
+    </div>
+  </div>
+
+  <nav class="toc" aria-label="本頁目錄">
+    <a href="#b1">① 循環與心臟</a><a href="#a1">🎬 心臟收縮與舒張</a><a href="#a2">② 🎬 三種血管比一比</a><a href="#b2">📋 血管統整</a>
+    <a href="#a3">③ 🎬 血液成分試管</a><a href="#b3">📋 血液統整</a><a href="#b4">④ 循環路徑與淋巴</a><a href="#a4">🎬 循環 12 站</a>
+    <button class="btn ghost" id="flipAll" style="min-height:40px;padding:4px 14px;font-size:.85rem">全部翻到說明面</button>
+  </nav>
+
+  <!-- ========== 卡 1、2 ========== -->
+  <div class="block-title" id="b1"><span class="num">1</span><h2>人體的循環與心臟</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-2-c1"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="20" r="11" fill="#FFCCBC"/><rect x="36" y="32" width="28" height="40" rx="12" fill="#FFCCBC"/>
+          <path d="M50 44 C42 38 36 44 42 52 L50 60 L58 52 C64 44 58 38 50 44Z" fill="#E53935"/>
+          <path d="M44 52 V86 M56 52 V86" stroke="#E53935" stroke-width="3"/><path d="M40 70 V90 M60 70 V90" stroke="#81C784" stroke-width="2.5" stroke-dasharray="3 2"/>
+        </svg>
+        <h3>人體的循環</h3><span class="hint">兩大系統</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>人體的循環</h3>
+        <ul>
+          <li>人體內的物質運輸靠兩個系統完成：</li>
+          <li><span class="kw">心血管系統</span>：心臟、血管、血液。</li>
+          <li><span class="kw">淋巴系統</span>：淋巴結、淋巴管、淋巴。</li>
+        </ul>
+        <div class="ft"><small>課本 P.104</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+
+    <div class="concept" data-id="3-2-c2"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 90 C14 66 6 40 20 24 C32 12 46 18 50 28 C54 18 68 12 80 24 C94 40 86 66 50 90Z" fill="#E53935"/>
+          <path d="M50 28 V84 M18 46 H82" stroke="#FFEBEE" stroke-width="3"/>
+          <text x="32" y="40" font-size="9" fill="#fff" font-weight="900">右房</text><text x="54" y="40" font-size="9" fill="#fff" font-weight="900">左房</text>
+          <text x="32" y="64" font-size="9" fill="#fff" font-weight="900">右室</text><text x="54" y="64" font-size="9" fill="#fff" font-weight="900">左室</text>
+        </svg>
+        <h3>心臟</h3><span class="hint">四腔室・心搏・瓣膜</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>心臟</h3>
+        <ul>
+          <li>位於胸腔<b>中央偏左</b>，由<b>心肌</b>構成。</li>
+          <li>四個腔室：上方<span class="kw">左、右心房</span>，下方<span class="kw">左、右心室</span>。</li>
+          <li><span class="kw">心搏</span>（收縮與舒張）是血液流動的<b>動力來源</b>。收縮時心室→動脈；舒張時靜脈→心房。</li>
+          <li>心房與心室間、心室與動脈間有<span class="kw">瓣膜</span>，防止血液<b>倒流</b>。</li>
+        </ul>
+        <div class="ft"><small>課本 P.105</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 1：心臟 ========== -->
+  <div class="block-title" id="a1"><span class="num">🎬</span><h2>心臟收縮與舒張</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <button class="btn blood" id="hPlay">▶ 播放</button>
+      <button class="btn ghost" id="hStep">下一階段 ⏭</button>
+      <div class="range"><label for="bpm"><strong>心跳</strong></label><input type="range" id="bpm" min="40" max="140" value="60"><span id="bpmTxt">60 次／分</span></div>
+      <span class="sp"></span>
+      <div class="seg" id="segValve"><button data-v="on" aria-pressed="true">有瓣膜</button><button data-v="off">拿掉瓣膜 ⚠</button></div>
+      <button class="icon-btn" id="hMute" title="心音開關">🔊</button>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="heart" viewBox="0 0 500 420" role="img" aria-label="心臟剖面示意圖"></svg></div>
+      <div class="info">
+        <div class="phase-pills"><span data-p="a">A 心房收縮</span><span data-p="b">B 心室收縮</span><span data-p="c">C 都舒張</span></div>
+        <div class="sound" id="hSound" aria-live="polite"></div>
+        <div id="hInfo"></div>
+      </div>
+    </div>
+    <div class="legend"><span><i style="background:#E53935"></i>充氧血（左心，鮮紅）</span><span><i style="background:#8E1B1B"></i>缺氧血（右心，暗紅）</span><span>示意圖：圖的左側是身體的右側</span></div>
+  </div>
+
+  <!-- ========== 卡 3 ========== -->
+  <!-- ========== 動畫 2：血管 ========== -->
+  <div class="block-title" id="a2"><span class="num">2</span><h2>三種血管比一比</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar"><div class="seg" id="segVes"><button data-v="art" aria-pressed="true">動脈</button><button data-v="cap">微血管</button><button data-v="vein">靜脈</button></div></div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="ves" viewBox="0 0 500 360" role="img" aria-label="血管比較"></svg></div>
+      <div class="info"><div id="vesInfo"></div><table class="vt" id="vesTable"></table></div>
+    </div>
+  </div>
+
+  <div class="block-title" id="b2"><span class="num">📋</span><h2>統整：三種血管的比較</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-2-c3"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="20" cy="50" r="15" fill="#E53935"/><circle cx="20" cy="50" r="7" fill="#FFEBEE"/>
+          <circle cx="50" cy="50" r="6" fill="#EF9A9A"/><circle cx="50" cy="50" r="4.5" fill="#FFEBEE"/>
+          <circle cx="80" cy="50" r="17" fill="#8E1B1B"/><circle cx="80" cy="50" r="12" fill="#FFEBEE"/>
+          <text x="8" y="82" font-size="10" font-weight="900" fill="#B71C1C">動脈</text><text x="37" y="82" font-size="10" font-weight="900" fill="#B71C1C">微血管</text><text x="70" y="82" font-size="10" font-weight="900" fill="#8E1B1B">靜脈</text>
+        </svg>
+        <h3>三種血管</h3><span class="hint">動脈・微血管・靜脈</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>三種血管的比較（表 3-1）</h3>
+        <div class="colsel" data-table="tblVes"><button data-col="all">全部</button><button data-col="1">動脈</button><button data-col="2">微血管</button><button data-col="3">靜脈</button></div>
+        <table class="mini-table" id="tblVes">
+          <tr><th></th><th>動脈</th><th>微血管</th><th>靜脈</th></tr>
+          <tr><td>功能</td><td>帶血<b>離開</b>心臟</td><td>物質交換</td><td>帶血<b>回</b>心臟</td></tr>
+          <tr><td>管壁</td><td>最厚</td><td>最薄（一層細胞）</td><td>中</td></tr>
+          <tr><td>彈性</td><td>最好</td><td>最差</td><td>中</td></tr>
+          <tr><td>內徑</td><td>中</td><td>最小</td><td>最大</td></tr>
+          <tr><td>流速</td><td>最快</td><td>最慢</td><td>中</td></tr>
+          <tr><td>血壓</td><td>最大</td><td>中</td><td>最小</td></tr>
+        </table>
+        <ul><li data-colnote="2">微血管<b>分布最廣</b>，有助於物質交換。</li><li data-colnote="3">有些<b>靜脈</b>具有<b>瓣膜</b>，防止血液倒流。</li><li data-colnote="1">動脈與心室相連，所以<b>血壓最高</b>。</li></ul>
+        <div class="ft"><small>課本 P.106～107</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 3：試管 ========== -->
+  <div class="block-title" id="a3"><span class="num">3</span><h2>血液成分試管</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar"><button class="btn blood" id="spinBtn">🌀 離心分層</button><button class="btn ghost" id="tubeReset">↺ 重來</button><span class="sp"></span><span style="color:var(--c-muted);font-size:.9rem">分層後，點試管的每一層放大看看</span></div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="tube" viewBox="0 0 500 380" role="img" aria-label="血液離心試管"></svg></div>
+      <div class="info"><div id="tubeInfo"></div>
+        <table class="vt bt" id="bloodTable">
+          <tr><th>血球比較</th><th>紅血球</th><th>白血球</th><th>血小板</th></tr>
+          <tr><td>形狀</td><td data-c="r">雙凹圓盤狀</td><td data-c="w">圓球形</td><td data-c="p">不規則</td></tr>
+          <tr><td>體積</td><td data-c="r">中</td><td data-c="w">最大</td><td data-c="p">最小</td></tr>
+          <tr><td>細胞核</td><td data-c="r">無</td><td data-c="w">有</td><td data-c="p">無</td></tr>
+          <tr><td>數量</td><td data-c="r">最多</td><td data-c="w">最少</td><td data-c="p">中</td></tr>
+          <tr><td>功能</td><td data-c="r">攜帶氧氣</td><td data-c="w">吞噬病原體、產生抗體</td><td data-c="p">促使傷口血液凝固</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 卡 4 ========== -->
+  <div class="block-title" id="b3"><span class="num">📋</span><h2>統整：血液的成分</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-2-c4"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <rect x="38" y="8" width="24" height="84" rx="12" fill="#fff" stroke="#90A4AE" stroke-width="3"/>
+          <rect x="41" y="20" width="18" height="34" fill="#FFE082"/><rect x="41" y="54" width="18" height="4" fill="#ECEFF1"/>
+          <path d="M41 58 H59 V80 a9 9 0 0 1 -18 0Z" fill="#C62828"/>
+        </svg>
+        <h3>血液</h3><span class="hint">血漿＋三種血球</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>血液的成分</h3>
+        <div class="colsel" data-table="tblBlood"><button data-col="all">全部</button><button data-col="plasma">血漿</button><button data-col="1">紅血球</button><button data-col="2">白血球</button><button data-col="3">血小板</button></div>
+        <ul data-colnote="plasma">
+          <li><span class="kw">血漿</span>：主要是<b>水</b>，溶有養分、廢物、抗體和激素。</li>
+        </ul>
+        <table class="mini-table" id="tblBlood">
+          <tr><th></th><th>紅血球</th><th>白血球</th><th>血小板</th></tr>
+          <tr><td>形狀</td><td>雙凹圓盤</td><td>圓球形</td><td>不規則</td></tr>
+          <tr><td>體積</td><td>中</td><td>最大</td><td>最小</td></tr>
+          <tr><td>細胞核</td><td>無</td><td>有</td><td>無</td></tr>
+          <tr><td>數量</td><td>最多</td><td>最少</td><td>中</td></tr>
+          <tr><td>功能</td><td>血紅素運氧</td><td>吞噬病原體、產生抗體</td><td>促使傷口血液凝固</td></tr>
+        </table>
+        <div class="ft"><small>課本 P.108～109・表 3-2</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 卡 5、6 ========== -->
+  <div class="block-title" id="b4"><span class="num">4</span><h2>血液循環路徑與淋巴系統</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-2-c5"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <div class="ic" style="display:flex;align-items:center;justify-content:center" id="rbcIcon"></div>
+        <h3>血液循環路徑</h3><span class="hint">體循環・肺循環</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>血液循環的路徑</h3>
+        <ul>
+          <li><span class="kw">體循環</span>：左心室→主動脈→小動脈→組織微血管→小靜脈→大靜脈→右心房。（運送養分、氧氣給全身細胞，帶走廢物）</li>
+          <li><span class="kw">肺循環</span>：右心室→肺動脈→肺微血管→肺靜脈→左心房。（氣體交換）</li>
+          <li><span class="kw">充氧血</span>鮮紅色（左心）；<span class="kw">缺氧血</span>暗紅色（右心）。</li>
+          <li>注意：<b>肺動脈</b>內是缺氧血、<b>肺靜脈</b>內是充氧血！</li>
+        </ul>
+        <div class="ft"><small>課本 P.110～111</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+
+    <div class="concept" data-id="3-2-c6"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M10 70 C30 70 30 30 50 30 S70 70 90 70" stroke="#E53935" stroke-width="6" fill="none"/>
+          <g fill="#FFF59D" stroke="#F9A825"><circle cx="34" cy="60" r="4"/><circle cx="66" cy="60" r="4"/><circle cx="50" cy="48" r="4"/></g>
+          <path d="M20 88 C40 80 60 80 80 88" stroke="#81C784" stroke-width="5" fill="none"/>
+          <ellipse cx="50" cy="82" rx="9" ry="6" fill="#66BB6A"/>
+        </svg>
+        <h3>淋巴系統</h3><span class="hint">回收血漿・防禦疾病</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>淋巴系統</h3>
+        <ul>
+          <li><b>血漿</b>滲出微血管→<span class="kw">組織液</span>→滲入淋巴管成為<span class="kw">淋巴</span>→最後<b>注入靜脈</b>。</li>
+          <li><span class="kw">淋巴結</span>：過濾淋巴中的異物，結內白血球吞噬細菌或病毒。</li>
+          <li>有些淋巴管內有瓣膜，防止淋巴倒流。</li>
+        </ul>
+        <table class="mini-table">
+          <tr><th></th><th>心血管系統</th><th>淋巴系統</th></tr>
+          <tr><td>組成</td><td>心臟、血管、血液</td><td>淋巴結、淋巴管、淋巴</td></tr>
+          <tr><td>功能</td><td>運輸、防禦疾病</td><td>回收滲漏血漿、防禦疾病</td></tr>
+        </table>
+        <div class="ft"><small>課本 P.114～115・表 3-3</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 4：循環 12 站 ========== -->
+  <div class="block-title" id="a4"><span class="num">🎬</span><h2>血液循環路徑圖（12 站）</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <button class="btn blood" id="cPlay">▶ 出發</button>
+      <button class="btn ghost" id="cStep">下一站 ⏭</button>
+      <button class="btn ghost" id="cReset">↺ 回到起點</button>
+      <span class="sp"></span>
+      <div class="seg" id="segSpeed"><button data-v="1" aria-pressed="true">一般速度</button><button data-v="2">快速</button></div>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="circ" viewBox="0 0 500 490" role="img" aria-label="人體血液循環 12 站示意圖"></svg></div>
+      <div class="info"><div id="circInfo"></div><div class="stlist" id="stList"></div></div>
+    </div>
+    <div class="legend"><span><i style="background:#E53935"></i>━ 充氧血（實線）</span><span><i style="background:#8E1B1B"></i>┅ 缺氧血（虛線）</span><span>點圖上的站點可以直接跳過去</span></div>
+  </div>
+
+  <div class="unit-foot">
+    <a class="btn ghost" href="unit3-1.html">← 3-1 植物的運輸構造</a>
+    <a class="btn blood" href="quiz.html?unit=3-2">✏️ 練習 3-2 題目</a>
+    <a class="btn" href="unit3-3.html">下一單元：3-3 人體的防禦 →</a>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/unit.js"></script>
+<script>
+(function(){
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
+  function $(id){ return document.getElementById(id); }
+  $('rbcIcon').innerHTML = CH3.mascots.rbc(100);
+  var OXY = '#E53935', DEOXY = '#8E1B1B';
+
+  /* ===== 動畫 1：心臟 ===== */
+  var heart = $('heart');
+  var arrow = function(d, color, cls){ var c = cls.indexOf('flow') >= 0 ? '#FFFFFF' : color; return '<path class="'+cls+'" d="'+d+'" stroke="'+c+'" stroke-width="7" fill="none" stroke-linecap="round" marker-end="url(#ah-'+(c==='#FFFFFF'?'w':'k')+')"/>'; };
+  heart.innerHTML =
+    '<defs>' +
+      '<marker id="ah-o" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+OXY+'"/></marker>' +
+      '<marker id="ah-d" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0L10 5L0 10z" fill="'+DEOXY+'"/></marker>' +
+      '<marker id="ah-w" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0L10 5L0 10z" fill="#FFFFFF"/></marker>' +
+      '<marker id="ah-k" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0 0L10 5L0 10z" fill="#FFD600"/></marker>' +
+    '</defs>' +
+    // 血管
+    '<path d="M60 70 H150 V120" stroke="'+DEOXY+'" stroke-width="26" fill="none" opacity=".85"/>' +      // 上大靜脈
+    '<path d="M60 360 H150 V300" stroke="'+DEOXY+'" stroke-width="26" fill="none" opacity=".85"/>' +     // 下大靜脈
+    '<path d="M214 214 V40 H120" stroke="'+DEOXY+'" stroke-width="24" fill="none" opacity=".85"/>' +     // 肺動脈
+    '<path d="M288 214 V30 H440" stroke="'+OXY+'" stroke-width="28" fill="none" opacity=".9"/>' +         // 主動脈
+    '<path d="M470 140 H392" stroke="'+OXY+'" stroke-width="22" fill="none" opacity=".85"/>' +           // 肺靜脈
+    // 腔室
+    '<g class="ch atrium"><rect x="106" y="110" width="92" height="88" rx="28" fill="'+DEOXY+'"/></g>' +
+    '<g class="ch atrium"><rect x="304" y="110" width="92" height="88" rx="28" fill="'+OXY+'"/></g>' +
+    '<g class="ch ventricle"><path d="M110 214 H232 V372 C190 372 110 330 110 260Z" fill="'+DEOXY+'"/></g>' +
+    '<g class="ch ventricle"><path d="M270 214 H392 V260 C392 330 330 380 270 390Z" fill="'+OXY+'"/></g>' +
+    // 中隔
+    '<rect x="242" y="104" width="18" height="290" rx="6" fill="#FFCDD2"/>' +
+    // 文字
+    '<g font-size="16" font-weight="900" fill="#fff" text-anchor="middle"><text x="152" y="160">右心房</text><text x="350" y="160">左心房</text><text x="170" y="290">右心室</text><text x="330" y="290">左心室</text></g>' +
+    '<g font-size="13" font-weight="700" fill="#5D4037"><text x="20" y="52">上大靜脈</text><text x="20" y="392">下大靜脈</text><text x="100" y="26">肺動脈（往肺）</text><text x="350" y="18">主動脈（往全身）</text><text x="410" y="124">肺靜脈</text></g>' +
+    // 瓣膜（房室間）
+    '<g class="valve" id="vAV"></g><g class="valve" id="vSL"></g>' +
+    // 流向箭頭
+    arrow('M152 175 V240', DEOXY, 'flow f-a f-c') + arrow('M350 175 V240', OXY, 'flow f-a f-c') +
+    arrow('M196 300 C214 260 214 230 214 100', DEOXY, 'flow f-b') + arrow('M306 300 C288 260 288 230 288 80', OXY, 'flow f-b') +
+    arrow('M90 70 H140', DEOXY, 'flow f-c') + arrow('M90 360 H140', DEOXY, 'flow f-c') + arrow('M450 140 H406', OXY, 'flow f-c') +
+    // 倒流（拿掉瓣膜）
+    arrow('M140 262 V180', '#FFD600', 'back back-b') + arrow('M362 262 V180', '#FFD600', 'back back-b') +
+    arrow('M214 120 V255', '#FFD600', 'back back-c') + arrow('M288 120 V255', '#FFD600', 'back back-c') +
+    '<text class="back back-b back-c" x="250" y="412" text-anchor="middle" font-size="18" font-weight="900" fill="#F57F17">⚠ 沒有瓣膜，血液倒流！</text>';
+
+  function drawValves(phase){
+    // 房室瓣：A、C 打開，B 關閉；動脈瓣：B 打開，A、C 關閉
+    var avOpen = phase !== 'b', slOpen = phase === 'b';
+    $('vAV').innerHTML = avOpen
+      ? '<path class="vl" d="M116 206 L134 230 M190 206 L172 230"/><path class="vl" d="M312 206 L330 230 M388 206 L370 230"/>'
+      : '<path class="vl" d="M114 206 L152 206 M192 206 L152 206"/><path class="vl" d="M310 206 L350 206 M390 206 L350 206"/>';
+    $('vSL').innerHTML = slOpen
+      ? '<path class="vl" d="M202 212 L198 192 M226 212 L230 192"/><path class="vl" d="M274 212 L270 192 M302 212 L306 192"/>'
+      : '<path class="vl" d="M202 210 L226 210"/><path class="vl" d="M274 210 L302 210"/>';
+  }
+  var PH = {
+    a:{ t:'A 心房收縮', d:'<b>心房收縮</b>，把心房內的血液擠入心室。<br>房室間瓣膜：<b>打開</b>；心室與動脈間瓣膜：<b>關閉</b>。' },
+    b:{ t:'B 心室收縮', d:'<b>心室收縮</b>，血液被擠壓進入<b>動脈</b>（右心室→肺動脈、左心室→主動脈）。<br>房室間瓣膜<b>關閉</b>，防止血液倒流回心房 → 產生第一個心音「<b>撲</b>」。' },
+    c:{ t:'C 心房心室皆舒張', d:'心臟<b>舒張</b>，血液由<b>靜脈</b>流經心房到心室。<br>心室與動脈間瓣膜<b>關閉</b>，防止血液倒流回心室 → 產生第二個心音「<b>通</b>」。' }
+  };
+  var NOVALVE = {
+    a:'沒有瓣膜時，心房收縮仍能把血擠進心室。',
+    b:'⚠ 沒有房室間瓣膜：心室收縮時，部分血液<b>倒流回心房</b>，送進動脈的血量變少！',
+    c:'⚠ 沒有心室與動脈間瓣膜：舒張時，動脈裡的血液<b>倒流回心室</b>！'
+  };
+  var order = ['a','b','c'], pi = 0, hTimer = null, novalve = false;
+  function setPhase(p, withSound){
+    heart.classList.remove('pa','pb','pc'); heart.classList.add('p' + p);
+    drawValves(p);
+    document.querySelectorAll('.phase-pills span').forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-p') === p); });
+    $('hInfo').innerHTML = '<h3>'+PH[p].t+'</h3><p>'+PH[p].d+'</p>' + (novalve ? '<p style="background:#FFF8E1;padding:8px;border-radius:10px">'+NOVALVE[p]+'</p>' : '');
+    var snd = '';
+    if(!novalve){
+      if(p === 'b'){ snd = '撲～'; if(withSound) UNIT.thump(70, .18, .7); }
+      if(p === 'c'){ snd = '通！'; if(withSound) UNIT.thump(110, .12, .55); }
+    }
+    $('hSound').textContent = snd;
+  }
+  function cycleMs(){ return 60000 / Number($('bpm').value); }
+  var FRAC = { a:.18, b:.32, c:.5 };
+  function runHeart(){
+    var p = order[pi]; setPhase(p, true);
+    hTimer = setTimeout(function(){ pi = (pi + 1) % 3; runHeart(); }, Math.max(150, cycleMs() * FRAC[p] * (UNIT.reduced() ? 2 : 1)));
+  }
+  $('hPlay').addEventListener('click', function(){
+    if(hTimer){ clearTimeout(hTimer); hTimer = null; this.textContent = '▶ 播放'; return; }
+    this.textContent = '⏸ 暫停'; runHeart();
+  });
+  $('hStep').addEventListener('click', function(){
+    if(hTimer){ clearTimeout(hTimer); hTimer = null; $('hPlay').textContent = '▶ 播放'; }
+    pi = (pi + 1) % 3; setPhase(order[pi], true);
+  });
+  $('bpm').addEventListener('input', function(){ $('bpmTxt').textContent = this.value + ' 次／分'; });
+  UNIT.seg($('segValve'), function(v){ novalve = v === 'off'; heart.classList.toggle('novalve', novalve); setPhase(order[pi]); });
+  function muteBtn(){ $('hMute').textContent = CH3.store.get('mute', false) ? '🔇' : '🔊'; }
+  $('hMute').addEventListener('click', function(){ CH3.store.set('mute', !CH3.store.get('mute', false)); muteBtn(); });
+  muteBtn(); setPhase('a');
+
+  /* ===== 動畫 2：三種血管 ===== */
+  var VES = {
+    art: { n:'動脈', wall:26, inner:46, speed:1, press:.92, color:OXY, valve:false,
+           d:'將血液<b>帶離心臟</b>。管壁<b>最厚</b>、彈性<b>最好</b>，能承受心臟送出血液的壓力；血流<b>最快</b>、血壓<b>最大</b>。' },
+    cap: { n:'微血管', wall:3, inner:13, speed:.14, press:.5, color:'#C62828', valve:false,
+           d:'連接小動脈與小靜脈。管壁<b>只有一層細胞</b>、內徑<b>最小</b>（紅血球要排成單列通過），流速<b>最慢</b>、分布<b>最廣</b>，有利血液和組織細胞進行<b>物質交換</b>。' },
+    vein:{ n:'靜脈', wall:13, inner:62, speed:.45, press:.15, color:DEOXY, valve:true,
+           d:'將血液<b>帶回心臟</b>。管壁比動脈薄、彈性較差，內徑<b>最大</b>、血壓<b>最小</b>；<b>有些靜脈具有瓣膜</b>，防止血液倒流。' }
+  };
+  var ROWS = [['功能','帶血液離開心臟','物質交換','帶血液回心臟'],['管壁厚度','最厚','最薄','中'],['管壁彈性','最好','最差','中'],['血管內徑','中','最小','最大'],['血液流速','最快','最慢','中'],['血壓','最大','中','最小']];
+  var ves = $('ves'), vk = 'art', cells = [], vLast = 0;
+  function drawVes(){
+    var v = VES[vk]; ves.innerHTML = '';
+    // 橫切面
+    el('text',{x:90,y:28,'text-anchor':'middle','font-size':15,'font-weight':900,fill:'#5D4037'},ves).textContent = '橫切面';
+    el('circle',{cx:90,cy:120,r:(v.inner/2+v.wall)*1.2,fill:v.color},ves);
+    el('circle',{cx:90,cy:120,r:v.inner/2*1.2,fill:'#FFEBEE'},ves);
+    if(vk === 'cap') el('text',{x:90,y:180,'text-anchor':'middle','font-size':12,fill:'#B71C1C','font-weight':700},ves).textContent = '（放大很多倍）';
+    // 血壓計
+    var gx = 90, gy = 300;
+    el('path',{d:'M30 300 A60 60 0 0 1 150 300',fill:'none',stroke:'#E0E0E0','stroke-width':14},ves);
+    el('path',{d:'M30 300 A60 60 0 0 1 '+(90-60*Math.cos(Math.PI*v.press)).toFixed(1)+' '+(300-60*Math.sin(Math.PI*v.press)).toFixed(1),fill:'none',stroke:v.color,'stroke-width':14},ves);
+    el('line',{x1:gx,y1:gy,x2:(gx-52*Math.cos(Math.PI*v.press)).toFixed(1),y2:(gy-52*Math.sin(Math.PI*v.press)).toFixed(1),stroke:'#263238','stroke-width':4,'stroke-linecap':'round'},ves);
+    el('circle',{cx:gx,cy:gy,r:6,fill:'#263238'},ves);
+    el('text',{x:90,y:330,'text-anchor':'middle','font-size':15,'font-weight':900,fill:'#5D4037'},ves).textContent = '血壓';
+    // 縱切面
+    var top = 170 - v.inner*1.2/2 - v.wall, h = v.inner*1.2 + v.wall*2;
+    el('text',{x:340,y:28,'text-anchor':'middle','font-size':15,'font-weight':900,fill:'#5D4037'},ves).textContent = '縱切面（看血流速度）';
+    el('rect',{x:190,y:top,width:300,height:h,fill:v.color,rx:8},ves);
+    el('rect',{x:190,y:top+v.wall,width:300,height:v.inner*1.2,fill:'#FFEBEE'},ves);
+    if(v.valve){ [260,400].forEach(function(x){ el('path',{d:'M'+x+' '+(top+v.wall)+' L'+(x+26)+' 170 M'+x+' '+(top+h-v.wall)+' L'+(x+26)+' 170',stroke:v.color,'stroke-width':5,fill:'none'},ves); });
+      el('text',{x:330,y:top+h+26,'text-anchor':'middle','font-size':14,'font-weight':700,fill:DEOXY},ves).textContent = '靜脈瓣膜（只讓血液往一個方向流）'; }
+    el('text',{x:340,y:300,'text-anchor':'middle','font-size':15,'font-weight':700,fill:'#5D4037'},ves).textContent = '血流方向 →';
+    var g = el('g',{},ves); cells = [];
+    var n = vk === 'cap' ? 7 : 12;
+    for(var i=0;i<n;i++){
+      var y = vk === 'cap' ? 170 : 170 + ((i*37)%Math.max(1,v.inner*1.2-16)) - (v.inner*1.2-16)/2;
+      var c = el('ellipse',{rx:vk === 'cap' ? 6 : 8,ry:vk === 'cap' ? 5 : 6,fill:'#E53935',stroke:'#B71C1C'},g);
+      cells.push({el:c, x:190 + i*(300/n), y:y});
+    }
+    var cl = el('rect',{x:186,y:top-4,width:6,height:h+8,fill:'#FBFBF7'},ves);
+    // 表格
+    var idx = {art:1,cap:2,vein:3}[vk];
+    $('vesTable').innerHTML = '<tr><th></th><th'+(idx===1?' class="sel"':'')+'>動脈</th><th'+(idx===2?' class="sel"':'')+'>微血管</th><th'+(idx===3?' class="sel"':'')+'>靜脈</th></tr>' +
+      ROWS.map(function(r){ return '<tr><td>'+r[0]+'</td>' + [1,2,3].map(function(k){ return '<td'+(k===idx?' class="sel"':'')+'>'+r[k]+'</td>'; }).join('') + '</tr>'; }).join('');
+    $('vesInfo').innerHTML = '<h3>'+v.n+'</h3><p>'+v.d+'</p>';
+  }
+  function vesTick(ts){
+    var dt = Math.min(50, ts - (vLast || ts)) / 1000; vLast = ts;
+    var sp = VES[vk].speed * 240 * (UNIT.reduced() ? .3 : 1);
+    cells.forEach(function(c){ c.x += sp * dt; if(c.x > 492) c.x -= 300; c.el.setAttribute('cx', c.x.toFixed(1)); c.el.setAttribute('cy', c.y.toFixed(1)); });
+    requestAnimationFrame(vesTick);
+  }
+  UNIT.seg($('segVes'), function(v){ vk = v; drawVes(); });
+  drawVes(); requestAnimationFrame(vesTick);
+
+  /* ===== 動畫 3：血液試管 ===== */
+  var tube = $('tube'), spun = false;
+  function drawTube(){
+    var h = '<g id="tubeG">' +
+      '<rect x="80" y="30" width="80" height="300" rx="40" fill="#fff" stroke="#90A4AE" stroke-width="4"/>' +
+      '<rect x="72" y="22" width="96" height="16" rx="6" fill="#B0BEC5"/>';
+    if(!spun){
+      h += '<path d="M84 80 H156 V290 a36 36 0 0 1 -72 0Z" fill="#B71C1C"/>' +
+           '<text x="120" y="360" text-anchor="middle" font-size="15" font-weight="700" fill="#5D4037">全血（尚未分層）</text>';
+    } else {
+      h += '<path class="layer" data-l="plasma" d="M84 80 H156 V196 H84Z" fill="#FFE082"/>' +
+           '<path class="layer" data-l="buffy" d="M84 196 H156 V206 H84Z" fill="#ECEFF1" stroke="#B0BEC5"/>' +
+           '<path class="layer" data-l="rbc" d="M84 206 H156 V290 a36 36 0 0 1 -72 0Z" fill="#C62828"/>' +
+           '<g font-size="14" font-weight="900"><text x="170" y="142" fill="#F9A825">← 血漿（約 55%）</text><text x="170" y="205" fill="#78909C">← 白血球、血小板</text><text x="170" y="270" fill="#C62828">← 紅血球</text></g>';
+    }
+    h += '</g><g id="zoom"></g>';
+    tube.innerHTML = h;
+  }
+  var ZOOM = {
+    plasma: { t:'血漿', d:'主要成分是<b>水</b>，溶有養分、廢物、抗體和激素等物質。', cols:[],
+      svg:'<circle r="80" fill="#FFF8E1" stroke="#F9A825" stroke-width="4"/><g fill="#FFB300"><circle cx="-30" cy="-20" r="5"/><circle cx="20" cy="-40" r="4"/><circle cx="40" cy="10" r="5"/><circle cx="-10" cy="30" r="4"/><circle cx="-45" cy="25" r="3"/></g><text y="64" text-anchor="middle" font-size="14" font-weight="700" fill="#F57F17">水＋溶解的物質</text>' },
+    buffy: { t:'白血球與血小板', d:'<b>白血球</b>：圓球形、<b>有細胞核</b>、體積最大、數量最少，可吞噬病原體或產生抗體。<br><b>血小板</b>：不規則、無核、體積最小，促使傷口血液凝固。', cols:['w','p'],
+      svg:'<circle r="80" fill="#FAFAFA" stroke="#90A4AE" stroke-width="4"/><circle cx="-20" cy="-8" r="32" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="2"/><path d="M-36 -14 q10 -14 24 -4 q12 10 0 18 q-14 8 -24 -4z" fill="#7E57C2"/><text x="-20" y="40" text-anchor="middle" font-size="13" font-weight="900" fill="#3949AB">白血球</text><g fill="#F48FB1" stroke="#AD1457"><path d="M36 -30 l8 -3 l5 6 l-6 5 l-8 -2z"/><path d="M48 6 l7 -2 l3 6 l-6 4 l-6 -3z"/><path d="M30 26 l6 -4 l6 4 l-3 6 l-7 -1z"/></g><text x="44" y="56" text-anchor="middle" font-size="13" font-weight="900" fill="#AD1457">血小板</text>' },
+    rbc: { t:'紅血球', d:'<b>雙凹圓盤狀</b>、不具細胞核、數量<b>最多</b>；內含<b>血紅素</b>，可以和氧氣結合，把氧氣運到全身。', cols:['r'],
+      svg:'<circle r="80" fill="#FFEBEE" stroke="#C62828" stroke-width="4"/>' + [[-30,-30],[25,-35],[-40,15],[10,5],[40,30],[-10,45]].map(function(p){ return '<g transform="translate('+p[0]+' '+p[1]+')"><ellipse rx="18" ry="14" fill="#E53935" stroke="#B71C1C"/><ellipse rx="8" ry="6" fill="#C62828"/></g>'; }).join('') }
+  };
+  var shown = {};
+  function paintTable(){
+    document.querySelectorAll('#bloodTable td[data-c]').forEach(function(td){
+      var on = shown[td.getAttribute('data-c')];
+      if(!td.dataset.full) td.dataset.full = td.textContent;
+      td.textContent = on ? td.dataset.full : '？'; td.classList.toggle('blank', !on); td.classList.toggle('sel', !!on);
+    });
+  }
+  function tubeText(){
+    $('tubeInfo').innerHTML = spun
+      ? '<h3>分層了！</h3><p>密度較大的血球沉在下面。點試管的每一層，放大看看裡面有什麼，表格會自動填好。</p>'
+      : '<h3>血液由什麼組成？</h3><p>血液看起來是紅色的液體。按「<b>離心分層</b>」讓試管高速旋轉，血液就會分層。</p>';
+  }
+  tube.addEventListener('click', function(e){
+    var l = e.target.closest('.layer'); if(!l) return;
+    var z = ZOOM[l.getAttribute('data-l')];
+    $('zoom').innerHTML = '<line x1="160" y1="'+(l.getAttribute('data-l')==='plasma'?140:l.getAttribute('data-l')==='buffy'?201:250)+'" x2="300" y2="190" stroke="#90A4AE" stroke-dasharray="5 4" stroke-width="2"/><g transform="translate(390 190)">'+z.svg+'</g>';
+    z.cols.forEach(function(c){ shown[c] = true; }); paintTable();
+    $('tubeInfo').innerHTML = '<h3>🔍 '+z.t+'</h3><p>'+z.d+'</p>' + (shown.r && shown.w && shown.p ? '<p>✅ 血球比較表完成！</p>' : '');
+  });
+  $('spinBtn').addEventListener('click', function(){
+    if(spun) return;
+    var g = $('tubeG'); g.classList.add('spin');
+    setTimeout(function(){ spun = true; drawTube(); tubeText(); }, UNIT.reduced() ? 50 : 1500);
+  });
+  $('tubeReset').addEventListener('click', function(){ spun = false; shown = {}; drawTube(); paintTable(); tubeText(); });
+  drawTube(); paintTable(); tubeText();
+
+  /* ===== 動畫 4：循環 12 站 ===== */
+  var circ = $('circ');
+  var ST = [
+    null,
+    {n:'左心室', x:300, y:250, o:1, loop:'體'},
+    {n:'主動脈', x:420, y:210, o:1, loop:'體'},
+    {n:'小動脈', x:420, y:355, o:1, loop:'體'},
+    {n:'組織微血管', x:250, y:402, o:1, loop:'體', ex:'body'},
+    {n:'小靜脈', x:80, y:355, o:0, loop:'體'},
+    {n:'大靜脈', x:80, y:210, o:0, loop:'體'},
+    {n:'右心房', x:200, y:190, o:0, loop:'體'},
+    {n:'右心室', x:200, y:250, o:0, loop:'肺'},
+    {n:'肺動脈', x:110, y:110, o:0, loop:'肺'},
+    {n:'肺微血管', x:250, y:50, o:0, loop:'肺', ex:'lung'},
+    {n:'肺靜脈', x:390, y:110, o:1, loop:'肺'},
+    {n:'左心房', x:300, y:190, o:1, loop:'肺'}
+  ];
+  var h = '';
+  // 肺、心、組織
+  h += '<g fill="#F8BBD0" stroke="#EC407A" stroke-width="2"><path d="M150 30 C110 30 100 90 130 100 C160 100 200 90 210 60 C210 40 190 30 150 30Z"/><path d="M350 30 C390 30 400 90 370 100 C340 100 300 90 290 60 C290 40 310 30 350 30Z"/></g>';
+  h += '<text x="250" y="140" text-anchor="middle" font-size="14" font-weight="900" fill="#AD1457">肺（肺泡）</text>';
+  h += '<rect x="165" y="165" width="170" height="110" rx="34" fill="#FFEBEE" stroke="#E57373" stroke-width="2"/><line x1="250" y1="168" x2="250" y2="272" stroke="#E57373" stroke-width="2"/><line x1="168" y1="220" x2="332" y2="220" stroke="#E57373" stroke-width="2" stroke-dasharray="4 3"/>';
+  h += '<text x="250" y="292" text-anchor="middle" font-size="13" font-weight="900" fill="#C62828">心臟</text>';
+  h += '<rect x="130" y="402" width="240" height="84" rx="18" fill="#FFF3E0" stroke="#FFB74D" stroke-width="2"/><text x="250" y="478" text-anchor="middle" font-size="13" font-weight="900" fill="#E65100">全身組織細胞</text>';
+  // 路段
+  function seg(a, b, ox){ var A = ST[a], B = ST[b];
+    var d = 'M'+A.x+' '+A.y+' L'+B.x+' '+B.y;
+    return '<path d="'+d+'" stroke="'+(ox?OXY:DEOXY)+'" stroke-width="9" fill="none" stroke-linecap="round"'+(ox?'':' stroke-dasharray="14 8"')+' opacity=".85"/>'; }
+  h += seg(1,2,1)+seg(2,3,1)+seg(3,4,1)+seg(4,5,0)+seg(5,6,0)+seg(6,7,0)+seg(7,8,0)+seg(8,9,0)+seg(9,10,0)+seg(10,11,1)+seg(11,12,1)+seg(12,1,1);
+  h += '<g font-size="13" font-weight="900"><text x="440" y="290" fill="'+OXY+'">體循環</text><text x="20" y="290" fill="'+DEOXY+'">體循環</text><text x="20" y="160" fill="'+DEOXY+'">肺循環</text><text x="428" y="160" fill="'+OXY+'">肺循環</text></g>';
+  for(var i=1;i<=12;i++){
+    var s = ST[i];
+    h += '<g class="stn" data-i="'+i+'" transform="translate('+s.x+' '+s.y+')"><circle r="13" fill="#fff" stroke="'+(s.o?OXY:DEOXY)+'" stroke-width="3"/><text y="5" text-anchor="middle" font-size="13" font-weight="900" fill="'+(s.o?OXY:DEOXY)+'">'+i+'</text>' +
+         '<text y="'+(s.y > 300 ? 30 : -20)+'" x="'+(s.x < 150 ? 4 : s.x > 350 ? -4 : 0)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#37474F">'+s.n+'</text></g>';
+  }
+  h += '<g id="gasFx"></g><g id="rbcRunner"></g>';
+  circ.innerHTML = h;
+  var runner = $('rbcRunner'), cur = 1, cTimer = null, anim = null, speed = 1;
+  $('stList').innerHTML = ST.slice(1).map(function(s,k){ return '<div data-i="'+(k+1)+'" class="'+(s.o?'':'deoxy')+'">'+(k+1)+'. '+s.n+'</div>'; }).join('');
+  function runnerSvg(oxy){
+    return '<g transform="translate(-22 -22) scale(.7)">' + CH3.mascots.rbc(64).replace('<svg','<svg x="0" y="0"').replace(/#E53935/g, oxy ? '#E53935' : '#8E1B1B') + '</g>';
+  }
+  function place(x, y, oxy){ runner.setAttribute('transform','translate('+x+' '+y+')'); runner.innerHTML = runnerSvg(oxy); }
+  function info(i){
+    var s = ST[i], txt = '<h3>第 '+i+' 站：'+s.n+'</h3>';
+    var blood = i === 4 ? '<b style="color:'+OXY+'">充氧血</b> → <b style="color:'+DEOXY+'">缺氧血</b>' : i === 10 ? '<b style="color:'+DEOXY+'">缺氧血</b> → <b style="color:'+OXY+'">充氧血</b>' : '<b style="color:'+(s.o?OXY:DEOXY)+'">'+(s.o ? '充氧血（鮮紅）' : '缺氧血（暗紅）')+'</b>';
+    txt += '<p>目前在：<b>'+s.loop+'循環</b>　血液：'+blood+'</p>';
+    var extra = {
+      1:'體循環的<b>起點</b>。左心室收縮，把充氧血壓入主動脈。',
+      4:'在組織微血管，<b>氧氣和養分</b>進入細胞，細胞產生的<b>二氧化碳和廢物</b>進入血液 → 變成缺氧血。',
+      7:'體循環的<b>終點</b>。上、下大靜脈把缺氧血送回右心房。',
+      8:'肺循環的<b>起點</b>。右心室收縮，把缺氧血壓入肺動脈。',
+      9:'注意：<b>肺動脈裡流的是缺氧血</b>！（動脈是指「離開心臟」）',
+      10:'在肺微血管，肺泡中的<b>氧氣擴散進血液</b>，血液中的<b>二氧化碳擴散到肺泡</b> → 變成充氧血。',
+      11:'注意：<b>肺靜脈裡流的是充氧血</b>！（靜脈是指「回到心臟」）',
+      12:'肺循環的<b>終點</b>。充氧血接著流入左心室，再進行體循環。'
+    }[i];
+    if(extra) txt += '<p>'+extra+'</p>';
+    $('circInfo').innerHTML = txt;
+    document.querySelectorAll('#stList div').forEach(function(d){ d.classList.toggle('on', Number(d.getAttribute('data-i')) === i); });
+    document.querySelectorAll('#circ .stn').forEach(function(d){ d.classList.toggle('on', Number(d.getAttribute('data-i')) === i); });
+  }
+  function gas(i){
+    var g = $('gasFx'); g.innerHTML = '';
+    if(i === 4) g.innerHTML = '<g font-size="14" font-weight="900"><text x="262" y="455" fill="#1565C0">O₂ → 進入細胞</text><text x="140" y="455" fill="#6D4C41">CO₂ → 進入血液</text></g>';
+    if(i === 10) g.innerHTML = '<g font-size="14" font-weight="900"><text x="268" y="84" fill="#1565C0">O₂ ↓ 進入血液</text><text x="120" y="84" fill="#6D4C41">CO₂ ↑ 到肺泡</text></g>';
+  }
+  var swapT = null;
+  function goTo(i){ cur = i; var s = ST[i]; clearTimeout(swapT); place(s.x, s.y, s.o); info(i); gas(i);
+    if(i === 4 || i === 10) swapT = setTimeout(function(){ if(cur === i) place(s.x, s.y, i === 10); }, 700); }
+  function moveNext(done){
+    var a = ST[cur], nxt = cur % 12 + 1, b = ST[nxt];
+    var dur = (UNIT.reduced() ? 200 : 900) / speed, t0 = null;
+    var oxy = cur === 4 ? 0 : cur === 10 ? 1 : a.o;
+    cancelAnimationFrame(anim);
+    function step(ts){
+      if(!t0) t0 = ts; var k = Math.min(1, (ts - t0) / dur);
+      var e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
+      place(a.x + (b.x - a.x)*e, a.y + (b.y - a.y)*e, oxy);
+      if(k < 1) anim = requestAnimationFrame(step); else { goTo(nxt); if(done) done(); }
+    }
+    anim = requestAnimationFrame(step);
+  }
+  function loop(){ moveNext(function(){ cTimer = setTimeout(loop, (UNIT.reduced() ? 400 : 1100) / speed + ((cur === 4 || cur === 10) ? 900 : 0)); }); }
+  function stop(){ clearTimeout(cTimer); cTimer = null; $('cPlay').textContent = '▶ 出發'; }
+  $('cPlay').addEventListener('click', function(){ if(cTimer){ stop(); cancelAnimationFrame(anim); goTo(cur); return; } this.textContent = '⏸ 暫停'; cTimer = 1; loop(); });
+  $('cStep').addEventListener('click', function(){ stop(); moveNext(); });
+  $('cReset').addEventListener('click', function(){ stop(); cancelAnimationFrame(anim); goTo(1); });
+  circ.addEventListener('click', function(e){ var s = e.target.closest('.stn'); if(!s) return; stop(); cancelAnimationFrame(anim); goTo(Number(s.getAttribute('data-i'))); });
+  UNIT.seg($('segSpeed'), function(v){ speed = Number(v); });
+  goTo(1);
+})();
+</script>
+</body>
+</html>

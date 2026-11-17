@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3-3 人體的防禦｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  /* 三道防線 */
+  .lv-pills{ display:flex; gap:8px; flex-wrap:wrap; }
+  .lv-pills span{ padding:6px 14px; border-radius:999px; background:#F1F0EA; font-weight:700; font-size:.88rem; }
+  .lv-pills span.on{ background:var(--u); color:#fff; }
+  .lv-pills span.done{ background:var(--u-l); color:var(--u-d); }
+  @keyframes bounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(46px); } }
+  @keyframes sneak{ 0%{ transform:translate(0,0); } 100%{ transform:translate(var(--dx),var(--dy)); } }
+  @keyframes pulse{ 0%,100%{ opacity:.35; } 50%{ opacity:.8; } }
+  @keyframes wbcGo{ 0%{ transform:translate(0,0); } 100%{ transform:translate(var(--dx),var(--dy)); } }
+  @keyframes eaten{ 0%,60%{ opacity:1; } 100%{ opacity:0; } }
+  @keyframes shoot{ 0%{ transform:translate(0,0); opacity:0; } 15%{ opacity:1; } 100%{ transform:translate(var(--dx),var(--dy)); opacity:1; } }
+  @keyframes grey{ 0%,70%{ filter:none; } 100%{ filter:grayscale(1) opacity(.5); } }
+  @keyframes destroy{ 0%,55%{ opacity:1; } 100%{ opacity:.12; } }
+  #def .bnc{ animation:bounce 1.6s ease-in-out infinite; }
+  #def .sn{ animation:sneak 2.2s ease-in forwards; }
+  #def .pl{ animation:pulse 1.2s ease-in-out infinite; }
+  #def .wg{ animation:wbcGo 2s 1.6s ease-out forwards; }
+  #def .et{ animation:eaten .8s 3.4s ease-in forwards; transform-box:fill-box; transform-origin:center; }
+  #def .sh{ animation:shoot 1.4s 1s ease-out forwards; opacity:0; }
+  #def .gr{ animation:grey .6s 2.4s forwards; }
+  #def .ds{ animation:destroy 2.6s 1s forwards; }
+  /* 曲線 */
+  #curve .lbl{ font-size:13px; font-weight:700; }
+  /* 時間軸 */
+  .tl{ display:grid; grid-template-columns:repeat(6,1fr); gap:10px; position:relative; margin-top:10px; }
+  .tl::before{ content:''; position:absolute; left:4%; right:4%; top:34px; height:6px; border-radius:3px; background:linear-gradient(90deg,#90CAF9,#1E88E5); }
+  .tl button{ position:relative; z-index:1; background:none; border:none; cursor:pointer; font-family:inherit; color:inherit; display:flex; flex-direction:column; align-items:center; gap:6px; padding:0; min-height:48px; }
+  .tl .dot{ width:72px; height:72px; border-radius:50%; background:#fff; border:5px solid var(--u); display:flex; align-items:center; justify-content:center; font-size:1.7rem; transition:transform .2s; }
+  .tl button[aria-pressed="true"] .dot{ background:var(--u); transform:scale(1.1); }
+  .tl .yr{ font-weight:900; color:var(--u-d); font-size:.9rem; text-align:center; }
+  .tl .nm{ font-size:.8rem; color:var(--c-muted); text-align:center; }
+  .tl-card{ margin-top:16px; background:var(--u-l); border-radius:18px; padding:18px 20px; min-height:120px; }
+  @media (max-width:760px){
+    .tl{ grid-template-columns:1fr; }
+    .tl::before{ left:34px; right:auto; top:4%; bottom:4%; width:6px; height:auto; background:linear-gradient(180deg,#90CAF9,#1E88E5); }
+    .tl button{ flex-direction:row; justify-content:flex-start; gap:14px; }
+    .tl .yr, .tl .nm{ text-align:left; }
+  }
+</style>
+</head>
+<body data-page="3-3" data-root="./" class="unit-33">
+<main class="wrap">
+
+  <div class="page-hero unit-hero">
+    <div class="txt">
+      <span class="tag" style="background:rgba(255,255,255,.25);color:#fff">單元 3-3</span>
+      <h1 style="margin:.2em 0">人體的防禦</h1>
+      <p>病原體想闖進身體，得先突破三道防線！疫苗又是怎麼幫我們提前「練兵」的？</p>
+    </div>
+    <div class="mini secondary">
+      <div>本單元概念卡 <strong data-unit-progress-text>0 / 4 張</strong></div>
+      <div class="progress" data-unit-progress="3-3"><span></span></div>
+    </div>
+  </div>
+
+  <nav class="toc" aria-label="本頁目錄">
+    <a href="#b1">① 三道防線</a><a href="#a1">🎬 防線闖關</a><a href="#b2">② 疫苗</a><a href="#a2">🎬 免疫力曲線</a><a href="#tl">🕰️ 科學漫遊</a>
+    <button class="btn ghost" id="flipAll" style="min-height:40px;padding:4px 14px;font-size:.85rem">全部翻到說明面</button>
+  </nav>
+
+  <!-- ========== 卡 1～3 ========== -->
+  <div class="block-title" id="b1"><span class="num">1</span><h2>病原體與三道防線</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-3-c1"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <rect x="12" y="34" width="34" height="16" rx="8" fill="#81C784" stroke="#2E7D32" stroke-width="2"/><circle cx="20" cy="42" r="2" fill="#2E7D32"/><circle cx="36" cy="42" r="2" fill="#2E7D32"/>
+          <g transform="translate(70 62)"><circle r="16" fill="#CE93D8" stroke="#7B1FA2" stroke-width="2"/><g stroke="#7B1FA2" stroke-width="3" stroke-linecap="round"><path d="M0 -16v-8M0 16v8M-16 0h-8M16 0h8M11 11l6 6M-11 -11l-6 -6M11 -11l6 -6M-11 11l-6 6"/></g></g>
+        </svg>
+        <h3>病原體與三道防線</h3><span class="hint">點我翻面看說明</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>病原體與三道防線</h3>
+        <ul>
+          <li><span class="kw">病原體</span>：可能造成疾病的微生物，例如某些<b>細菌</b>或<b>病毒</b>。</li>
+          <li>人體有<b>三道</b>防禦機制保護身體：</li>
+        </ul>
+        <table class="mini-table">
+          <tr><th colspan="2">非專一性防禦</th><th>專一性防禦</th></tr>
+          <tr><td>第一道</td><td>第二道</td><td>第三道</td></tr>
+          <tr><td>皮膜的阻隔</td><td>發炎反應、吞噬作用</td><td>白血球破壞受感染細胞、產生抗體</td></tr>
+        </table>
+        <div class="ft"><small>課本 P.116・表 3-4</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+
+    <div class="concept" data-id="3-3-c2"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <rect x="6" y="30" width="88" height="18" fill="#FFCC80" stroke="#E65100" stroke-width="2"/>
+          <path d="M44 30 L50 48 L56 30" fill="#FFEBEE" stroke="#E53935" stroke-width="2"/>
+          <circle cx="50" cy="66" r="20" fill="#FFCDD2" opacity=".7"/><text x="50" y="72" text-anchor="middle" font-size="13" font-weight="900" fill="#C62828">紅腫熱痛</text>
+        </svg>
+        <h3>第一、二道防線</h3><span class="hint">非專一性防禦</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>第一、二道防線（非專一性）</h3>
+        <ul>
+          <li><span class="kw">第一道</span>：身體表面的<b>皮膚</b>，以及消化道、呼吸道、泌尿道表面的<b>黏膜</b>阻擋病原體。要維持皮膚和黏膜完整！</li>
+          <li><span class="kw">第二道</span>：皮膜損傷、病原體入侵 → <b>發炎反應</b>（紅、腫、熱、痛）讓更多白血球聚集到傷口 → 白血球<b>吞噬</b>病原體。</li>
+          <li>兩者都<b>沒有針對特定病原體</b>，所以是<span class="kw">非專一性防禦</span>。</li>
+        </ul>
+        <div class="ft"><small>課本 P.116</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+
+    <div class="concept" data-id="3-3-c3"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <div class="ic" style="display:flex;align-items:center;justify-content:center" id="wbcIcon"></div>
+        <h3>第三道防線</h3><span class="hint">專一性防禦</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>第三道防線（專一性）</h3>
+        <ul>
+          <li>由一群<b>特殊的白血球</b>負責：</li>
+          <li>有些白血球<b>破壞受感染的細胞</b>，阻止病原體繁殖。</li>
+          <li>有些白血球針對病原體產生<span class="kw">抗體</span>，讓病原體失去感染能力。</li>
+          <li><span class="kw">專一性</span>：只對特定病原體有效。例：腸病毒引起的防禦，<b>無法</b>對抗流行性感冒病毒。</li>
+        </ul>
+        <div class="ft"><small>課本 P.117</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 1：三道防線闖關 ========== -->
+  <div class="block-title" id="a1"><span class="num">🎬</span><h2>三道防線闖關動畫</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <div class="lv-pills" id="lvPills"><span>第一道</span><span>第二道</span><span>第三道</span><span>結果</span></div>
+      <span class="sp"></span>
+      <button class="btn ghost" id="lvReplay">↺ 重播這關</button>
+      <button class="btn defense" id="lvNext">病原體「破防」▶</button>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="def" viewBox="0 0 500 360" role="img" aria-label="三道防線動畫"></svg></div>
+      <div class="info" id="defInfo"></div>
+    </div>
+  </div>
+
+  <!-- ========== 卡 4 ========== -->
+  <div class="block-title" id="b2"><span class="num">2</span><h2>疫苗</h2><span class="kind">概念卡</span></div>
+  <div class="cards">
+    <div class="concept" data-id="3-3-c4"><div class="inner">
+      <div class="face front"><span class="done-badge">✓ 已懂</span>
+        <svg class="ic" viewBox="0 0 100 100" aria-hidden="true">
+          <g transform="rotate(-35 50 50)"><rect x="40" y="14" width="20" height="56" rx="4" fill="#E3F2FD" stroke="#1E88E5" stroke-width="3"/><rect x="43" y="40" width="14" height="27" fill="#90CAF9"/><rect x="36" y="8" width="28" height="8" rx="3" fill="#1E88E5"/><rect x="47" y="0" width="6" height="10" fill="#1E88E5"/><path d="M50 70 V92" stroke="#607D8B" stroke-width="3"/></g>
+        </svg>
+        <h3>疫苗</h3><span class="hint">讓白血球先「記住」</span>
+      </div>
+      <div class="face back"><span class="done-badge">✓ 已懂</span>
+        <h3>疫苗</h3>
+        <ul>
+          <li>疫苗成分能<b>模擬病原體</b>，引發<b>專一性防禦</b>，但不會致病或只有輕微症狀。</li>
+          <li>成分：<b>沒感染力的病原體、弱化的病原體、病原體表面特殊蛋白質</b>，讓特殊白血球記住病原體的表面特徵。</li>
+          <li><b>第一次</b>接觸：反應<b>慢且弱</b>；<b>第二次</b>接觸相同病原體：白血球留有<span class="kw">記憶</span>，反應<b>快且強</b>。</li>
+          <li>例：2020 年 Covid-19 疫苗；新生兒預防接種「<b>黃卡</b>」。</li>
+        </ul>
+        <div class="ft"><small>課本 P.118～119</small><button class="got">我懂了？</button></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ========== 動畫 2：免疫力曲線 ========== -->
+  <div class="block-title" id="a2"><span class="num">🎬</span><h2>疫苗免疫力曲線</h2><span class="kind">互動動畫</span></div>
+  <div class="anim">
+    <div class="bar">
+      <div class="seg" id="segVac"><button data-v="yes" aria-pressed="true">💉 有接種疫苗</button><button data-v="no">🚫 未接種</button></div>
+      <span class="sp"></span>
+      <div class="range"><label for="tRange"><strong>時間</strong></label><input type="range" id="tRange" min="0" max="20" step="0.1" value="0"><button class="btn defense" id="tPlay">▶ 播放</button></div>
+    </div>
+    <div class="anim-body">
+      <div class="stagebox"><svg id="curve" viewBox="0 0 520 340" role="img" aria-label="免疫力強度隨時間變化的曲線"></svg></div>
+      <div class="info" id="curveInfo"></div>
+    </div>
+    <div class="legend"><span>━ 免疫力（專一性防禦反應強度）</span><span>┅ 能有效阻止病原體繁殖的程度（示意）</span><span>圖為示意，數值不代表真實比例</span></div>
+  </div>
+
+  <!-- ========== 科學漫遊 ========== -->
+  <div class="block-title" id="tl"><span class="num">🕰️</span><h2>科學漫遊：人體循環系統的發現</h2><span class="kind">時間軸</span></div>
+  <div class="anim">
+    <div class="tl" id="tlNodes"></div>
+    <div class="tl-card" id="tlCard" aria-live="polite"></div>
+  </div>
+
+  <div class="unit-foot">
+    <a class="btn ghost" href="unit3-2.html">← 3-2 人體的循環</a>
+    <a class="btn defense" href="quiz.html?unit=3-3">✏️ 練習 3-3 題目</a>
+    <a class="btn" href="lab.html">接著做實驗模擬 →</a>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/unit.js"></script>
+<script>
+(function(){
+  'use strict';
+  function $(id){ return document.getElementById(id); }
+  $('wbcIcon').innerHTML = CH3.mascots.wbc(100);
+
+  /* ===== 動畫 1：三道防線 ===== */
+  var def = $('def'), lv = 0;
+  function bact(x, y, cls, extra){ return '<g class="'+(cls||'').replace(' et','')+'" style="'+(extra||'')+'"><g class="'+((cls||'').indexOf('et')>=0?'et':'')+'"><g transform="translate('+x+' '+y+')"><rect x="-16" y="-8" width="32" height="16" rx="8" fill="#81C784" stroke="#2E7D32" stroke-width="2"/><circle cx="-7" cy="0" r="2" fill="#2E7D32"/><circle cx="7" cy="0" r="2" fill="#2E7D32"/></g></g></g>'; }
+  function virus(x, y, cls, extra, color){ color = color || '#CE93D8'; return '<g class="'+(cls||'').replace(' et','')+'" style="'+(extra||'')+'"><g class="'+((cls||'').indexOf('et')>=0?'et':'')+'"><g transform="translate('+x+' '+y+')"><circle r="11" fill="'+color+'" stroke="#7B1FA2" stroke-width="2"/><g stroke="#7B1FA2" stroke-width="2.5" stroke-linecap="round"><path d="M0 -11v-6M0 11v6M-11 0h-6M11 0h6M8 8l4 4M-8 -8l-4 -4M8 -8l4 -4M-8 8l-4 4"/></g></g></g></g>'; }
+  function wbc(x, y, cls, extra, special){ return '<g class="'+(cls||'')+'" style="'+(extra||'')+'"><g transform="translate('+x+' '+y+')"><circle r="20" fill="#F5F7FF" stroke="#1E88E5" stroke-width="2.5"/><path d="M-10 -6 q6 -8 14 -2 q8 6 0 10 q-8 4 -14 -2z" fill="#9575CD"/>'+(special ? '<circle cx="14" cy="-14" r="8" fill="#FFD600" stroke="#F57F17"/><text x="14" y="-10" text-anchor="middle" font-size="10" font-weight="900">★</text>' : '')+'</g></g>'; }
+  function antibody(x, y, cls, extra){ return '<g class="'+(cls||'')+'" style="'+(extra||'')+'"><g transform="translate('+x+' '+y+')"><path d="M0 10 V0 L-7 -8 M0 0 L7 -8" stroke="#1565C0" stroke-width="3.5" fill="none" stroke-linecap="round"/></g></g>'; }
+  var LV = [
+    { t:'第一道防線：皮膜的阻隔',
+      d:'身體表面的<b>皮膚</b>，以及消化道、呼吸道、泌尿道表面的<b>黏膜</b>，把病原體擋在外面。<br>👉 所以維持皮膚和黏膜的<b>完整</b>很重要。<br><span class="tag">非專一性</span>',
+      svg: function(){
+        return '<rect width="500" height="150" fill="#E3F2FD"/><text x="16" y="28" font-size="15" font-weight="900" fill="#1565C0">體外</text>' +
+          '<rect y="150" width="500" height="40" fill="#FFCC80" stroke="#E65100" stroke-width="2"/><text x="250" y="176" text-anchor="middle" font-size="16" font-weight="900" fill="#BF360C">皮膚／黏膜（城牆）</text>' +
+          '<rect y="190" width="500" height="170" fill="#FFF8F6"/><text x="16" y="220" font-size="15" font-weight="900" fill="#C62828">體內</text>' +
+          bact(90,70,'bnc','animation-delay:0s') + virus(200,50,'bnc','animation-delay:.3s') + bact(320,80,'bnc','animation-delay:.6s') + virus(420,60,'bnc','animation-delay:.9s') +
+          '<text x="250" y="300" text-anchor="middle" font-size="22" font-weight="900" fill="#2E7D32">🛡️ 擋住了！</text>';
+      } },
+    { t:'第二道防線：發炎反應與吞噬作用',
+      d:'皮膚受傷（例如被刺到、擦傷），病原體從傷口入侵 → 受傷部位出現<b>紅、腫、熱、痛</b>的<b>發炎反應</b> → 促使更多<b>白血球</b>穿出微血管、聚集到傷口 → <b>吞噬</b>病原體。<br><span class="tag">非專一性</span>：不管是哪一種病原體都吞。',
+      svg: function(){
+        return '<rect width="500" height="150" fill="#E3F2FD"/>' +
+          '<path d="M0 150 H220 L250 190 L280 150 H500 V190 H0Z" fill="#FFCC80" stroke="#E65100" stroke-width="2"/>' +
+          '<text x="80" y="176" text-anchor="middle" font-size="14" font-weight="900" fill="#BF360C">皮膚</text><text x="250" y="140" text-anchor="middle" font-size="14" font-weight="900" fill="#C62828">傷口</text>' +
+          '<rect y="190" width="500" height="170" fill="#FFF8F6"/>' +
+          '<ellipse class="pl" cx="250" cy="235" rx="150" ry="60" fill="#EF5350"/>' +
+          '<g font-size="16" font-weight="900" fill="#B71C1C"><text x="120" y="214">紅</text><text x="360" y="214">腫</text><text x="130" y="276">熱</text><text x="352" y="276">痛</text></g>' +
+          '<rect x="0" y="318" width="500" height="26" rx="13" fill="#E57373"/><text x="440" y="336" font-size="12" font-weight="700" fill="#fff">微血管</text>' +
+          bact(250,100,'sn et','--dx:-30px;--dy:130px') + virus(230,80,'sn et','--dx:40px;--dy:160px') + bact(270,60,'sn et','--dx:10px;--dy:180px') +
+          wbc(150,330,'wg','--dx:60px;--dy:-100px') + wbc(300,330,'wg','--dx:-12px;--dy:-80px') + wbc(380,330,'wg','--dx:-110px;--dy:-60px');
+      } },
+    { t:'第三道防線：專一性防禦',
+      d:'由一群<b>特殊白血球</b>（★）負責：<br>① 破壞<b>受感染的細胞</b>，阻止病原體繁殖。<br>② 針對病原體產生<b>抗體</b>（Y 形），讓病原體失去感染能力。<br>注意：抗體只抓「<b>這一種</b>」病毒（紫色），對其他病原體（綠色細菌）無效 → <span class="tag">專一性</span>',
+      svg: function(){
+        var cells = '';
+        [[90,110],[170,90],[90,250],[170,270]].forEach(function(p){ cells += '<rect x="'+(p[0]-30)+'" y="'+(p[1]-24)+'" width="60" height="48" rx="18" fill="#E1F5FE" stroke="#4FC3F7" stroke-width="2"/>'; });
+        return '<rect width="500" height="360" fill="#FFF8F6"/><text x="16" y="28" font-size="15" font-weight="900" fill="#C62828">體內組織</text>' + cells +
+          '<g class="ds"><rect x="100" y="156" width="70" height="54" rx="20" fill="#E1F5FE" stroke="#E53935" stroke-width="3" stroke-dasharray="5 3"/>' + virus(135,183,'', '', '#CE93D8') + '<text x="135" y="230" text-anchor="middle" font-size="12" font-weight="900" fill="#C62828">受感染細胞</text></g>' +
+          wbc(260,183,'wg','--dx:-60px;--dy:0px;animation-delay:.6s',true) +
+          virus(360,80,'gr') + virus(440,130,'gr') + virus(400,250,'gr') + bact(450,310) +
+          wbc(330,300,'',  '', true) +
+          antibody(330,300,'sh','--dx:30px;--dy:-205px') + antibody(330,300,'sh','--dx:105px;--dy:-158px') + antibody(330,300,'sh','--dx:70px;--dy:-38px') +
+          '<text x="455" y="345" text-anchor="middle" font-size="11" font-weight="700" fill="#2E7D32">抗體不理它</text>';
+      } },
+    { t:'🎉 三道防線都完成了！', d:'', svg:function(){
+        return '<rect width="500" height="360" fill="#E3F2FD"/>' +
+          '<g font-size="18" font-weight="900" text-anchor="middle"><rect x="20" y="40" width="140" height="130" rx="18" fill="#fff" stroke="#FFB74D" stroke-width="3"/><text x="90" y="80" fill="#E65100">第一道</text><text x="90" y="112" font-size="14" fill="#5D4037">皮膜的阻隔</text>' +
+          '<rect x="180" y="40" width="140" height="130" rx="18" fill="#fff" stroke="#EF5350" stroke-width="3"/><text x="250" y="80" fill="#C62828">第二道</text><text x="250" y="112" font-size="14" fill="#5D4037">發炎反應</text><text x="250" y="134" font-size="14" fill="#5D4037">吞噬作用</text>' +
+          '<rect x="340" y="40" width="140" height="130" rx="18" fill="#fff" stroke="#1E88E5" stroke-width="3"/><text x="410" y="80" fill="#1565C0">第三道</text><text x="410" y="112" font-size="14" fill="#5D4037">破壞受感染細胞</text><text x="410" y="134" font-size="14" fill="#5D4037">產生抗體</text>' +
+          '<rect x="20" y="186" width="300" height="40" rx="12" fill="#FFE0B2"/><text x="170" y="212" font-size="16" fill="#E65100">非專一性防禦</text>' +
+          '<rect x="340" y="186" width="140" height="40" rx="12" fill="#BBDEFB"/><text x="410" y="212" font-size="16" fill="#1565C0">專一性防禦</text></g>' +
+          '<g transform="translate(220 250)">' + CH3.mascots.wbc(90).replace('<svg','<svg x="0" y="0"') + '</g>';
+      } }
+  ];
+  function drawLv(){
+    def.innerHTML = LV[lv].svg();
+    document.querySelectorAll('#lvPills span').forEach(function(s,i){ s.className = i === lv ? 'on' : (i < lv ? 'done' : ''); });
+    var d = LV[lv].d || '<p>點「重新挑戰」從第一道防線再看一次。想想看：<b>打了流感疫苗</b>，跌倒擦傷時還會發炎嗎？（會！疫苗只影響專一性防禦。）</p>';
+    $('defInfo').innerHTML = '<h3>'+LV[lv].t+'</h3><p>'+d+'</p>';
+    $('lvNext').textContent = lv === 3 ? '↺ 重新挑戰' : (lv === 2 ? '看總整理 ▶' : '病原體「破防」▶');
+  }
+  $('lvNext').addEventListener('click', function(){ lv = (lv + 1) % 4; drawLv(); });
+  $('lvReplay').addEventListener('click', drawLv);
+  drawLv();
+
+  /* ===== 動畫 2：免疫力曲線 ===== */
+  var curve = $('curve'), vac = 'yes', tR = $('tRange'), tTimer = null;
+  var X0 = 60, X1 = 500, Y0 = 290, Y1 = 30, TMAX = 20, VMAX = 100;
+  function sx(t){ return X0 + (X1 - X0) * t / TMAX; }
+  function sy(v){ return Y0 - (Y0 - Y1) * v / VMAX; }
+  function resp(t, t0, tp, A){ var x = (t - t0) / tp; if(x <= 0) return 0; return A * x * x * Math.exp(2 * (1 - x)); }
+  function f(t){
+    if(vac === 'yes') return resp(t, 1, 4, 24) + resp(t, 10, 1.4, 88);
+    return resp(t, 10, 4, 26);
+  }
+  function drawCurve(){
+    var t = Number(tR.value), h = '';
+    h += '<line x1="'+X0+'" y1="'+Y0+'" x2="'+X1+'" y2="'+Y0+'" stroke="#455A64" stroke-width="2"/><line x1="'+X0+'" y1="'+Y0+'" x2="'+X0+'" y2="'+Y1+'" stroke="#455A64" stroke-width="2"/>';
+    h += '<text x="'+(X1-4)+'" y="'+(Y0+26)+'" text-anchor="end" class="lbl" fill="#455A64">時間 →</text>';
+    h += '<text transform="translate(22 '+((Y0+Y1)/2)+') rotate(-90)" text-anchor="middle" class="lbl" fill="#455A64">免疫力強度 →</text>';
+    h += '<line x1="'+X0+'" y1="'+sy(50)+'" x2="'+X1+'" y2="'+sy(50)+'" stroke="#90A4AE" stroke-width="2" stroke-dasharray="6 5"/>';
+    // 事件
+    function ev(tt, txt, color){ h += '<line x1="'+sx(tt)+'" y1="'+Y0+'" x2="'+sx(tt)+'" y2="'+(Y1-4)+'" stroke="'+color+'" stroke-width="2" stroke-dasharray="3 4"/><rect x="'+(sx(tt)-62)+'" y="'+(Y0+6)+'" width="124" height="24" rx="12" fill="'+color+'"/><text x="'+sx(tt)+'" y="'+(Y0+23)+'" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">'+txt+'</text>'; }
+    if(vac === 'yes') ev(1, '第一次接觸（打疫苗）', '#1E88E5');
+    ev(10, vac === 'yes' ? '第二次接觸（病原體）' : '第一次接觸（病原體）', '#7B1FA2');
+    // 曲線（到目前時間）
+    var pts = [];
+    for(var k=0;k<=t+1e-6;k+=0.1) pts.push(sx(k).toFixed(1)+','+sy(f(k)).toFixed(1));
+    if(pts.length > 1){
+      h += '<polygon points="'+sx(0)+','+Y0+' '+pts.join(' ')+' '+sx(t).toFixed(1)+','+Y0+'" fill="#1E88E5" opacity=".12"/>';
+      h += '<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1565C0" stroke-width="4" stroke-linejoin="round"/>';
+    }
+    h += '<circle cx="'+sx(t)+'" cy="'+sy(f(t))+'" r="7" fill="#1565C0" stroke="#fff" stroke-width="2"/>';
+    // 未接種：生病區
+    if(vac === 'no' && t > 10.5) h += '<rect x="'+sx(10.5)+'" y="'+Y1+'" width="'+(sx(Math.min(t,17))-sx(10.5))+'" height="'+(Y0-Y1)+'" fill="#E53935" opacity=".08"/><text x="'+sx(12.8)+'" y="'+(Y1+40)+'" text-anchor="middle" font-size="14" font-weight="900" fill="#C62828">病原體大量繁殖・容易生病</text>';
+    if(vac === 'yes' && t > 11) h += '<text x="'+(sx(11.5)+50)+'" y="'+(Y1+18)+'" font-size="14" font-weight="900" fill="#1565C0">快又強！</text>';
+    if(vac === 'yes' && t > 3) h += '<text x="'+sx(5)+'" y="'+(sy(24)-12)+'" text-anchor="middle" font-size="13" font-weight="900" fill="#1E88E5">慢又弱</text>';
+    curve.innerHTML = h;
+    var msg;
+    if(t < 1 && vac === 'yes') msg = '還沒接觸過這種病原體，身體沒有對它的專一性防禦。';
+    else if(vac === 'yes' && t < 10) msg = '<b>施打疫苗（第一次接觸）</b>：疫苗模擬病原體，引發專一性防禦，但反應<b>較慢、效果較弱</b>，而且不會致病或只有輕微症狀。特殊白血球「<b>記住</b>」了病原體的表面特徵。';
+    else if(vac === 'yes') msg = '<b>第二次接觸相同病原體</b>：白血球留有記憶，能<b>快速大量增生、製造抗體</b>，反應<b>快且強</b>，病原體還來不及大量繁殖就被阻止 → 達到預防疾病的效果。';
+    else if(t < 10) msg = '沒有打疫苗，身體還不認識這種病原體。';
+    else msg = '<b>第一次接觸真正的病原體</b>：專一性防禦反應<b>慢且弱</b>，病原體有時間大量繁殖，比較容易生病、症狀也比較嚴重。';
+    $('curveInfo').innerHTML = '<h3>'+(vac === 'yes' ? '💉 有接種疫苗' : '🚫 未接種疫苗')+'</h3><p>'+msg+'</p><p style="font-size:.88rem;color:var(--c-muted)">試試看：切換「有接種／未接種」，比較病原體入侵（時間 10）之後兩條曲線的高度與上升速度。</p>';
+  }
+  tR.addEventListener('input', drawCurve);
+  $('tPlay').addEventListener('click', function(){
+    var b = this;
+    if(tTimer){ clearInterval(tTimer); tTimer = null; b.textContent = '▶ 播放'; return; }
+    if(Number(tR.value) >= 20) tR.value = 0;
+    b.textContent = '⏸ 暫停';
+    tTimer = setInterval(function(){
+      tR.value = Math.min(20, Number(tR.value) + (UNIT.reduced() ? .5 : .1)); drawCurve();
+      if(Number(tR.value) >= 20){ clearInterval(tTimer); tTimer = null; b.textContent = '▶ 播放'; }
+    }, 40);
+  });
+  UNIT.seg($('segVac'), function(v){ vac = v; drawCurve(); });
+  drawCurve();
+
+  /* ===== 科學漫遊時間軸 ===== */
+  var TL = [
+    { yr:'西元前 460 年', nm:'希波克拉底', ic:'🏛️', t:'四種體液說',
+      d:'古希臘的「西方醫學之父」<b>希波克拉底</b>認為人體內有四種體液：血液、黏液、黃膽汁和黑膽汁。當時已知道心臟分成兩心房、兩心室，但還不了解心臟和血液、血管的關係。' },
+    { yr:'西元 200 年', nm:'蓋侖（Galen）', ic:'🔪', t:'發現血液在血管流動',
+      d:'古羅馬醫生<b>蓋侖</b>透過大量解剖，得出血液在血管裡流動的結論。但他認為血液<b>不能循環</b>，流過血管後就消失在四肢末梢。' },
+    { yr:'西元 1628 年', nm:'威廉哈維（William Harvey）', ic:'❤️', t:'《心血運動論》',
+      d:'英國醫生<b>威廉哈維</b>指出血管是一個<b>封閉的管道系統</b>，動力來源是<b>心臟</b>：血液由動脈流出心臟，再由靜脈流回心臟。當時顯微鏡還沒發明，所以他沒有真正看到微血管。' },
+    { yr:'西元 15～19 世紀', nm:'輸血嘗試', ic:'🩸', t:'嘗試輸血治療',
+      d:'人類開始嘗試用<b>輸血</b>治療疾病或維持生命，但大多以失敗收場。為什麼呢？下一站揭曉！' },
+    { yr:'西元 1901 年', nm:'蘭德施泰納（Karl Landsteiner）', ic:'🅰️', t:'發現血型',
+      d:'<b>蘭德施泰納</b>發現人類血液可以分成 A、B、C 三類（C 後來改稱 <b>O</b>），AB 型則由他的學生後續發現。了解血型後，人類才能<b>正確進行輸血</b>。' },
+    { yr:'西元 21 世紀', nm:'持續研究', ic:'🔬', t:'免疫與循環',
+      d:'人們發現<b>免疫</b>與<b>循環系統</b>關係密切，許多預防與治療疾病的研究持續展開，例如愛滋病與癌症的治療、<b>疫苗</b>的施打等。' }
+  ];
+  $('tlNodes').innerHTML = TL.map(function(n,i){ return '<button data-i="'+i+'" aria-pressed="'+(i===0)+'"><span class="dot">'+n.ic+'</span><span><span class="yr">'+n.yr+'</span><br><span class="nm">'+n.nm+'</span></span></button>'; }).join('');
+  function showTl(i){
+    var n = TL[i];
+    document.querySelectorAll('#tlNodes button').forEach(function(b){ b.setAttribute('aria-pressed', Number(b.getAttribute('data-i')) === i); });
+    $('tlCard').innerHTML = '<h3 style="margin:0 0 6px;color:var(--u-d)">'+n.ic+' '+n.yr+'｜'+n.t+'</h3><p style="margin:0">'+n.d+'</p>' +
+      '<div style="display:flex;gap:8px;margin-top:12px">' + (i > 0 ? '<button class="btn ghost" data-go="'+(i-1)+'">◀ 上一站</button>' : '') + (i < TL.length-1 ? '<button class="btn defense" data-go="'+(i+1)+'">下一站 ▶</button>' : '') + '</div>';
+  }
+  $('tlNodes').addEventListener('click', function(e){ var b = e.target.closest('button'); if(b) showTl(Number(b.getAttribute('data-i'))); });
+  $('tlCard').addEventListener('click', function(e){ var b = e.target.closest('[data-go]'); if(b) showTl(Number(b.getAttribute('data-go'))); });
+  showTl(0);
+})();
+</script>
+</body>
+</html>

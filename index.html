@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第3章 生物體內的運輸｜互動學習網站</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  /* ---------- 小劇場 ---------- */
+  .theater{ display:grid; grid-template-columns:1.05fr 1fr; gap:22px; align-items:stretch; }
+  @media (max-width:860px){ .theater{ grid-template-columns:1fr; } }
+  .stage{
+    background:linear-gradient(180deg,#FFF8E1 0%,#FFFDF5 70%); border-radius:24px; position:relative;
+    box-shadow:var(--shadow); overflow:hidden; min-height:360px; display:flex; align-items:center; justify-content:center;
+  }
+  .stage svg.scene{ width:100%; height:auto; display:block; }
+  .stage .label{ position:absolute; left:16px; top:14px; background:#fff; border-radius:999px; padding:4px 14px; font-weight:900; color:#E65100; box-shadow:var(--shadow); font-size:.85rem; }
+  .strand{ stroke:#FFFFFF; stroke-width:3; fill:none; stroke-linecap:round; transition:stroke .6s, stroke-width .6s; }
+  .reveal .strand{ stroke:#29B6F6; stroke-width:4.5; filter:drop-shadow(0 0 4px rgba(41,182,246,.8)); }
+  .vb-tag{ opacity:0; transition:opacity .6s .3s; }
+  .reveal .vb-tag{ opacity:1; }
+  .float{ animation:float 3s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes float{ 50%{ transform:translateY(-6px); } }
+
+  .dialog{ display:flex; flex-direction:column; gap:12px; }
+  .lines{ flex:1; display:flex; flex-direction:column; gap:12px; min-height:300px; }
+  .line{ display:flex; gap:10px; align-items:flex-end; animation:pop .35s ease both; }
+  .line.right{ flex-direction:row-reverse; }
+  .line .who{ flex:0 0 auto; text-align:center; font-size:.7rem; font-weight:700; color:var(--c-muted); }
+  .line .who svg{ display:block; }
+  .bubble{ background:#fff; border-radius:18px; padding:12px 16px; box-shadow:var(--shadow); max-width:80%; position:relative; }
+  .line.right .bubble{ background:#FFF3E0; }
+  .line.drop .bubble{ background:#E1F5FE; border:2px solid #29B6F6; }
+  .bubble b{ color:#0277BD; font-size:1.15em; }
+  @keyframes pop{ from{ opacity:0; transform:translateY(12px) scale(.96);} to{ opacity:1; transform:none; } }
+  .dialog-ctrl{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  /* ---------- 單元卡 ---------- */
+  .units{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:900px){ .units{ grid-template-columns:1fr; } }
+  .unit-card{ border-top:8px solid var(--u); display:flex; flex-direction:column; gap:10px; text-decoration:none; transition:transform .2s; }
+  .unit-card:hover{ transform:translateY(-4px); }
+  .unit-card .icon{ width:84px; height:84px; border-radius:22px; background:var(--u-l); display:flex; align-items:center; justify-content:center; }
+  .unit-card h3{ margin:0; color:var(--u-d); }
+  .unit-card .tag{ align-self:flex-start; }
+  .unit-card ul{ margin:0; padding-left:1.1em; color:var(--c-muted); font-size:.9rem; }
+  .unit-card .meta{ display:flex; justify-content:space-between; font-size:.85rem; color:var(--c-muted); }
+
+  .overall{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .overall .progress{ flex:1; min-width:200px; height:20px; }
+  .overall .progress > span{ background:linear-gradient(90deg,var(--c-plant),var(--c-blood),var(--c-defense)); }
+
+  .path{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .path a{ text-decoration:none; background:#fff; border:2px solid var(--c-line); border-radius:16px; padding:10px 16px; font-weight:700; min-height:48px; display:flex; align-items:center; gap:6px; }
+  .path a:hover{ border-color:var(--c-text); }
+  .path .arrow{ color:var(--c-muted); font-weight:900; }
+  section{ margin-top:34px; }
+  .sec-title{ display:flex; align-items:center; gap:10px; }
+  .ch2-link{ display:inline-flex; align-items:center; gap:6px; color:var(--c-muted); font-weight:700; text-decoration:none; border-bottom:2px dashed var(--c-line); padding-bottom:2px; }
+</style>
+</head>
+<body data-page="home" data-root="./">
+
+<main class="wrap">
+
+  <!-- ===== 小劇場 ===== -->
+  <section style="margin-top:0">
+    <div class="sec-title"><h1>生活情境小劇場：水果上的白色細絲是什麼？</h1></div>
+    <div class="theater">
+      <div class="stage" id="stage">
+        <span class="label">🍊 小劇場</span>
+        <svg class="scene" viewBox="0 0 520 380" role="img" aria-label="剝開的橘子與香蕉，表面有白色細絲">
+          <!-- 桌面 -->
+          <ellipse cx="260" cy="330" rx="240" ry="34" fill="#F3E5C8"/>
+          <!-- 盤子 -->
+          <ellipse cx="260" cy="318" rx="210" ry="30" fill="#fff" stroke="#E0D6C2" stroke-width="3"/>
+
+          <!-- 橘子（剝開一半） -->
+          <g transform="translate(160 205)">
+            <circle r="92" fill="#FFA726"/>
+            <path d="M-92 0 a92 92 0 0 1 184 0 z" fill="#FB8C00"/>
+            <circle r="74" fill="#FFE0B2"/>
+            <!-- 果瓣 -->
+            <g stroke="#FFCC80" stroke-width="3" fill="#FFB74D">
+              <path d="M0 0 L0 -72 A72 72 0 0 1 51 -51 Z"/>
+              <path d="M0 0 L51 -51 A72 72 0 0 1 72 0 Z"/>
+              <path d="M0 0 L72 0 A72 72 0 0 1 51 51 Z"/>
+              <path d="M0 0 L51 51 A72 72 0 0 1 0 72 Z"/>
+              <path d="M0 0 L0 72 A72 72 0 0 1 -51 51 Z"/>
+              <path d="M0 0 L-51 51 A72 72 0 0 1 -72 0 Z"/>
+              <path d="M0 0 L-72 0 A72 72 0 0 1 -51 -51 Z"/>
+              <path d="M0 0 L-51 -51 A72 72 0 0 1 0 -72 Z"/>
+            </g>
+            <!-- 白色細絲（維管束） -->
+            <path class="strand" d="M-60 -30 C-30 -50 10 -10 40 -40 S70 -20 66 10"/>
+            <path class="strand" d="M-66 14 C-30 0 -10 40 26 20 S56 46 52 52"/>
+            <path class="strand" d="M-40 54 C-20 20 10 60 30 -60"/>
+            <path class="strand" d="M-20 -66 C-10 -20 -40 10 -6 60"/>
+            <circle r="8" fill="#FFF8E1"/>
+          </g>
+
+          <!-- 香蕉（剝開） -->
+          <g transform="translate(370 230) rotate(-18)">
+            <path d="M-80 30 C-60 -70 60 -90 96 -40 C40 -60 -40 -30 -80 30 Z" fill="#FFF59D" stroke="#F9A825" stroke-width="3"/>
+            <!-- 果皮 -->
+            <path d="M-80 30 C-110 60 -120 80 -96 96 C-80 70 -70 50 -60 40 Z" fill="#FDD835" stroke="#F9A825" stroke-width="3"/>
+            <path d="M-80 30 C-70 70 -40 90 -30 110 C-20 80 -40 50 -50 34 Z" fill="#FFEB3B" stroke="#F9A825" stroke-width="3"/>
+            <!-- 香蕉絲 -->
+            <path class="strand" d="M-66 10 C-30 -40 30 -64 88 -46"/>
+            <path class="strand" d="M-58 22 C-20 -24 40 -50 90 -40"/>
+            <path class="strand" d="M-72 18 C-40 -30 20 -58 80 -54"/>
+          </g>
+
+          <!-- 標籤：維管束 -->
+          <g class="vb-tag">
+            <rect x="170" y="22" width="180" height="46" rx="23" fill="#0277BD"/>
+            <text x="260" y="53" text-anchor="middle" font-size="24" font-weight="900" fill="#fff">維管束！</text>
+            <path d="M200 68 L170 120" stroke="#0277BD" stroke-width="3" stroke-dasharray="6 5"/>
+            <path d="M330 68 L380 150" stroke="#0277BD" stroke-width="3" stroke-dasharray="6 5"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="dialog card">
+        <div class="lines" id="lines" aria-live="polite"></div>
+        <div class="dialog-ctrl">
+          <button class="btn" id="btnNext">下一句 ▶</button>
+          <button class="btn ghost" id="btnAuto">自動播放</button>
+          <button class="btn ghost" id="btnReplay">↺ 重播</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 學習進度 ===== -->
+  <section>
+    <div class="card overall">
+      <strong>我的學習進度</strong>
+      <div class="progress" aria-label="全章概念卡完成度"><span id="pAll"></span></div>
+      <span id="pAllText">0 / 15 張概念卡</span>
+    </div>
+  </section>
+
+  <!-- ===== 單元入口 ===== -->
+  <section>
+    <h2>三個單元</h2>
+    <div class="units">
+      <a class="card unit-card unit-31" href="unit3-1.html">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true">
+            <path d="M32 60 V24" stroke="#2E7D32" stroke-width="5" stroke-linecap="round"/>
+            <path d="M32 36 C16 36 10 24 10 16 C22 16 32 22 32 36Z" fill="#4CAF50"/>
+            <path d="M32 28 C48 28 54 16 54 8 C42 8 32 14 32 28Z" fill="#66BB6A"/>
+            <path d="M29 58 V30" stroke="#29B6F6" stroke-width="2" stroke-dasharray="3 3"/>
+            <path d="M35 30 V58" stroke="#FF9800" stroke-width="2" stroke-dasharray="3 3"/>
+          </svg>
+        </div>
+        <span class="tag">3-1</span>
+        <h3>植物的運輸構造</h3>
+        <ul><li>維管束：木質部、韌皮部、形成層</li><li>樹皮、木材與年輪</li><li>根毛、蒸散作用、養分運輸</li></ul>
+        <div class="meta"><span>概念卡 5 張・動畫 3 個</span><span id="p31t">0/5</span></div>
+        <div class="progress"><span id="p31"></span></div>
+      </a>
+
+      <a class="card unit-card unit-32" href="unit3-2.html">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true">
+            <path d="M32 56 C8 40 4 24 14 14 C22 7 30 11 32 18 C34 11 42 7 50 14 C60 24 56 40 32 56Z" fill="#E53935"/>
+            <path d="M32 18 V50" stroke="#8E1B1B" stroke-width="2.5"/>
+            <path d="M14 30 H50" stroke="#8E1B1B" stroke-width="2.5"/>
+            <ellipse cx="22" cy="22" rx="4" ry="6" fill="#fff" opacity=".4"/>
+          </svg>
+        </div>
+        <span class="tag">3-2</span>
+        <h3>人體的循環</h3>
+        <ul><li>心臟、三種血管、血液</li><li>體循環與肺循環（12 站）</li><li>淋巴系統</li></ul>
+        <div class="meta"><span>概念卡 6 張・動畫 4 個</span><span id="p32t">0/6</span></div>
+        <div class="progress"><span id="p32"></span></div>
+      </a>
+
+      <a class="card unit-card unit-33" href="unit3-3.html">
+        <div class="icon">
+          <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true">
+            <path d="M32 6 L54 14 V30 C54 44 44 54 32 58 C20 54 10 44 10 30 V14Z" fill="#1E88E5"/>
+            <path d="M32 14 V48 M18 30 H46" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="tag">3-3</span>
+        <h3>人體的防禦</h3>
+        <ul><li>病原體與三道防線</li><li>非專一性 vs. 專一性防禦</li><li>疫苗與免疫力曲線</li></ul>
+        <div class="meta"><span>概念卡 4 張・動畫 2 個・時間軸</span><span id="p33t">0/4</span></div>
+        <div class="progress"><span id="p33"></span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== 學習動線 ===== -->
+  <section>
+    <h2>建議學習動線</h2>
+    <div class="path">
+      <a href="#">🍊 小劇場</a><span class="arrow">→</span>
+      <a href="unit3-1.html">📘 單元概念卡</a><span class="arrow">→</span>
+      <a href="lab.html">🧪 實驗模擬</a><span class="arrow">→</span>
+      <a href="quiz.html">✏️ 練習題</a><span class="arrow">→</span>
+      <a href="mindmap.html">🧠 心智圖</a><span class="arrow">→</span>
+      <a href="games/index.html">🎮 遊戲複習</a>
+    </div>
+  </section>
+
+  <section class="secondary">
+    <a class="ch2-link" href="https://batyunching.github.io/bio/">🏠 生物網站總目錄</a>
+    <a class="ch2-link" id="ch2Link" href="#" style="margin-left:18px">← 回到第2章「生物體的營養」</a>
+  </section>
+</main>
+
+<div class="footer">國中自然（生物）一上・第3章 生物體內的運輸｜圖形皆為原創 SVG 繪製</div>
+
+<script src="js/common.js"></script>
+<script>
+(function(){
+  var M = CH3.mascots;
+  // 原創學生角色
+  function kid(color, hair, size){
+    size = size || 52;
+    return '<svg viewBox="0 0 64 64" width="'+size+'" height="'+size+'" aria-hidden="true">' +
+      '<circle cx="32" cy="34" r="22" fill="#FFE0BD"/>' +
+      '<path d="'+hair+'" fill="'+color+'"/>' +
+      '<circle cx="25" cy="36" r="2.6" fill="#1B2A3A"/><circle cx="39" cy="36" r="2.6" fill="#1B2A3A"/>' +
+      '<path d="M27 44 q5 4 10 0" stroke="#1B2A3A" stroke-width="2.2" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="20" cy="42" r="3" fill="#FF8A80" opacity=".5"/><circle cx="44" cy="42" r="3" fill="#FF8A80" opacity=".5"/>' +
+      '</svg>';
+  }
+  var CAST = {
+    qing: { name:'小晴', side:'left',  face: kid('#5D4037','M10 32 C10 12 54 12 54 32 C50 22 40 18 32 22 C24 18 14 22 10 32Z M8 30 C6 46 12 54 14 56 L16 34Z M56 30 C58 46 52 54 50 56 L48 34Z') },
+    zhe:  { name:'阿哲', side:'right', face: kid('#212121','M10 30 C12 10 52 10 54 30 C46 20 38 24 32 18 C26 24 18 20 10 30Z') },
+    drop: { name:'小水滴', side:'left', face: M.drop(52), cls:'drop' }
+  };
+  var SCRIPT = [
+    ['qing','好多水果喔！我們一起吃吧～'],
+    ['zhe','剝橘子最麻煩的就是這些白白的細絲，我每次都要一條一條撕掉。'],
+    ['qing','我媽說橘子上的細絲含有纖維和營養，不要撕掉比較好喔！'],
+    ['zhe','那我改吃香蕉好了……咦？香蕉上也有苦苦澀澀的絲！'],
+    ['drop','很多水果上都有這些細絲喔！它們對水果的生長發育非常重要。'],
+    ['drop','不只水果，葉片和花瓣上的紋路也藏著這種「管道」。它的名字叫做 <b>維管束</b>！'],
+    ['drop','它到底怎麼運送水分和養分呢？一起進入 <b>3-1 植物的運輸構造</b> 找答案吧！']
+  ];
+  var linesEl = document.getElementById('lines'), stage = document.getElementById('stage');
+  var idx = 0, timer = null;
+  var btnNext = document.getElementById('btnNext'), btnAuto = document.getElementById('btnAuto');
+
+  function show(){
+    if(idx >= SCRIPT.length) return;
+    var s = SCRIPT[idx], c = CAST[s[0]];
+    var div = document.createElement('div');
+    div.className = 'line ' + c.side + (c.cls ? ' ' + c.cls : '');
+    div.innerHTML = '<div class="who">'+c.face+c.name+'</div><div class="bubble">'+s[1]+'</div>';
+    linesEl.appendChild(div);
+    // 只保留最近 4 句，避免版面過長
+    while(linesEl.children.length > 4) linesEl.removeChild(linesEl.firstChild);
+    if(idx === 5) stage.classList.add('reveal');
+    idx++;
+    if(idx >= SCRIPT.length){
+      stopAuto();
+      btnNext.textContent = '進入 3-1 ▶';
+    }
+  }
+  function stopAuto(){ clearInterval(timer); timer = null; btnAuto.textContent = '自動播放'; }
+  btnNext.addEventListener('click', function(){
+    if(idx >= SCRIPT.length){ location.href = 'unit3-1.html'; return; }
+    stopAuto(); show();
+  });
+  btnAuto.addEventListener('click', function(){
+    if(timer){ stopAuto(); return; }
+    if(idx >= SCRIPT.length) replay();
+    btnAuto.textContent = '⏸ 暫停';
+    show(); timer = setInterval(show, 2600);
+  });
+  function replay(){
+    stopAuto(); idx = 0; linesEl.innerHTML = ''; stage.classList.remove('reveal');
+    btnNext.textContent = '下一句 ▶'; show();
+  }
+  document.getElementById('btnReplay').addEventListener('click', replay);
+  show();
+
+  // 進度
+  function bar(id, p){
+    var pct = p.total ? Math.round(p.done / p.total * 100) : 0;
+    document.getElementById(id).style.width = pct + '%';
+    var t = document.getElementById(id + 't'); if(t) t.textContent = p.done + '/' + p.total;
+  }
+  setTimeout(function(){
+    bar('p31', CH3.progress.unit('3-1'));
+    bar('p32', CH3.progress.unit('3-2'));
+    bar('p33', CH3.progress.unit('3-3'));
+    var all = CH3.progress.total();
+    document.getElementById('pAll').style.width = (all.total ? Math.round(all.done/all.total*100) : 0) + '%';
+    document.getElementById('pAllText').textContent = all.done + ' / ' + all.total + ' 張概念卡';
+  }, 200);
+
+  document.getElementById('ch2Link').href = CH3.CH2_URL;
+})();
+</script>
+</body>
+</html>

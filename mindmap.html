@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>心智圖｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  .mm-wrap{ background:#fff; border-radius:24px; box-shadow:var(--shadow); padding:20px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .mm{ display:inline-flex; align-items:center; min-width:max-content; padding:6px 10px; transform-origin:0 0; }
+  #mmBox{ position:relative; overflow:hidden; }
+  .mm-wrap{ padding:14px; }
+  .mm ul{ list-style:none; margin:0; padding:0 0 0 30px; position:relative; display:flex; flex-direction:column; justify-content:center; }
+  .mm ul::before{ content:''; position:absolute; left:0; top:50%; width:15px; border-top:3px solid var(--lc,#B0BEC5); }
+  .mm li{ position:relative; display:flex; align-items:center; padding:5px 0 5px 15px; }
+  .mm li::before{ content:''; position:absolute; left:0; top:50%; width:15px; border-top:3px solid var(--lc,#B0BEC5); }
+  .mm li::after{ content:''; position:absolute; left:0; top:0; bottom:0; border-left:3px solid var(--lc,#B0BEC5); }
+  .mm li:first-child::after{ top:50%; } .mm li:last-child::after{ bottom:50%; }
+  .mm li:only-child::after{ display:none; }
+  .mm li.collapsed > ul{ display:none; }
+  .node{ display:inline-flex; align-items:center; gap:6px; border-radius:14px; padding:8px 14px; font-weight:700; font-size:.95rem; background:#fff; border:2.5px solid var(--lc,#B0BEC5); min-height:44px; cursor:pointer; font-family:inherit; color:inherit; text-align:left; white-space:normal; max-width:440px; line-height:1.45; }
+  .node.l0{ font-size:1.25rem; font-weight:900; background:#263238; color:#fff; border-color:#263238; padding:14px 20px; border-radius:20px; }
+  .node.l1{ font-size:1.1rem; font-weight:900; color:#fff; background:var(--lc); }
+  .node.l2{ background:var(--ll,#fff); font-weight:900; }
+  .node .tg{ font-size:.75rem; border-radius:999px; padding:0 8px; background:rgba(0,0,0,.08); }
+  .node .go{ text-decoration:none; font-size:.8rem; border-radius:999px; padding:2px 8px; background:var(--ll,#eee); border:1px solid var(--lc); color:inherit; }
+  .node .kw{ background:none; }
+  .br-plant{ --lc:#4CAF50; --ll:#E8F5E9; } .br-body{ --lc:#E53935; --ll:#FFEBEE; } .br-def{ --lc:#1E88E5; --ll:#E3F2FD; }
+  .blank{ display:inline-flex; min-width:96px; min-height:34px; border:2.5px dashed var(--lc); border-radius:10px; align-items:center; justify-content:center; padding:0 8px; background:#FFFDE7; color:var(--c-muted); font-weight:900; }
+  .blank.filled{ border-style:solid; color:#263238; background:#fff; }
+  .blank.right{ background:#E8F5E9; border-color:var(--c-ok); color:var(--c-ok); }
+  .blank.wrong{ background:#FFEBEE; border-color:var(--c-ng); color:var(--c-ng); }
+  .blank.target{ outline:3px solid #FFB300; }
+  .bank{ position:sticky; bottom:0; z-index:5; background:rgba(250,250,245,.96); border-top:2px solid var(--c-line); padding:12px; margin-top:14px; border-radius:18px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .chipw{ min-height:48px; padding:6px 16px; border-radius:999px; border:2.5px solid #263238; background:#fff; font-family:inherit; font-weight:900; font-size:1rem; cursor:grab; touch-action:none; user-select:none; color:inherit; }
+  .chipw.sel{ background:#263238; color:#fff; }
+  .chipw.used{ opacity:.25; pointer-events:none; }
+  .drag-ghost{ position:fixed; z-index:300; pointer-events:none; transform:translate(-50%,-50%); }
+  .mmbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+</style>
+</head>
+<body data-page="mindmap" data-root="./">
+<main class="wrap">
+  <div class="page-hero" style="background:linear-gradient(120deg,#4CAF50,#E53935 55%,#1E88E5)">
+    <h1>🧠 心智圖：生物體的運輸</h1>
+    <p>以課本「重點整理：概念篇」為骨架。點節點可以展開或收合，點「📘」可以跳到對應的概念卡。「挖空挑戰」會隨機藏起 8 個關鍵詞，從下方詞庫拖曳（或點選）填回去。</p>
+  </div>
+
+  <div class="mmbar">
+    <div class="seg" id="segMode"><button data-v="view" aria-pressed="true">👀 瀏覽模式</button><button data-v="quiz">🧩 挖空挑戰</button></div>
+    <span style="flex:1"></span>
+    <span class="seg" style="align-items:center"><button id="zOut" title="縮小">🔍－</button><button id="zFit" title="符合螢幕">⛶ 符合螢幕</button><button id="zIn" title="放大">🔍＋</button></span>
+    <button class="btn ghost" id="btnExpand">全部展開</button>
+    <button class="btn ghost" id="btnCollapse">只看大分類</button>
+  </div>
+
+  <div class="mm-wrap"><div id="mmBox"><div class="mm" id="mm"></div></div></div>
+  <div class="bank" id="bank" style="display:none"></div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/unit.js"></script>
+<script>
+(function(){
+  'use strict';
+  /* 節點：t 文字（{關鍵詞} 可被挖空）、c 子節點、go 連結、br 分支色 */
+  var TREE = { t:'生物體的運輸', c:[
+    { t:'植物', br:'br-plant', go:'unit3-1.html', c:[
+      { t:'運輸構造：{維管束}', go:'unit3-1.html#b1', c:[
+        { t:'{木質部}：運輸水分和礦物質（在內側）' },
+        { t:'{韌皮部}：運輸養分（在外側）' },
+        { t:'{形成層}：向內產生木質部、向外產生韌皮部' }
+      ]},
+      { t:'維管束的排列', go:'unit3-1.html#b1', c:[
+        { t:'{散生排列}：無形成層（玉米、水稻、小麥）' },
+        { t:'{環狀排列}：有形成層，莖可加粗（向日葵、榕樹）' }
+      ]},
+      { t:'樹皮、木材與年輪', go:'unit3-1.html#b2', c:[
+        { t:'木材：木質部向內累積' },
+        { t:'{樹皮}：韌皮部及其外側' },
+        { t:'{年輪}：春夏細胞大色淺、秋冬細胞小色深' }
+      ]},
+      { t:'水分的運輸', go:'unit3-1.html#b3', c:[
+        { t:'{根毛}：增加吸收水分的表面積' },
+        { t:'{蒸散作用}：水分由氣孔散失，是水分向上運輸的動力' }
+      ]},
+      { t:'養分的運輸與儲存', go:'unit3-1.html#b3', c:[
+        { t:'由韌皮部運送，可上可下' },
+        { t:'儲存在根和莖，需要時再分解利用' }
+      ]}
+    ]},
+    { t:'動物（人體）', br:'br-body', go:'unit3-2.html', c:[
+      { t:'心血管系統', go:'unit3-2.html#b1', c:[
+        { t:'{心臟}：四腔室、心搏是動力、{瓣膜}防倒流' },
+        { t:'血管：動脈、{微血管}、靜脈' },
+        { t:'血液：血漿、{紅血球}、{白血球}、{血小板}' },
+        { t:'{體循環}：左心室→主動脈→…→大靜脈→右心房' },
+        { t:'{肺循環}：右心室→肺動脈→肺微血管→肺靜脈→左心房' }
+      ]},
+      { t:'淋巴系統', go:'unit3-2.html#b4', c:[
+        { t:'血漿滲出成{組織液}→滲入淋巴管成為淋巴→注入靜脈' },
+        { t:'{淋巴結}：過濾病原體' },
+        { t:'功能：回收滲漏血漿、防禦疾病' }
+      ]},
+      { t:'人體的防禦', br:'br-def', go:'unit3-3.html', c:[
+        { t:'{非專一性防禦}：第一道 皮膜的阻隔、第二道 發炎反應與吞噬作用' },
+        { t:'{專一性防禦}：第三道 特殊白血球破壞受感染細胞、產生{抗體}' },
+        { t:'{疫苗}：模擬病原體，第二次反應快又強' }
+      ]}
+    ]}
+  ]};
+  var mm = document.getElementById('mm'), bank = document.getElementById('bank');
+  var mode = 'view', blanks = {}, answers = {}, picked = null;
+
+  function label(t){
+    return t.replace(/\{([^}]+)\}/g, function(_, w){
+      if(mode === 'quiz' && blanks[w]) return '<span class="blank" data-w="'+w+'" data-n="'+blanks[w]+'">'+(answers[w] || '（'+blanks[w]+'）')+'</span>';
+      return '<span class="kw">'+w+'</span>';
+    });
+  }
+  function nodeHtml(n, lvl){
+    var h = '<li class="'+(n.br||'')+(lvl >= 2 && mode === 'view' && n.c ? ' collapsed' : '')+'">';
+    h += '<span class="node l'+lvl+'" '+(n.c ? 'role="button" tabindex="0" data-toggle' : '')+'>' + label(n.t) +
+      (n.c && lvl > 0 ? ' <span class="tg">'+n.c.length+'</span>' : '') +
+      (n.go && mode === 'view' ? ' <a class="go" href="'+n.go+'" title="到概念卡">📘</a>' : '') + '</span>';
+    if(n.c) h += '<ul>' + n.c.map(function(c){ return nodeHtml(c, lvl + 1); }).join('') + '</ul>';
+    return h + '</li>';
+  }
+  function draw(){
+    mm.innerHTML = '<ul style="padding-left:0">' + nodeHtml(TREE, 0) + '</ul>';
+    var top = mm.querySelector('ul'); top.style.setProperty('--lc','transparent');
+    top.querySelector(':scope > li').style.padding = '0';
+    fit();
+  }
+  /* ---- 自動縮放：盡量整張圖放進螢幕寬度 ---- */
+  var userZoom = 1, box = document.getElementById('mmBox'), wrapEl = document.querySelector('.mm-wrap');
+  function fit(){
+    mm.style.transform = 'none';
+    var natW = mm.scrollWidth, natH = mm.scrollHeight;
+    var avail = wrapEl.clientWidth - 28;
+    var sc = Math.min(1, avail / natW) * userZoom;
+    sc = Math.max(.5, Math.min(1.6, sc));
+    mm.style.transform = 'scale(' + sc.toFixed(3) + ')';
+    box.style.height = Math.ceil(natH * sc) + 'px';
+    box.style.width = Math.ceil(natW * sc) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  document.getElementById('zIn').addEventListener('click', function(){ userZoom = Math.min(2.5, userZoom * 1.15); fit(); });
+  document.getElementById('zOut').addEventListener('click', function(){ userZoom = Math.max(.4, userZoom / 1.15); fit(); });
+  document.getElementById('zFit').addEventListener('click', function(){ userZoom = 1; fit(); });
+  mm.addEventListener('click', function(e){
+    if(e.target.closest('a')) return;
+    if(mode === 'quiz'){
+      var b = e.target.closest('.blank'); if(b) fillBlank(b); return;
+    }
+    var n = e.target.closest('[data-toggle]'); if(!n) return;
+    n.parentNode.classList.toggle('collapsed'); fit();
+  });
+  mm.addEventListener('keydown', function(e){ var n = e.target.closest('[data-toggle]'); if(n && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); n.parentNode.classList.toggle('collapsed'); fit(); } });
+  document.getElementById('btnExpand').addEventListener('click', function(){ mm.querySelectorAll('li').forEach(function(l){ l.classList.remove('collapsed'); }); fit(); });
+  document.getElementById('btnCollapse').addEventListener('click', function(){ mm.querySelectorAll('li').forEach(function(l){ var lv = l.querySelector(':scope > .node'); if(lv && lv.classList.contains('l1')) l.classList.add('collapsed'); else l.classList.remove('collapsed'); }); fit(); });
+
+  /* ===== 挖空挑戰 ===== */
+  function allWords(){ var out = []; (function walk(n){ (n.t.match(/\{([^}]+)\}/g) || []).forEach(function(m){ out.push(m.slice(1,-1)); }); (n.c||[]).forEach(walk); })(TREE); return out; }
+  function startQuiz(){
+    blanks = {}; answers = {}; picked = null;
+    CH3.shuffle(allWords()).slice(0, 8).forEach(function(w, i){ blanks[w] = i + 1; });
+    draw(); renderBank();
+  }
+  function renderBank(msg){
+    var words = CH3.shuffle(Object.keys(blanks));
+    var used = Object.keys(answers).map(function(k){ return answers[k]; });
+    bank.innerHTML = '<b>詞庫：</b>' + words.sort().map(function(w){ return '<button class="chipw'+(used.indexOf(w) >= 0 ? ' used' : '')+(picked === w ? ' sel' : '')+'" data-w="'+w+'">'+w+'</button>'; }).join('') +
+      '<span style="flex:1"></span><button class="btn" id="btnCheck">✔ 檢查</button><button class="btn ghost" id="btnNew">🔀 換一組</button>' + (msg ? '<div style="flex-basis:100%">'+msg+'</div>' : '');
+    bank.querySelectorAll('.chipw').forEach(bindChip);
+    bank.querySelector('#btnCheck').addEventListener('click', check);
+    bank.querySelector('#btnNew').addEventListener('click', startQuiz);
+  }
+  function place(word, blankEl){
+    var w = blankEl.getAttribute('data-w');
+    Object.keys(answers).forEach(function(k){ if(answers[k] === word) delete answers[k]; });
+    answers[w] = word; picked = null;
+    draw(); renderBank();
+  }
+  function fillBlank(b){
+    var w = b.getAttribute('data-w');
+    if(picked){ place(picked, b); return; }
+    if(answers[w]){ delete answers[w]; draw(); renderBank(); }
+    else CH3.toast('先從下方詞庫選一個詞');
+  }
+  function bindChip(ch){
+    ch.addEventListener('pointerdown', function(e){
+      var sx = e.clientX, sy = e.clientY, ghost = null, dragging = false, last = null;
+      function move(ev){
+        if(!dragging && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8){ dragging = true; ghost = ch.cloneNode(true); ghost.classList.add('drag-ghost'); ghost.classList.add('sel'); document.body.appendChild(ghost); }
+        if(dragging){
+          ev.preventDefault(); ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px';
+          var t = document.elementFromPoint(ev.clientX, ev.clientY), b = t && t.closest('.blank');
+          if(last && last !== b) last.classList.remove('target'); if(b) b.classList.add('target'); last = b;
+        }
+      }
+      function up(ev){
+        document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', up);
+        if(dragging){ ghost.remove(); if(last){ last.classList.remove('target'); place(ch.getAttribute('data-w'), last); } }
+        else { picked = picked === ch.getAttribute('data-w') ? null : ch.getAttribute('data-w'); renderBank(picked ? '已選「'+picked+'」，點上面的空格放進去。' : ''); }
+      }
+      document.addEventListener('pointermove', move, { passive:false }); document.addEventListener('pointerup', up);
+    });
+  }
+  function check(){
+    var right = 0, total = Object.keys(blanks).length;
+    mm.querySelectorAll('.blank').forEach(function(b){
+      var w = b.getAttribute('data-w'), ok = answers[w] === w;
+      b.classList.toggle('right', ok); b.classList.toggle('wrong', !!answers[w] && !ok); if(ok) right++;
+    });
+    var best = CH3.store.get('mindmapBest', 0); if(right > best) CH3.store.set('mindmapBest', right);
+    var msg = right === total ? '🎉 全部正確！' + (right > best ? '（新紀錄）' : '') : '答對 '+right+' / '+total+'。紅框的再想想，點一下空格可以拿掉。';
+    bank.querySelector('div') ? null : null;
+    var keep = bank.innerHTML; renderBank(msg);
+    // renderBank 會重畫詞庫；重新標記對錯
+    mm.querySelectorAll('.blank').forEach(function(b){ var w = b.getAttribute('data-w'), ok = answers[w] === w; b.classList.toggle('right', ok); b.classList.toggle('wrong', !!answers[w] && !ok); });
+    if(right === total) CH3.toast('🎉 心智圖挖空挑戰完成！');
+  }
+  UNIT.seg(document.getElementById('segMode'), function(v){
+    mode = v; bank.style.display = v === 'quiz' ? '' : 'none';
+    document.getElementById('btnExpand').style.display = document.getElementById('btnCollapse').style.display = v === 'quiz' ? 'none' : '';
+    if(v === 'quiz') startQuiz(); else draw();
+  });
+  draw();
+})();
+</script>
+</body>
+</html>
