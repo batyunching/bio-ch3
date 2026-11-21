@@ -40,6 +40,7 @@
           m.el.querySelectorAll('.opt').forEach(function(o){ o.disabled = true; if(Number(o.getAttribute('data-i')) === q.answer) o.classList.add('correct'); });
           var inBank = !!QB.byId(q.id);
           if(!ok){ b.classList.add('wrong'); if(inBank) CH3.wrongBook.add(q.id); } else if(inBank) CH3.wrongBook.remove(q.id);
+          if(inBank) CH3.record(q, ok, i, 'game');
           var fb = m.el.querySelector('.fb'); fb.style.display = ''; fb.className = 'fb ' + (ok ? 'ok' : 'ng');
           fb.innerHTML = '<b>' + (ok ? '✅ 答對了！' + (opt.okText ? ' ' + opt.okText : '') : '❌ 答錯了' + (opt.ngText ? '：' + opt.ngText : '（已放進錯題本）')) + '</b><br>💡 ' + q.explain;
           UNIT.thump(ok ? 520 : 140, .15, .4);

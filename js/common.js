@@ -59,6 +59,48 @@
     clear: function(){ store.set('wrongbook', []); }
   };
 
+  /* ---------- 學習概念（老師熱圖用；依題庫 tags 對應） ---------- */
+  var CONCEPTS = [
+    { id:'3-1-vb',   unit:'3-1', t:'維管束構造',     tags:['維管束'] },
+    { id:'3-1-arr',  unit:'3-1', t:'維管束排列',     tags:['維管束排列'] },
+    { id:'3-1-ring', unit:'3-1', t:'樹皮與年輪',     tags:['樹皮與年輪'] },
+    { id:'3-1-water',unit:'3-1', t:'水分運輸與蒸散', tags:['水分運輸'] },
+    { id:'3-1-food', unit:'3-1', t:'養分運輸',       tags:['養分運輸'] },
+    { id:'3-1-lab',  unit:'3-1', t:'實驗3-1',        tags:['實驗3-1'] },
+    { id:'3-2-heart',unit:'3-2', t:'心臟',           tags:['心臟'] },
+    { id:'3-2-vessel',unit:'3-2',t:'血管',           tags:['血管'] },
+    { id:'3-2-blood',unit:'3-2', t:'血液',           tags:['血液'] },
+    { id:'3-2-circ', unit:'3-2', t:'血液循環',       tags:['血液循環'] },
+    { id:'3-2-lymph',unit:'3-2', t:'淋巴系統',       tags:['淋巴系統'] },
+    { id:'3-2-lab2', unit:'3-2', t:'實驗3-2 脈搏',   tags:['實驗3-2'] },
+    { id:'3-2-lab3', unit:'3-2', t:'實驗3-3 魚尾鰭', tags:['實驗3-3'] },
+    { id:'3-3-def',  unit:'3-3', t:'三道防線',       tags:['三道防線'] },
+    { id:'3-3-vac',  unit:'3-3', t:'疫苗與免疫',     tags:['疫苗'] },
+    { id:'3-3-hist', unit:'3-3', t:'科學漫遊',       tags:['科學漫遊'] }
+  ];
+  function conceptOf(q){
+    var tags = (q && q.tags) || [];
+    for(var i = 0; i < tags.length; i++){
+      for(var j = 0; j < CONCEPTS.length; j++){
+        if(CONCEPTS[j].unit === q.unit && CONCEPTS[j].tags.indexOf(tags[i]) >= 0) return CONCEPTS[j].id;
+      }
+    }
+    return q && q.unit ? q.unit + '-misc' : 'misc';
+  }
+  /* 作答紀錄：概念精熟度（mastery）＋每題統計（qstat）＋最近作答明細（answers），會同步到雲端給老師看 */
+  function record(q, ok, pick, src){
+    if(!q || !q.id) return;
+    var c = conceptOf(q);
+    var m = store.get('mastery', {}), r = m[c] || { n:0, ok:0 };
+    r.n++; if(ok) r.ok++; m[c] = r; store.set('mastery', m);
+    var qs = store.get('qstat', {}), x = qs[q.id] || { n:0, ok:0 };
+    x.n++; if(ok) x.ok++; x.last = ok ? 1 : 0; qs[q.id] = x; store.set('qstat', qs);
+    var a = store.get('answers', []);
+    a.push({ q:q.id, ok:ok ? 1 : 0, p:(pick == null ? '' : pick), s:src || '', t:Date.now() });
+    if(a.length > 400) a = a.slice(a.length - 400);
+    store.set('answers', a);
+  }
+
   /* ---------- 吉祥物（原創 SVG） ---------- */
   var mascots = {
     // 小水滴
@@ -164,6 +206,13 @@
       toast(on ? '已減少動態效果' : '已恢復動態效果');
     });
     sync();
+    // 老師帳號：導覽列多一個「老師專區」
+    if(window.BIO_ACCOUNT && BIO_ACCOUNT.ready) BIO_ACCOUNT.ready.then(function(){
+      if(!BIO_ACCOUNT.isTeacher) return;
+      var a = document.createElement('a'); a.href = root + 'teacher.html'; a.textContent = '👩‍🏫 老師專區';
+      if(current === 'teacher'){ a.className = 'active'; a.setAttribute('aria-current', 'page'); }
+      nav.querySelector('.links').appendChild(a);
+    }, function(){});
   }
 
   // 盡早套用顯示設定，避免閃爍
@@ -191,6 +240,7 @@
   window.CH3 = {
     CH2_URL: CH2_URL, CONCEPT_CARDS: CONCEPT_CARDS, UNIT_NAMES: UNIT_NAMES,
     store: store, progress: progress, wrongBook: wrongBook, mascots: mascots,
-    toast: toast, shuffle: shuffle, unitClass: unitClass
+    toast: toast, shuffle: shuffle, unitClass: unitClass,
+    CONCEPTS: CONCEPTS, conceptOf: conceptOf, record: record
   };
 })();
