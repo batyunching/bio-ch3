@@ -113,7 +113,7 @@
       <div class="actions" style="margin-top:0">
         <button class="btn" id="btnStart">開始練習 ▶</button>
         <button class="btn ghost" id="btnWrong">只練錯題本</button>
-        <button class="btn ghost secondary" id="btnShowWrong">📒 查看錯題本</button>
+        <button class="btn ghost secondary" id="btnShowWrong">📒 我的錯題本（看詳解、訂正）</button>
       </div>
     </div>
 
@@ -146,6 +146,7 @@
         <button class="btn" id="btnAgain">再練一次</button>
         <button class="btn ghost" id="btnRetryWrong">練這次答錯的題</button>
         <button class="btn ghost" id="btnBack">回到設定</button>
+        <a class="btn ghost" href="wrongbook.html">📒 我的錯題本</a>
       </div>
     </div>
   </div>
@@ -204,9 +205,7 @@
     });
     $('wrongList').innerHTML = html;
   }
-  $('btnShowWrong').addEventListener('click', function(){
-    $('wrongPanel').classList.toggle('hide'); renderWrong();
-  });
+  $('btnShowWrong').addEventListener('click', function(){ location.href = 'wrongbook.html'; });
   $('wrongList').addEventListener('click', function(e){
     var b = e.target.closest('[data-rm]'); if(!b) return;
     CH3.wrongBook.remove(b.getAttribute('data-rm')); renderWrong(); refreshInfo();

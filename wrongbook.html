@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的錯題本｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  .hero{ display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .hero .big{ font-size:3.2rem; }
+  .count{ font-size:2.6rem; font-weight:900; color:var(--c-ng); line-height:1; }
+  .note{ color:var(--c-muted); margin:4px 0 0; }
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; margin:16px 0 4px; }
+  .chip{ min-height:44px; padding:6px 16px; border-radius:999px; border:2px solid var(--c-line); background:#fff; font:inherit; font-weight:700; cursor:pointer; color:inherit; }
+  .chip[aria-pressed="true"]{ background:var(--u, var(--c-text)); border-color:var(--u, var(--c-text)); color:#fff; }
+  .unit-31{ --u:var(--c-plant); } .unit-32{ --u:var(--c-blood); } .unit-33{ --u:var(--c-defense); }
+  .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  .list{ display:grid; gap:12px; margin-top:16px; }
+  .item{ background:#fff; border-radius:16px; border:2px solid var(--c-line); border-left:8px solid var(--u); padding:14px 16px; }
+  .item .top{ display:flex; gap:10px; align-items:flex-start; justify-content:space-between; }
+  .item .q{ font-weight:700; font-size:1.05rem; margin:6px 0 0; }
+  .item .meta{ font-size:.82rem; color:var(--c-muted); }
+  .pill{ display:inline-block; padding:1px 10px; border-radius:999px; font-size:.78rem; font-weight:700; color:#fff; background:var(--u); margin-right:6px; }
+  .item details{ margin-top:10px; }
+  .item summary{ cursor:pointer; font-weight:700; color:var(--c-defense-d); min-height:32px; }
+  .ans{ margin-top:8px; padding:10px 12px; border-radius:12px; background:#F6F5EE; }
+  .ans .ok{ color:var(--c-ok); font-weight:700; }
+  .item .ops{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .small{ min-height:42px; padding:6px 14px; font-size:.92rem; }
+  .empty{ text-align:center; padding:30px 10px; }
+  .fixed{ margin-top:26px; }
+  .fixed li{ margin:6px 0; color:var(--c-muted); }
+</style>
+</head>
+<body data-page="wrongbook" data-root="./">
+<main class="wrap">
+  <div class="card">
+    <div class="hero">
+      <div class="big">📒</div>
+      <div style="flex:1;min-width:220px">
+        <h1 style="margin:0">我的錯題本</h1>
+        <p class="note">練習題和遊戲裡答錯的題目會自動收進來。<b>訂正答對</b>就會自動移出錯題本。</p>
+      </div>
+      <div style="text-align:center"><div class="count" id="cnt">0</div><div class="note" style="margin:0">題待訂正</div></div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="actions" id="mainOps"></div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <details class="card fixed" id="fixedBox" hidden>
+    <summary style="cursor:pointer;font-weight:700">✅ 已經訂正成功的題目（<span id="fixedN">0</span>）</summary>
+    <ol id="fixedList"></ol>
+  </details>
+</main>
+
+<script src="js/common.js"></script>
+<script src="data/questions.js"></script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  var filter = 'all';
+
+  function answerHtml(q){
+    if(q.type === 'single') return '正確答案：<span class="ok">' + esc(q.options[q.answer]) + '</span>';
+    if(q.type === 'tf') return '正確答案：<span class="ok">' + (q.answer === 0 ? '⭕ 正確' : '❌ 錯誤') + '</span>';
+    if(q.type === 'order') return '正確順序：<span class="ok">' + q.options.map(esc).join(' → ') + '</span>';
+    if(q.type === 'match') return '正確配對：<span class="ok">' + q.options.map(function(p){ return esc(p[0]) + '－' + esc(p[1]); }).join('；') + '</span>';
+    return '';
+  }
+  function practice(ids){ location.href = 'quiz.html?q=' + ids.join(','); }
+
+  function render(){
+    var all = CH3.wrongBook.list().map(function(id){ return QB.byId(id); }).filter(Boolean);
+    var qs = CH3.store.get('qstat', {});
+    $('cnt').textContent = all.length;
+    var by = { '3-1':0, '3-2':0, '3-3':0 }; all.forEach(function(q){ by[q.unit]++; });
+    $('chips').innerHTML = '<button class="chip" data-f="all" aria-pressed="' + (filter === 'all') + '">全部 ' + all.length + '</button>' +
+      ['3-1','3-2','3-3'].map(function(u){ return '<button class="chip ' + CH3.unitClass(u) + '" data-f="' + u + '" aria-pressed="' + (filter === u) + '">' + u + ' ' + CH3.UNIT_NAMES[u] + ' ' + by[u] + '</button>'; }).join('');
+    var list = filter === 'all' ? all : all.filter(function(q){ return q.unit === filter; });
+    $('mainOps').innerHTML = list.length
+      ? '<button class="btn" id="fixAll">✏️ 訂正' + (filter === 'all' ? '全部' : ' ' + filter) + '（' + list.length + ' 題）</button>' +
+        (list.length > 10 ? '<button class="btn ghost" id="fix10">先訂正 10 題</button>' : '') +
+        '<a class="btn ghost" href="quiz.html">回練習題</a>'
+      : '<a class="btn" href="quiz.html">去做練習題 ▶</a>';
+    if(!all.length){
+      $('list').innerHTML = '<div class="card empty"><div style="font-size:3rem">🎉</div><h2>錯題本是空的！</h2><p class="note">繼續做練習題或玩遊戲，答錯的題目會自動收進來。</p></div>';
+    } else {
+      $('list').innerHTML = list.map(function(q){
+        var x = qs[q.id];
+        return '<div class="item ' + CH3.unitClass(q.unit) + '">' +
+          '<div class="top"><div><span class="pill">' + q.unit + '</span><span class="meta">' + esc((q.tags || []).join('、')) + (x ? '｜答過 ' + x.n + ' 次、答對 ' + x.ok + ' 次' : '') + '</span>' +
+          '<div class="q">' + esc(q.question) + '</div></div></div>' +
+          '<details><summary>先自己想一想，再點這裡看答案與詳解</summary><div class="ans">' + answerHtml(q) + '<div style="margin-top:6px">💡 ' + esc(q.explain) + '</div></div></details>' +
+          '<div class="ops"><button class="btn small" data-fix="' + q.id + '">✏️ 訂正這題</button><button class="btn ghost small" data-rm="' + q.id + '">我已經會了，移出</button></div></div>';
+      }).join('');
+    }
+    // 已訂正：曾經答錯、最近一次答對、而且不在錯題本裡
+    var inBook = CH3.wrongBook.list();
+    var fixed = Object.keys(qs).filter(function(id){ var x = qs[id]; return x.ok < x.n && x.last === 1 && inBook.indexOf(id) < 0 && QB.byId(id); });
+    $('fixedBox').hidden = !fixed.length; $('fixedN').textContent = fixed.length;
+    $('fixedList').innerHTML = fixed.map(function(id){ var q = QB.byId(id); return '<li><span class="pill ' + CH3.unitClass(q.unit) + '">' + q.unit + '</span>' + esc(q.question) + '</li>'; }).join('');
+    var fa = $('fixAll'); if(fa) fa.onclick = function(){ practice(CH3.shuffle(list).map(function(q){ return q.id; })); };
+    var f10 = $('fix10'); if(f10) f10.onclick = function(){ practice(CH3.shuffle(list).slice(0, 10).map(function(q){ return q.id; })); };
+  }
+  $('chips').addEventListener('click', function(e){ var b = e.target.closest('[data-f]'); if(!b) return; filter = b.getAttribute('data-f'); render(); });
+  $('list').addEventListener('click', function(e){
+    var f = e.target.closest('[data-fix]'); if(f){ practice([f.getAttribute('data-fix')]); return; }
+    var r = e.target.closest('[data-rm]');
+    if(r){ CH3.wrongBook.remove(r.getAttribute('data-rm')); CH3.toast('已移出錯題本'); render(); }
+  });
+  render();
+  // 雲端進度載入後（換電腦登入時）重新整理畫面
+  if(window.BIO_ACCOUNT && BIO_ACCOUNT.ready) BIO_ACCOUNT.ready.then(render, function(){});
+})();
+</script>
+</body>
+</html>
