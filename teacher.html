@@ -123,6 +123,7 @@
 
 <script src="js/common.js"></script>
 <script src="data/questions.js"></script>
+<script src="data/selfcheck.js"></script>
 <script>
 (function(){
   'use strict';
@@ -175,7 +176,7 @@
         return {
           sid:x.sid, seat:x.seat, name:(x.v.profile && x.v.profile.name) || '',
           mastery:mastery, qstat:qstat, answers:answers,
-          understood:get('understood', []).length,
+          understood:get('cardPassed', []).length,  // 只算通過 3 題檢核的概念卡
           n:n, acc:n ? ok / n : null,
           wrong:get('wrongbook', []),
           wrongN:get('wrongbook', []).length,
@@ -308,7 +309,7 @@
       '<div class="tbar" style="margin-top:12px"><a class="btn small-btn" href="' + qLink(r.wrong) + '" target="_blank" rel="noopener">📝 開啟他的錯題練習</a><button class="btn ghost small-btn" type="button" id="stuCopy">🔗 複製錯題練習連結</button><span id="stuMsg"></span></div>'
       : '<p class="muted">錯題本是空的 👍</p>';
     var recent = r.answers.slice(-20).reverse();
-    var rec = recent.length ? '<ol class="wl" style="list-style:none;padding:0">' + recent.map(function(a){ var q = QB.byId(a.q); return '<li>' + (a.ok ? '✅' : '❌') + ' <span class="muted">' + new Date(a.t).toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) + '｜' + (a.s === 'game' ? '遊戲' : '練習') + '</span> ' + esc(q ? q.question.slice(0, 32) : a.q) + '</li>'; }).join('') + '</ol>' : '<p class="muted">還沒有作答紀錄。</p>';
+    var rec = recent.length ? '<ol class="wl" style="list-style:none;padding:0">' + recent.map(function(a){ var q = QB.byId(a.q); return '<li>' + (a.ok ? '✅' : '❌') + ' <span class="muted">' + new Date(a.t).toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) + '｜' + (a.s === 'game' ? '遊戲' : a.s === 'card' ? '概念卡' : '練習') + '</span> ' + esc(q ? q.question.slice(0, 32) : a.q) + '</li>'; }).join('') + '</ol>' : '<p class="muted">還沒有作答紀錄。</p>';
     $('stuBody').innerHTML = '<div><h3 style="margin-top:0">各概念答對率</h3>' + bars + '</div>' +
       '<div><h3 style="margin-top:0">📒 錯題本（' + wq.length + ' 題）</h3>' + wl + '</div>' +
       '<div><h3 style="margin-top:0">🕘 最近 20 次作答</h3>' + rec + '</div>';
