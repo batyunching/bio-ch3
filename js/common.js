@@ -52,11 +52,12 @@
   };
 
   /* ---------- 錯題本 ---------- */
+  function wbChanged(){ try{ document.dispatchEvent(new CustomEvent('ch3:wrongbook')); }catch(e){} }
   var wrongBook = {
     list: function(){ return store.get('wrongbook', []); },
-    add: function(id){ var l = wrongBook.list(); if(l.indexOf(id) < 0){ l.push(id); store.set('wrongbook', l); } },
-    remove: function(id){ store.set('wrongbook', wrongBook.list().filter(function(x){ return x !== id; })); },
-    clear: function(){ store.set('wrongbook', []); }
+    add: function(id){ var l = wrongBook.list(); if(l.indexOf(id) < 0){ l.push(id); store.set('wrongbook', l); wbChanged(); } },
+    remove: function(id){ store.set('wrongbook', wrongBook.list().filter(function(x){ return x !== id; })); wbChanged(); },
+    clear: function(){ store.set('wrongbook', []); wbChanged(); }
   };
 
   /* ---------- 學習概念（老師熱圖用；依題庫 tags 對應） ---------- */
@@ -159,6 +160,7 @@
     { page:'3-3',     href:'unit3-3.html',     label:'3-3 人體防禦', unit:'3-3' },
     { page:'lab',     href:'lab.html',         label:'實驗' },
     { page:'quiz',    href:'quiz.html',        label:'練習' },
+    { page:'wrongbook', href:'wrongbook.html', label:'📒 錯題本<span class="wb-n"></span>' },
     { page:'mindmap', href:'mindmap.html',     label:'心智圖' },
     { page:'games',   href:'games/index.html', label:'遊戲' }
   ];
@@ -206,6 +208,10 @@
       toast(on ? '已減少動態效果' : '已恢復動態效果');
     });
     sync();
+    // 錯題本題數小紅點
+    function paintWB(){ var n = wrongBook.list().length; nav.querySelectorAll('.wb-n').forEach(function(el){ el.textContent = n ? ' ' + n : ''; el.style.cssText = n ? 'display:inline-block;min-width:1.4em;margin-left:4px;padding:0 5px;border-radius:999px;background:#E53935;color:#fff;font-size:.75em;text-align:center' : ''; }); }
+    paintWB(); document.addEventListener('ch3:wrongbook', paintWB);
+    if(window.BIO_ACCOUNT && BIO_ACCOUNT.ready) BIO_ACCOUNT.ready.then(paintWB, function(){});
     // 老師帳號：導覽列多一個「老師專區」
     if(window.BIO_ACCOUNT && BIO_ACCOUNT.ready) BIO_ACCOUNT.ready.then(function(){
       if(!BIO_ACCOUNT.isTeacher) return;
