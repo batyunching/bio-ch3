@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>老師專區｜第3章 生物體內的運輸</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://batyunching.github.io/bio/js/account.js" data-chapter="ch3" data-prefix="ch3."></script>
+<style>
+  .tbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .tbar select{ min-height:48px; font:inherit; font-weight:700; padding:6px 14px; border-radius:12px; border:2px solid var(--c-line); background:#fff; }
+  .stats{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-top:16px; }
+  .stat{ background:#fff; border:2px solid var(--c-line); border-radius:16px; padding:12px 8px; text-align:center; color:var(--c-muted); font-size:.9rem; }
+  .stat b{ display:block; font-size:1.7rem; color:var(--c-text); }
+  h2.sec{ margin:34px 0 6px; display:flex; align-items:center; gap:10px; }
+  p.note{ margin:0 0 12px; color:var(--c-muted); font-size:.92rem; }
+  .muted{ color:var(--c-muted); }
+
+  /* 錯題排行 */
+  .wq{ display:grid; grid-template-columns:2.4em 1fr auto; gap:12px; align-items:start; padding:14px 0; border-bottom:1px solid var(--c-line); }
+  .wq:last-child{ border-bottom:0; }
+  .wq .rk{ font-size:1.4rem; font-weight:900; color:var(--c-ng); text-align:center; }
+  .wq .qt{ font-weight:700; }
+  .wq .meta{ font-size:.85rem; color:var(--c-muted); margin-top:4px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .wq .num{ text-align:right; font-size:.85rem; color:var(--c-muted); white-space:nowrap; }
+  .wq .num b{ font-size:1.5rem; color:var(--c-ng); }
+  .wq details{ margin-top:6px; font-size:.92rem; }
+  .wq details summary{ cursor:pointer; color:var(--c-defense-d); font-weight:700; }
+  .wq .opt-stat{ margin:6px 0 0; padding-left:1.2em; }
+  .wq .opt-stat li.ans{ color:var(--c-ok); font-weight:700; }
+  .pill{ display:inline-block; padding:1px 10px; border-radius:999px; font-size:.78rem; font-weight:700; color:#fff; background:var(--u, #888); }
+  .unit-31{ --u:var(--c-plant); } .unit-32{ --u:var(--c-blood); } .unit-33{ --u:var(--c-defense); }
+  .small-btn{ min-height:40px; padding:6px 14px; font-size:.9rem; }
+
+  /* 熱圖 */
+  .legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:.85rem; color:var(--c-muted); margin:0 0 10px; }
+  .legend i{ display:inline-block; width:14px; height:14px; border-radius:3px; vertical-align:-2px; margin-right:4px; }
+  .hm-wrap{ overflow:auto; max-height:72vh; }
+  table.hm{ border-collapse:separate; border-spacing:2px; font-size:.82rem; }
+  table.hm th{ position:sticky; top:0; background:#fff; z-index:2; padding:4px; vertical-align:bottom; font-weight:700; }
+  table.hm th.c{ writing-mode:vertical-rl; text-orientation:mixed; height:9.5em; white-space:nowrap; }
+  table.hm th.c.unit-31{ color:var(--c-plant-d); } table.hm th.c.unit-32{ color:var(--c-blood-d); } table.hm th.c.unit-33{ color:var(--c-defense-d); }
+  table.hm td.n{ position:sticky; left:0; background:#fff; z-index:1; white-space:nowrap; padding:4px 10px 4px 2px; font-weight:700; }
+  table.hm td.x{ width:38px; min-width:38px; height:30px; text-align:center; font-size:.75rem; border-radius:4px; }
+  td.x.none{ background:#F1F0EA; color:#aaa; }
+  td.x.g{ background:#81C784; } td.x.m{ background:#FFD54F; } td.x.b{ background:#E57373; color:#fff; }
+  td.x.few{ opacity:.5; }
+  table.hm tr.avg td{ border-top:3px solid var(--c-text); }
+
+  /* 進度總覽 */
+  .tbl-wrap{ overflow:auto; }
+  table.prog{ width:100%; border-collapse:collapse; font-size:.9rem; }
+  table.prog th, table.prog td{ border-bottom:1px solid var(--c-line); padding:8px 8px; text-align:center; white-space:nowrap; }
+  table.prog th{ cursor:pointer; user-select:none; position:sticky; top:0; background:#F6F5EE; }
+  table.prog td:first-child, table.prog th:first-child{ text-align:left; }
+  table.prog tbody tr{ cursor:pointer; }
+  table.prog tbody tr:hover{ background:#FFFDE7; }
+  table.prog tr.sel{ background:#E3F2FD; }
+  .bar{ display:inline-block; width:70px; height:10px; border-radius:5px; background:#eee; vertical-align:middle; overflow:hidden; margin-right:6px; }
+  .bar i{ display:block; height:100%; background:var(--c-plant); }
+  .gone{ color:#bbb; }
+
+  /* 個人明細 */
+  .stu-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; }
+  .cbar{ display:grid; grid-template-columns:9em 1fr 4.5em; gap:8px; align-items:center; font-size:.88rem; margin:5px 0; }
+  .cbar .t{ height:12px; background:#eee; border-radius:6px; overflow:hidden; }
+  .cbar .t i{ display:block; height:100%; }
+  ol.wl{ margin:6px 0 0; padding-left:1.4em; font-size:.92rem; }
+  ol.wl li{ margin:6px 0; }
+  .locked{ text-align:center; padding:40px 20px; }
+  .copied{ color:var(--c-ok); font-weight:700; font-size:.85rem; }
+</style>
+</head>
+<body data-page="teacher" data-root="./">
+<main class="wrap">
+  <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <div style="font-size:3rem">👩‍🏫</div>
+    <div style="flex:1;min-width:240px">
+      <div class="tag">老師專區</div>
+      <h1 style="margin:6px 0 4px">全班學習狀況</h1>
+      <p class="note" style="margin:0">讀取學生帳號同步到雲端的第 3 章紀錄。只有這個班的任課老師（和管理人）看得到。</p>
+    </div>
+  </div>
+
+  <div class="card locked" id="locked" hidden></div>
+
+  <div id="app" hidden>
+    <div class="card" style="margin-top:18px">
+      <div class="tbar">
+        <b>班級</b><select id="cls" aria-label="選擇班級"></select>
+        <button class="btn" type="button" id="reload">↻ 重新讀取</button>
+        <button class="btn ghost" type="button" id="csv">匯出 CSV</button>
+        <span class="muted" style="font-size:.88rem" id="loadNote"></span>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <h2 class="sec">❌ 全班錯題排行（前 10 題）</h2>
+    <p class="note">統計練習題和遊戲中答錯的題目，依「有幾位學生答錯」排序。可以投影單題講解，或把這 10 題出成一份全班練習。</p>
+    <div class="card">
+      <div class="tbar" style="margin-bottom:6px" id="wqOps" hidden>
+        <a class="btn" id="wqPlay" target="_blank" rel="noopener">📝 用這 10 題出全班練習（投影）</a>
+        <button class="btn ghost" type="button" id="wqCopy">🔗 複製練習連結給學生</button>
+        <span id="wqMsg"></span>
+      </div>
+      <div id="wq"></div>
+    </div>
+
+    <h2 class="sec">🔥 全班概念熱圖</h2>
+    <div class="legend"><span><i style="background:#81C784"></i>答對率 80% 以上</span><span><i style="background:#FFD54F"></i>50～79%</span><span><i style="background:#E57373"></i>未滿 50%</span><span><i style="background:#F1F0EA"></i>還沒作答</span><span>（淡色＝作答不到 3 題，僅供參考；滑鼠移到格子上可看題數）</span></div>
+    <div class="card" style="padding:10px"><div class="hm-wrap" id="hm"></div></div>
+
+    <h2 class="sec">📊 學習進度總覽</h2>
+    <p class="note">點欄位名稱可以排序；<b>點一位學生</b>可以看他的錯題本和各概念答對率。</p>
+    <div class="card tbl-wrap" style="padding:10px"><table class="prog" id="prog"></table></div>
+
+    <div id="stu" hidden>
+      <h2 class="sec" id="stuTitle"></h2>
+      <div class="card"><div class="stu-grid" id="stuBody"></div></div>
+    </div>
+  </div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="data/questions.js"></script>
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  var C = CH3.CONCEPTS, NCARD = CH3.progress.total().total, NLAB = 3;
+  var BASE = location.href.replace(/[^/]*$/, '');
+  var db, me, isAdmin = false, classes = {}, rows = [], sortKey = 'seat', sortDir = 1, selSid = null, topWrong = [];
+
+  function lock(msg){ $('locked').hidden = false; $('locked').innerHTML = msg; }
+  var ready = window.BIO_ACCOUNT && BIO_ACCOUNT.ready ? BIO_ACCOUNT.ready : Promise.resolve(null);
+  ready.then(function(){
+    var A = window.BIO_ACCOUNT;
+    if(!A || !A.online){ lock('<h2>老師專區要在學校網址上使用</h2><p>請到 https://batyunching.github.io/bio-ch3/teacher.html ，用老師帳號登入。</p>'); return; }
+    if(!A.user){ lock('<h2>請先登入</h2><p><a class="btn" href="https://batyunching.github.io/bio/">到總入口登入</a></p>'); return; }
+    if(!A.isTeacher){ lock('<h2>這一頁只有老師可以使用</h2><p><a class="btn" href="index.html">回第 3 章首頁</a></p>'); return; }
+    db = firebase.database(); me = A.user;
+    db.ref('admins/' + me.uid).get().then(function(s){ isAdmin = s.val() === true; }, function(){}).then(loadClasses);
+  }, function(){ lock('<h2>登入失敗，請重新整理</h2>'); });
+
+  function loadClasses(){
+    $('app').hidden = false;
+    db.ref('classes').get().then(function(s){
+      var all = s.val() || {};
+      classes = {};
+      Object.keys(all).forEach(function(c){ if(isAdmin || all[c].owner === me.uid) classes[c] = all[c]; });
+      var keys = Object.keys(classes).sort();
+      $('cls').innerHTML = keys.map(function(c){ return '<option value="' + esc(c) + '">' + esc(c) + ' 班</option>'; }).join('') || '<option value="">（還沒有班級，請到總入口的老師工具設定）</option>';
+      var last = CH3.store.get('teacherCls', ''); if(classes[last]) $('cls').value = last;
+      if(keys.length) loadClass();
+    }, function(e){ lock('<h2>讀取班級失敗</h2><p>' + esc(e.message) + '</p>'); });
+  }
+  function parse(v, d){ try{ return v == null ? d : JSON.parse(v); }catch(e){ return d; } }
+  function loadClass(){
+    var c = $('cls').value; if(!c) return;
+    CH3.store.set('teacherCls', c); selSid = null; $('stu').hidden = true;
+    $('loadNote').textContent = '讀取中…';
+    var seats = Object.keys(classes[c].seats || {}).map(Number).sort(function(a, b){ return a - b; });
+    Promise.all(seats.map(function(n){
+      var sid = c + '-' + (n < 10 ? '0' + n : n);
+      return db.ref('students/' + sid).get().then(function(s){ return { sid:sid, seat:n, v:s.val() || {} }; }, function(){ return { sid:sid, seat:n, v:{} }; });
+    })).then(function(list){
+      rows = list.map(function(x){
+        var d = (x.v.data && x.v.data.ch3) || {}, get = function(k, def){ return parse(d['ch3%2E' + k], def); };
+        var mastery = get('mastery', {}), qstat = get('qstat', {}), answers = get('answers', []);
+        var n = 0, ok = 0; Object.keys(mastery).forEach(function(k){ n += mastery[k].n; ok += mastery[k].ok; });
+        var hist = get('quizHistory', []), bestQ = null;
+        hist.forEach(function(h){ if(h.total){ var p = h.right / h.total; if(bestQ == null || p > bestQ.p) bestQ = { p:p, s:h.right + '/' + h.total }; } });
+        var labDone = get('labDone', {}), badges = get('badges', {}), best = get('best', {}), stars = get('plumberStars', []);
+        return {
+          sid:x.sid, seat:x.seat, name:(x.v.profile && x.v.profile.name) || '',
+          mastery:mastery, qstat:qstat, answers:answers,
+          understood:get('understood', []).length,
+          n:n, acc:n ? ok / n : null,
+          wrong:get('wrongbook', []),
+          wrongN:get('wrongbook', []).length,
+          quizN:hist.length, quizBest:bestQ ? bestQ.p : null, quizBestS:bestQ ? bestQ.s : '',
+          lab:Object.keys(labDone).filter(function(k){ return labDone[k]; }).length,
+          badges:Object.keys(badges).length,
+          stars:(stars || []).reduce(function(a, b){ return a + (b || 0); }, 0),
+          mind:get('mindmapBest', 0),
+          seen:(x.v.lastSeen && x.v.lastSeen.ch3) || 0
+        };
+      });
+      $('loadNote').textContent = '已讀取 ' + rows.length + ' 位學生　' + new Date().toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' });
+      render();
+    });
+  }
+  function cellClass(m){ if(!m || !m.n) return 'none'; var p = m.ok / m.n; return (p >= .8 ? 'g' : p >= .5 ? 'm' : 'b') + (m.n < 3 ? ' few' : ''); }
+  function qLink(ids){ return BASE + 'quiz.html?q=' + ids.join(','); }
+
+  function render(){
+    var active = rows.filter(function(r){ return r.n > 0 || r.understood > 0 || r.seen; });
+    var tn = 0, tok = 0; rows.forEach(function(r){ tn += r.n; tok += r.acc == null ? 0 : Math.round(r.acc * r.n); });
+    function avg(k){ return active.length ? (active.reduce(function(s, r){ return s + r[k]; }, 0) / active.length).toFixed(1) : '—'; }
+    $('stats').innerHTML =
+      '<div class="stat"><b>' + active.length + ' / ' + rows.length + '</b>已開始學習</div>' +
+      '<div class="stat"><b>' + avg('understood') + '</b>平均概念卡（/' + NCARD + '）</div>' +
+      '<div class="stat"><b>' + tn + '</b>全班作答題數</div>' +
+      '<div class="stat"><b>' + (tn ? Math.round(tok / tn * 100) + '%' : '—') + '</b>全班答對率</div>' +
+      '<div class="stat"><b>' + avg('wrongN') + '</b>平均錯題本題數</div>' +
+      '<div class="stat"><b>' + avg('lab') + '</b>平均完成實驗（/' + NLAB + '）</div>';
+    renderWrong(); renderHeat(); renderProg();
+  }
+
+  /* ---------- 錯題排行 ---------- */
+  function renderWrong(){
+    var st = {};  // qid → { wrongWho, tried, n, ok, inBook, picks }
+    rows.forEach(function(r){
+      Object.keys(r.qstat).forEach(function(id){
+        var x = r.qstat[id], o = st[id] = st[id] || { wrongWho:0, tried:0, n:0, ok:0, inBook:0, picks:{} };
+        o.tried++; o.n += x.n; o.ok += x.ok; if(x.ok < x.n) o.wrongWho++;
+      });
+      r.wrong.forEach(function(id){ var o = st[id] = st[id] || { wrongWho:0, tried:0, n:0, ok:0, inBook:0, picks:{} }; o.inBook++; if(!r.qstat[id]){ o.wrongWho++; o.tried++; } });
+      r.answers.forEach(function(a){ if(!a.ok && a.p !== '' && st[a.q]){ st[a.q].picks[a.p] = (st[a.q].picks[a.p] || 0) + 1; } });
+    });
+    topWrong = Object.keys(st).filter(function(id){ return st[id].wrongWho > 0 && QB.byId(id); })
+      .sort(function(a, b){ return st[b].wrongWho - st[a].wrongWho || (st[a].ok / (st[a].n || 1)) - (st[b].ok / (st[b].n || 1)); }).slice(0, 10);
+    if(!topWrong.length){ $('wq').innerHTML = '<p class="muted" style="text-align:center;margin:10px 0">目前還沒有錯題紀錄（學生做練習題或玩遊戲後就會出現）。</p>'; $('wqOps').hidden = true; return; }
+    $('wqOps').hidden = false; $('wqPlay').href = qLink(topWrong); $('wqMsg').textContent = '';
+    $('wq').innerHTML = topWrong.map(function(id, i){
+      var q = QB.byId(id), o = st[id], acc = o.n ? Math.round(o.ok / o.n * 100) + '%' : '—';
+      var opts = '';
+      if(q.type === 'single' || q.type === 'tf'){
+        var labels = q.type === 'tf' ? ['正確','錯誤'] : q.options;
+        opts = '<ol class="opt-stat" type="A">' + labels.map(function(t, k){ var c = o.picks[k] || 0; return '<li' + (k === q.answer ? ' class="ans"' : '') + '>' + esc(t) + (k === q.answer ? '（正解）' : c ? '　<span style="color:var(--c-ng)">← ' + c + ' 次選錯到這裡</span>' : '') + '</li>'; }).join('') + '</ol>';
+      } else if(q.type === 'order'){ opts = '<p style="margin:6px 0 0">正確順序：' + q.options.map(esc).join(' → ') + '</p>'; }
+      else if(q.type === 'match'){ opts = '<p style="margin:6px 0 0">正確配對：' + q.options.map(function(p){ return esc(p[0]) + '－' + esc(p[1]); }).join('；') + '</p>'; }
+      return '<div class="wq"><div class="rk">' + (i + 1) + '</div><div><div class="qt">' + esc(q.question) + '</div>' +
+        '<div class="meta"><span class="pill ' + CH3.unitClass(q.unit) + '">' + q.unit + '</span><span>' + esc((q.tags || []).join('、')) + '</span><span>全班答對率 ' + acc + '</span><span>目前 ' + o.inBook + ' 人留在錯題本</span>' +
+        '<a class="btn ghost small-btn" href="' + qLink([id]) + '" target="_blank" rel="noopener">📽 投影這題</a></div>' +
+        '<details><summary>看選項、學生選錯的地方與詳解</summary>' + opts + '<p style="margin:6px 0 0">💡 ' + esc(q.explain) + '</p></details></div>' +
+        '<div class="num"><b>' + o.wrongWho + '</b> 人答錯<br>' + o.tried + ' 人作答過</div></div>';
+    }).join('');
+  }
+  $('wqCopy').addEventListener('click', function(){
+    var url = qLink(topWrong);
+    function done(){ $('wqMsg').innerHTML = '<span class="copied">✔ 已複製，可以貼到 Classroom 或 LINE 給學生</span>'; }
+    if(navigator.clipboard) navigator.clipboard.writeText(url).then(done, function(){ prompt('請複製這個連結：', url); });
+    else prompt('請複製這個連結：', url);
+  });
+
+  /* ---------- 熱圖 ---------- */
+  function renderHeat(){
+    var h = '<table class="hm"><thead><tr><th style="position:sticky;left:0;z-index:3;text-align:left">座號</th>' + C.map(function(c){
+      return '<th class="c ' + CH3.unitClass(c.unit) + '">' + c.unit + ' ' + esc(c.t) + '</th>';
+    }).join('') + '</tr></thead><tbody>';
+    rows.forEach(function(r){
+      h += '<tr><td class="n">' + r.seat + ' 號 ' + esc(r.name) + '</td>' + C.map(function(c){
+        var m = r.mastery[c.id];
+        return '<td class="x ' + cellClass(m) + '" title="' + r.seat + ' 號｜' + esc(c.t) + '：' + (m && m.n ? m.ok + '/' + m.n + ' 題答對' : '還沒作答') + '">' + (m && m.n ? Math.round(m.ok / m.n * 100) : '') + '</td>';
+      }).join('') + '</tr>';
+    });
+    h += '<tr class="avg"><td class="n">全班平均</td>' + C.map(function(c){
+      var n = 0, ok = 0; rows.forEach(function(r){ var m = r.mastery[c.id]; if(m){ n += m.n; ok += m.ok; } });
+      return '<td class="x ' + cellClass(n ? { n:n, ok:ok } : null) + '" title="全班｜' + esc(c.t) + '：' + (n ? ok + '/' + n : '還沒作答') + '">' + (n ? Math.round(ok / n * 100) : '') + '</td>';
+    }).join('') + '</tr></tbody></table>';
+    $('hm').innerHTML = h;
+  }
+
+  /* ---------- 進度總覽 ---------- */
+  var COLS = [
+    ['seat','座號'], ['understood','概念卡'], ['n','作答題數'], ['acc','答對率'], ['wrongN','錯題本'],
+    ['quizN','練習次數'], ['quizBest','最佳練習'], ['lab','實驗'], ['mind','心智圖'], ['stars','水管工★'], ['badges','徽章'], ['seen','最後上線']
+  ];
+  function fmt(k, r){
+    var v = r[k];
+    if(k === 'seat') return v + ' 號 ' + esc(r.name);
+    if(k === 'understood') return '<span class="bar"><i style="width:' + Math.round(v / NCARD * 100) + '%"></i></span>' + v + '/' + NCARD;
+    if(k === 'acc') return v == null ? '—' : Math.round(v * 100) + '%';
+    if(k === 'wrongN') return v ? '<b style="color:var(--c-ng)">' + v + '</b>' : '0';
+    if(k === 'quizBest') return v == null ? '—' : r.quizBestS;
+    if(k === 'lab') return v + '/' + NLAB;
+    if(k === 'mind') return v || '—';
+    if(k === 'stars') return v + '/15';
+    if(k === 'seen') return v ? new Date(v).toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '<span class="gone">還沒進來過</span>';
+    return v;
+  }
+  function renderProg(){
+    var list = rows.slice().sort(function(a, b){ var x = a[sortKey], y = b[sortKey]; x = x == null ? -1 : x; y = y == null ? -1 : y; return (x > y ? 1 : x < y ? -1 : 0) * sortDir; });
+    $('prog').innerHTML = '<thead><tr>' + COLS.map(function(c){ return '<th data-k="' + c[0] + '">' + c[1] + (sortKey === c[0] ? (sortDir > 0 ? ' ▲' : ' ▼') : '') + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      list.map(function(r){ return '<tr data-sid="' + r.sid + '"' + (r.sid === selSid ? ' class="sel"' : '') + '>' + COLS.map(function(c){ return '<td>' + fmt(c[0], r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody>';
+  }
+  $('prog').addEventListener('click', function(e){
+    var th = e.target.closest('th');
+    if(th){ var k = th.getAttribute('data-k'); if(sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = k === 'seat' ? 1 : -1; } renderProg(); return; }
+    var tr = e.target.closest('tr[data-sid]'); if(tr) showStudent(tr.getAttribute('data-sid'));
+  });
+
+  /* ---------- 個人明細 ---------- */
+  function showStudent(sid){
+    selSid = sid; renderProg();
+    var r = rows.filter(function(x){ return x.sid === sid; })[0]; if(!r) return;
+    $('stu').hidden = false;
+    $('stuTitle').textContent = '🧑‍🎓 ' + r.seat + ' 號 ' + r.name + ' 的學習狀況';
+    var bars = C.map(function(c){
+      var m = r.mastery[c.id], p = m && m.n ? m.ok / m.n : null;
+      var col = p == null ? '#ddd' : p >= .8 ? '#66BB6A' : p >= .5 ? '#FFCA28' : '#EF5350';
+      return '<div class="cbar"><span>' + c.unit + ' ' + esc(c.t) + '</span><span class="t"><i style="width:' + (p == null ? 0 : Math.max(4, p * 100)) + '%;background:' + col + '"></i></span><span class="muted">' + (m && m.n ? m.ok + '/' + m.n : '—') + '</span></div>';
+    }).join('');
+    var wq = r.wrong.map(function(id){ return QB.byId(id); }).filter(Boolean);
+    var wl = wq.length ? '<ol class="wl">' + wq.map(function(q){ return '<li><span class="pill ' + CH3.unitClass(q.unit) + '">' + q.unit + '</span> ' + esc(q.question) + '</li>'; }).join('') + '</ol>' +
+      '<div class="tbar" style="margin-top:12px"><a class="btn small-btn" href="' + qLink(r.wrong) + '" target="_blank" rel="noopener">📝 開啟他的錯題練習</a><button class="btn ghost small-btn" type="button" id="stuCopy">🔗 複製錯題練習連結</button><span id="stuMsg"></span></div>'
+      : '<p class="muted">錯題本是空的 👍</p>';
+    var recent = r.answers.slice(-20).reverse();
+    var rec = recent.length ? '<ol class="wl" style="list-style:none;padding:0">' + recent.map(function(a){ var q = QB.byId(a.q); return '<li>' + (a.ok ? '✅' : '❌') + ' <span class="muted">' + new Date(a.t).toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) + '｜' + (a.s === 'game' ? '遊戲' : '練習') + '</span> ' + esc(q ? q.question.slice(0, 32) : a.q) + '</li>'; }).join('') + '</ol>' : '<p class="muted">還沒有作答紀錄。</p>';
+    $('stuBody').innerHTML = '<div><h3 style="margin-top:0">各概念答對率</h3>' + bars + '</div>' +
+      '<div><h3 style="margin-top:0">📒 錯題本（' + wq.length + ' 題）</h3>' + wl + '</div>' +
+      '<div><h3 style="margin-top:0">🕘 最近 20 次作答</h3>' + rec + '</div>';
+    var cb = $('stuCopy');
+    if(cb) cb.addEventListener('click', function(){
+      var url = qLink(r.wrong);
+      function done(){ $('stuMsg').innerHTML = '<span class="copied">✔ 已複製</span>'; }
+      if(navigator.clipboard) navigator.clipboard.writeText(url).then(done, function(){ prompt('請複製這個連結：', url); }); else prompt('請複製這個連結：', url);
+    });
+    $('stu').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  $('cls').addEventListener('change', loadClass);
+  $('reload').addEventListener('click', loadClass);
+  $('csv').addEventListener('click', function(){
+    if(!rows.length) return;
+    var head = ['座號','姓名','概念卡','作答題數','答對率','錯題本題數','練習次數','最佳練習','實驗完成','心智圖最佳','水管工星星','徽章','最後上線'].concat(C.map(function(c){ return c.unit + ' ' + c.t + ' 答對率'; }));
+    var lines = [head].concat(rows.map(function(r){
+      return [r.seat, r.name, r.understood + '/' + NCARD, r.n, r.acc == null ? '' : Math.round(r.acc * 100) + '%', r.wrongN, r.quizN, r.quizBestS, r.lab + '/' + NLAB, r.mind || '', r.stars, r.badges, r.seen ? new Date(r.seen).toLocaleString('zh-TW') : '']
+        .concat(C.map(function(c){ var m = r.mastery[c.id]; return m && m.n ? Math.round(m.ok / m.n * 100) + '%' : ''; }));
+    }));
+    var csv = '﻿' + lines.map(function(l){ return l.map(function(x){ x = String(x == null ? '' : x); return /[",\n]/.test(x) ? '"' + x.replace(/"/g, '""') + '"' : x; }).join(','); }).join('\n');
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv' })); a.download = '第3章_' + $('cls').value + '班_學習狀況.csv'; a.click();
+  });
+})();
+</script>
+</body>
+</html>

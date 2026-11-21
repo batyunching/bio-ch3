@@ -354,6 +354,7 @@
   function finish(q, ok, extra){
     answered = true;
     results.push({ q:q, ok:ok });
+    CH3.record(q, ok, null, 'quiz');
     if(ok) CH3.wrongBook.remove(q.id); else CH3.wrongBook.add(q.id);
     var fb = $('fb');
     fb.className = 'feedback show ' + (ok ? 'ok' : 'ng');
@@ -404,6 +405,12 @@
   var m = location.search.match(/unit=(3-[123])/);
   if(m){ document.querySelectorAll('input[name="unit"]').forEach(function(i){ i.checked = i.value === m[1]; }); }
   refreshInfo();
+  // 網址參數：quiz.html?q=3-1-001,3-2-005 直接練這幾題（老師專區的「全班錯題練習」）
+  var mq = location.search.match(/[?&]q=([^&]+)/);
+  if(mq){
+    var set = decodeURIComponent(mq[1]).split(',').map(function(id){ return QB.byId(id.trim()); }).filter(Boolean);
+    if(set.length){ start(set); CH3.toast('老師指定練習：共 ' + set.length + ' 題'); }
+  }
 })();
 </script>
 </body>
