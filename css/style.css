@@ -267,3 +267,21 @@ span.rv::after{ content:'？'; font-size:1rem; }
 /* 遊戲大廳浮動按鈕 */
 .lobby-fab{ position:fixed; right:18px; bottom:18px; z-index:150; box-shadow:0 6px 18px rgba(0,0,0,.25); background:#263238; }
 @media (max-width:600px){ .lobby-fab{ right:10px; bottom:10px; padding:8px 14px; font-size:.9rem; } }
+
+/* ---------- 概念卡自我檢核 ---------- */
+.sc .sc-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+.sc .sc-tag{ display:inline-block; padding:4px 12px; border-radius:999px; background:var(--u-l,#eee); color:var(--u-d,#333); font-weight:900; font-size:.85rem; }
+.sc .sc-x{ width:44px; height:44px; border-radius:50%; border:0; background:#f3f3f3; font-size:1.1rem; cursor:pointer; color:inherit; }
+.sc h2{ margin:6px 0 8px; color:var(--u-d,#333); }
+.sc .sc-dots{ display:flex; gap:6px; margin-bottom:6px; }
+.sc .sc-dots i{ flex:1; height:6px; border-radius:3px; background:#e5e5e5; }
+.sc .sc-dots i.past{ background:var(--u,#888); opacity:.5; } .sc .sc-dots i.now{ background:var(--u,#888); }
+.sc .sc-n{ margin:0; color:var(--c-muted,#777); font-size:.85rem; }
+.sc .sc-q{ font-size:1.12rem; font-weight:700; margin:6px 0 14px; line-height:1.6; }
+.sc .sc-fb:empty{ display:none; }
+.sc .sc-ops{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; margin-top:12px; }
+.sc .sc-res{ text-align:center; padding:18px 10px; border-radius:18px; }
+.sc .sc-res.ok{ background:#E8F5E9; } .sc .sc-res.ng{ background:#FFF8E1; }
+.sc .sc-face{ font-size:3.2rem; line-height:1.2; }
+.sc .sc-score{ font-size:1.5rem; font-weight:900; margin:4px 0; }
+.sc .sc-res p{ margin:6px 0 0; }
