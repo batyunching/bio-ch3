@@ -30,13 +30,16 @@
     remove: function(key){ try{ localStorage.removeItem(PREFIX + key); }catch(e){} }
   };
 
-  /* ---------- 學習進度 ---------- */
+  /* ---------- 學習進度 ----------
+     概念卡改為「3 題自我檢核全對」才算懂，存在 cardPassed。
+     舊版自己按的紀錄（understood）不再採計，全部學生重新檢核。 */
+  var PASS_KEY = 'cardPassed';
   var progress = {
-    done: function(){ return store.get('understood', []); },
+    done: function(){ return store.get(PASS_KEY, []); },
     mark: function(id, on){
       var list = progress.done().filter(function(x){ return x !== id; });
       if(on !== false) list.push(id);
-      store.set('understood', list);
+      store.set(PASS_KEY, list);
     },
     isDone: function(id){ return progress.done().indexOf(id) >= 0; },
     unit: function(u){

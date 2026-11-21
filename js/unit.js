@@ -20,7 +20,7 @@
       function paint(){
         var on = CH3.progress.isDone(id);
         card.classList.toggle('done', on);
-        if(btn){ btn.setAttribute('aria-pressed', on); btn.textContent = on ? '我懂了 ✓' : '我懂了？'; }
+        if(btn){ btn.setAttribute('aria-pressed', on); btn.textContent = on ? '我懂了 ✓' : '我懂了？考考我'; btn.title = '回答 3 題自我檢核，全對才算懂'; }
       }
       card.addEventListener('click', function(e){
         if(e.target.closest('.got, .colsel, .rv')) return;
@@ -31,12 +31,17 @@
       });
       if(btn) btn.addEventListener('click', function(e){
         e.stopPropagation();
-        var on = !CH3.progress.isDone(id);
-        CH3.progress.mark(id, on); paint(); refreshMini();
-        if(on){
+        var qs = (typeof selfCheckOf === 'function') ? selfCheckOf(id) : [];
+        if(!qs.length){ // 沒有檢核題時維持原本的切換方式
+          var on = !CH3.progress.isDone(id);
+          CH3.progress.mark(id, on); paint(); refreshMini();
+          return;
+        }
+        selfCheck(card, id, qs, function(){
+          paint(); refreshMini();
           var p = CH3.progress.unit(unitOf(id));
           CH3.toast(p.done === p.total ? '🎉 這個單元的概念卡全部完成！' : '已記錄：' + p.done + ' / ' + p.total);
-        }
+        }, btn);
       });
       paint();
     });
@@ -51,6 +56,81 @@
     initColSel();
     initReveal(document);
   }
+  /* ---------- 概念卡自我檢核：3 題全對才算「我懂了 ✓」 ---------- */
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  function selfCheck(card, id, qs, onPass, opener){
+    var title = (card.querySelector('.back h3') || card.querySelector('h3') || {}).textContent || '';
+    var wasDone = CH3.progress.isDone(id);
+    var bg = document.createElement('div');
+    bg.className = 'modal-bg sc-bg';
+    bg.innerHTML = '<div class="modal sc" role="dialog" aria-modal="true" aria-labelledby="scTitle"></div>';
+    var box = bg.firstChild;
+    document.body.appendChild(bg);
+    var cur, right, order, picked;
+    function close(){ bg.remove(); document.removeEventListener('keydown', onKey); if(opener) opener.focus(); }
+    function onKey(e){ if(e.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+    bg.addEventListener('click', function(e){ if(e.target === bg) close(); });
+    function start(){ cur = 0; right = 0; order = CH3.shuffle(qs.slice()); show(); }
+    function dots(){
+      return '<div class="sc-dots">' + order.map(function(_, i){ return '<i class="' + (i < cur ? 'past' : i === cur ? 'now' : '') + '"></i>'; }).join('') + '</div>';
+    }
+    function show(){
+      var q = order[cur];
+      // 每次作答時選項再隨機排一次
+      picked = CH3.shuffle(q.options.map(function(t, i){ return { t:t, i:i }; }));
+      box.innerHTML =
+        '<div class="sc-head"><span class="sc-tag">🧠 自我檢核</span><button class="sc-x" aria-label="關閉">✕</button></div>' +
+        '<h2 id="scTitle">' + esc(title) + '</h2>' + dots() +
+        '<p class="sc-n">第 ' + (cur + 1) + ' / ' + order.length + ' 題</p>' +
+        '<p class="sc-q">' + esc(q.question) + '</p>' +
+        '<div class="opts">' + picked.map(function(o, k){ return '<button class="opt" data-k="' + k + '"><b>' + 'ABCD'[k] + '.</b> ' + esc(o.t) + '</button>'; }).join('') + '</div>' +
+        '<div class="sc-fb" aria-live="polite"></div>';
+      box.querySelector('.sc-x').onclick = close;
+      box.querySelector('.opts').addEventListener('click', function(e){
+        var b = e.target.closest('.opt'); if(!b || b.disabled) return;
+        var o = picked[+b.getAttribute('data-k')], ok = o.i === q.answer;
+        box.querySelectorAll('.opt').forEach(function(x){
+          x.disabled = true;
+          if(picked[+x.getAttribute('data-k')].i === q.answer) x.classList.add('correct');
+        });
+        if(!ok) b.classList.add('wrong');
+        if(ok) right++;
+        CH3.record(q, ok, o.i, 'card');
+        if(ok) CH3.wrongBook.remove(q.id); else CH3.wrongBook.add(q.id);
+        var last = cur === order.length - 1;
+        var fb = box.querySelector('.sc-fb');
+        fb.className = 'fb sc-fb ' + (ok ? 'ok' : 'ng');
+        fb.innerHTML = '<strong>' + (ok ? '✅ 答對了！' : '❌ 答錯了，已收進錯題本') + '</strong><div>💡 ' + esc(q.explain) + '</div>' +
+          '<div class="sc-ops"><button class="btn sc-next">' + (last ? '看結果' : '下一題 ▶') + '</button></div>';
+        var nx = fb.querySelector('.sc-next');
+        nx.onclick = function(){ if(last) result(); else { cur++; show(); } };
+        nx.focus();
+      });
+      var first = box.querySelector('.opt'); if(first) first.focus();
+    }
+    function result(){
+      var pass = right === order.length;
+      if(pass){ CH3.progress.mark(id, true); if(onPass) onPass(); }
+      var face = pass ? '🎉' : right >= 2 ? '💪' : '📖';
+      box.innerHTML =
+        '<div class="sc-head"><span class="sc-tag">🧠 自我檢核</span><button class="sc-x" aria-label="關閉">✕</button></div>' +
+        '<h2 id="scTitle">' + esc(title) + '</h2>' +
+        '<div class="sc-res ' + (pass ? 'ok' : 'ng') + '"><div class="sc-face">' + face + '</div>' +
+        '<div class="sc-score">答對 ' + right + ' / ' + order.length + ' 題</div>' +
+        '<p>' + (pass ? '太棒了！這張概念卡你真的懂了，已標記「我懂了 ✓」。'
+                      : (wasDone ? '這次沒有全對喔！卡片仍保留「已懂」，但建議再看一次說明。'
+                                 : '還差一點點！要 ' + order.length + ' 題全對才算真的懂。先回卡片再讀一次說明，再來挑戰。')) + '</p></div>' +
+        '<div class="sc-ops">' + (pass ? '<button class="btn sc-close">完成</button>'
+                                      : '<button class="btn ghost sc-close">回去看卡片</button><button class="btn sc-again">再挑戰一次</button>') + '</div>';
+      box.querySelector('.sc-x').onclick = close;
+      box.querySelector('.sc-close').onclick = close;
+      var ag = box.querySelector('.sc-again'); if(ag) ag.onclick = start;
+      (box.querySelector('.sc-again') || box.querySelector('.sc-close')).focus();
+    }
+    start();
+  }
+
   /* 表格分欄顯示：<div class="colsel" data-table="id"><button data-col="all">全部</button><button data-col="1">…</button></div> */
   function initColSel(){
     document.querySelectorAll('.colsel').forEach(function(bar){
